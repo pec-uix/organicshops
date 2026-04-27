@@ -160,8 +160,48 @@
               </router-link>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              <MiniProductCard v-for="product in section.products" :key="'prod-' + product.id" :product="product" />
+            <div class="rounded-2xl border border-gray-100 bg-white p-4 md:p-5 shadow-sm">
+              <div class="mb-5">
+                <p class="text-xs font-bold tracking-[0.2em] text-[#5B8E3D]">CATEGORY PICKS</p>
+              </div>
+
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                <router-link
+                  v-for="product in section.products.slice(0, 3)"
+                  :key="'prod-inline-' + section.id + '-' + product.id"
+                  :to="'/products/' + product.id"
+                  class="group flex items-start gap-4 rounded-2xl border border-gray-100 bg-[#FCFCFA] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-[#5B8E3D]/30 hover:shadow-md"
+                >
+                  <div class="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-white">
+                    <img :src="product.image" :alt="product.name" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <div class="absolute left-2 top-2 flex flex-wrap gap-1">
+                      <span class="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-[#5B8E3D]">{{ tempZoneLabel(product.tempZone) }}</span>
+                    </div>
+                  </div>
+
+                  <div class="min-w-0 flex-1">
+                    <h4 class="line-clamp-2 text-base font-bold leading-6 text-gray-800 group-hover:text-[#5B8E3D]">
+                      {{ product.name }}
+                    </h4>
+                    <p class="mt-1 line-clamp-2 text-xs leading-5 text-gray-500">
+                      {{ product.description }}
+                    </p>
+                    <div class="mt-3 flex items-end justify-between gap-3">
+                      <div class="min-w-0">
+                        <div class="text-xs text-gray-400 line-through">
+                          NT$ {{ Math.round(product.originalPrice || product.price).toLocaleString() }}
+                        </div>
+                        <div class="text-lg font-black text-[#5B8E3D]">
+                          NT$ {{ Math.round(product.memberPrice || product.price).toLocaleString() }}
+                        </div>
+                      </div>
+                      <span class="shrink-0 rounded-full bg-[#E8F5E8] px-3 py-2 text-xs font-bold text-[#5B8E3D] transition-colors group-hover:bg-[#5B8E3D] group-hover:text-white">
+                        加入購物車
+                      </span>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
             </div>
           </div>
         </section>
@@ -320,6 +360,9 @@ export default Vue.extend({
     if (this.heroTimer) window.clearInterval(this.heroTimer)
   },
   methods: {
+    tempZoneLabel(zone: TempZone) {
+      return TEMP_ZONE_LABEL[zone]
+    },
     categoryEmoji(categoryId: string): string {
       const emojiMap: Record<string, string> = {
         fresh: '🥦',

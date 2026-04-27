@@ -89,12 +89,30 @@
         </button>
 
         <button
-          class="xl:hidden flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group"
-          @click="openMobileMenu"
+          class="md:hidden flex flex-col items-center text-brand-primary transition-colors"
+          @click="toggleMobileMenu"
         >
-          <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          <div class="h-11 w-11 rounded-full bg-brand-primary text-white flex items-center justify-center shadow-md transition-transform duration-300">
+            <svg
+              class="w-6 h-6 transition-transform duration-300"
+              :class="isMenuOpen ? 'rotate-90' : ''"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                v-if="!isMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 7h16M4 12h16M4 17h16"
+              />
+              <path
+                v-else
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 6l12 12M18 6L6 18"
+              />
             </svg>
           </div>
           <span class="text-[10px] font-black mt-1">選單</span>
@@ -152,10 +170,11 @@ export default Vue.extend({
   },
   computed: {
     cartCount(): number { return this.$store.getters['cart/totalCount'] },
+    isMenuOpen(): boolean { return this.$store.getters['ui/mobileMenuOpen'] },
   },
   methods: {
     openCartDrawer() { this.$store.dispatch('ui/openCartDrawer') },
-    openMobileMenu() { this.$store.dispatch('ui/openMobileMenu') },
+    toggleMobileMenu() { this.$store.dispatch('ui/toggleMobileMenu') },
     goToSearch() {
       if (this.$route.path === '/search') {
         this.$router.replace({ path: '/search', query: { ...this.$route.query, _t: String(Date.now()) } }).catch(() => {})

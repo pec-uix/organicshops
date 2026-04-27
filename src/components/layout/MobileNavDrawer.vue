@@ -1,100 +1,180 @@
 <template>
-  <transition name="drawer">
-    <div v-if="isOpen" class="fixed inset-0 z-[100] lg:hidden">
-      <!-- Backdrop -->
-      <div class="absolute inset-0 bg-brand-dark/50 backdrop-blur-sm transition-opacity" @click="close"></div>
-      
-      <!-- Drawer Content -->
-      <div class="absolute inset-y-0 left-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col transform transition-transform duration-300">
-        <!-- Header: Refined Branding -->
-        <div class="px-6 py-6 border-b border-gray-100 flex items-center justify-between bg-brand-surface/20">
-          <div class="flex flex-col">
-            <span class="font-black text-brand-primary text-xl tracking-tighter italic leading-none">統一生機</span>
-            <span class="text-[8px] font-bold text-gray-400 tracking-[0.3em] uppercase mt-1.5">Organic Life</span>
-          </div>
-          <button @click="close" class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-primary active:scale-90 transition-all">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-        </div>
+  <transition
+    enter-active-class="transition-opacity duration-300 ease-in-out"
+    leave-active-class="transition-opacity duration-300 ease-in-out"
+    enter-class="opacity-0"
+    leave-to-class="opacity-0"
+  >
+    <div v-if="isOpen" class="fixed inset-0 z-[100] md:hidden">
+      <div class="absolute inset-0 bg-black/50" @click="close"></div>
 
-        <div class="flex-1 overflow-y-auto scrollbar-hide">
-          <!-- 1. User Profile: Enhanced Spacing -->
-          <div class="p-8 border-b border-gray-50">
-            <div v-if="isLoggedIn" class="flex items-center gap-5">
-              <div class="w-14 h-14 rounded-full bg-brand-primary text-white flex items-center justify-center font-black text-xl shadow-lg shadow-brand-primary/20 border-2 border-white">
-                {{ nameInitial }}
+      <transition
+        enter-active-class="transform transition duration-300 ease-in-out"
+        leave-active-class="transform transition duration-300 ease-in-out"
+        enter-class="-translate-x-full"
+        enter-to-class="translate-x-0"
+        leave-class="translate-x-0"
+        leave-to-class="-translate-x-full"
+      >
+        <aside
+          v-if="isOpen"
+          class="absolute inset-y-0 left-0 flex w-[86%] max-w-sm flex-col bg-white shadow-2xl"
+        >
+          <div
+            class="flex items-center justify-between px-5 py-5 text-white"
+            style="background: linear-gradient(135deg, #1B4332, #2D6A2D);"
+          >
+            <div class="min-w-0">
+              <div class="text-2xl font-black tracking-tight">統一生機</div>
+              <p class="mt-1 text-[10px] font-bold tracking-[0.28em] text-white/75">ORGANIC LIFE</p>
+            </div>
+            <button
+              class="flex h-10 w-10 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/10"
+              @click="close"
+            >
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex-1 overflow-y-auto scrollbar-hide bg-white pb-36">
+            <div class="border-b border-gray-100 px-5 py-5">
+              <div v-if="isLoggedIn" class="rounded-2xl bg-brand-surface px-4 py-4">
+                <p class="text-[10px] font-black tracking-[0.18em] text-brand-primary">MEMBER</p>
+                <div class="mt-2 flex items-center gap-3">
+                  <div class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-primary text-base font-black text-white">
+                    {{ nameInitial }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="truncate text-base font-black text-brand-dark">{{ userName }}</p>
+                    <p class="mt-1 text-xs font-bold text-gray-400">歡迎回來</p>
+                  </div>
+                </div>
               </div>
-              <div class="min-w-0">
-                <p class="text-base font-black text-gray-800 truncate">{{ userName }}</p>
-                <p class="text-[10px] text-brand-primary font-bold uppercase tracking-widest mt-1">Premium Member</p>
+              <div v-else class="rounded-2xl bg-brand-surface px-4 py-4">
+                <p class="text-base font-black text-brand-dark">開啟您的有機生活</p>
+                <p class="mt-1 text-xs font-bold text-gray-400">登入後可查看會員專屬優惠與訂單資訊</p>
               </div>
             </div>
-            <div v-else class="text-center py-2">
-              <h3 class="text-lg font-black text-gray-800 mb-4 tracking-tight">開啟您的有機生活</h3>
-              <router-link to="/login" @click.native="close" class="w-full block bg-brand-primary text-white py-3.5 rounded-md text-xs font-black shadow-lg shadow-brand-primary/20 tracking-[0.2em] uppercase transition-transform active:scale-95">
-                立即登入 / 註冊
-              </router-link>
+
+            <nav>
+              <div
+                v-for="item in categories"
+                :key="item.id"
+                class="border-b border-[#E5E7EB]"
+              >
+                <div
+                  class="flex items-center justify-between py-4 pr-4 transition-colors hover:bg-[#E8F5E8]"
+                  :class="isActiveCategory(item.id) ? 'border-l-[3px] border-brand-primary bg-[#E8F5E8]/70 pl-[17px]' : 'pl-5'"
+                >
+                  <router-link
+                    :to="`/category/${item.id}`"
+                    class="flex min-w-0 flex-1 items-center gap-3"
+                    :class="isActiveCategory(item.id) ? 'text-brand-primary' : 'text-gray-700'"
+                    @click.native="close"
+                  >
+                    <span class="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-gray-100 bg-white shadow-sm">
+                      <img v-if="isImageUrl(item.icon)" :src="item.icon" :alt="item.name" class="h-full w-full object-cover" />
+                      <span v-else class="flex h-full w-full items-center justify-center text-xl">{{ item.icon }}</span>
+                    </span>
+                    <span class="truncate text-[15px] font-black tracking-[0.06em]">{{ item.name }}</span>
+                  </router-link>
+
+                  <button
+                    v-if="hasChildren(item.id)"
+                    class="ml-3 flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-white"
+                    @click.stop="toggleSubmenu(item.id)"
+                  >
+                    <svg
+                      class="h-4 w-4 transition-transform duration-300"
+                      :class="openSubmenu === item.id ? 'rotate-90 text-brand-primary' : ''"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                <transition
+                  enter-active-class="transition-all duration-300 ease-in-out overflow-hidden"
+                  leave-active-class="transition-all duration-300 ease-in-out overflow-hidden"
+                  enter-class="max-h-0 opacity-0"
+                  enter-to-class="max-h-48 opacity-100"
+                  leave-class="max-h-48 opacity-100"
+                  leave-to-class="max-h-0 opacity-0"
+                >
+                  <div
+                    v-if="hasChildren(item.id) && openSubmenu === item.id"
+                    class="bg-[#F7FAF7]"
+                  >
+                    <router-link
+                      v-for="child in childMenuMap[item.id]"
+                      :key="child.to"
+                      :to="child.to"
+                      class="block border-t border-[#E5E7EB] py-3 pl-[72px] pr-5 text-sm font-bold text-gray-500 transition-colors hover:bg-[#E8F5E8] hover:text-brand-primary"
+                      @click.native="close"
+                    >
+                      {{ child.label }}
+                    </router-link>
+                  </div>
+                </transition>
+              </div>
+            </nav>
+
+            <div class="border-t border-dashed border-gray-200 px-5 py-5">
+              <p class="mb-3 text-[10px] font-black tracking-[0.22em] text-gray-300">品牌服務</p>
+              <div class="space-y-1">
+                <router-link
+                  v-for="item in staticLinks"
+                  :key="item.to"
+                  :to="item.to"
+                  class="block rounded-xl px-3 py-3 text-sm font-bold text-gray-500 transition-colors hover:bg-[#E8F5E8] hover:text-brand-primary"
+                  @click.native="close"
+                >
+                  {{ item.label }}
+                </router-link>
+              </div>
             </div>
           </div>
 
-          <!-- 2. Core Navigation: Grouped & Spaced -->
-          <div class="py-6">
-            <p class="px-8 text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] mb-4">線上購物 Collections</p>
-            <nav class="space-y-1">
+          <div class="absolute inset-x-0 bottom-0 border-t border-gray-100 bg-white p-4">
+            <div v-if="isLoggedIn" class="space-y-3">
+              <div class="rounded-2xl bg-brand-surface px-4 py-3">
+                <p class="text-xs font-bold text-gray-400 tracking-[0.16em]">MEMBER</p>
+                <p class="mt-1 text-base font-black text-brand-dark">{{ userName }}</p>
+              </div>
               <router-link
-                v-for="cat in categories"
-                :key="cat.id"
-                :to="`/category/${cat.id}`"
-                class="flex items-center justify-between px-8 py-4 group active:bg-brand-surface transition-colors"
+                to="/account"
+                class="flex w-full items-center justify-center rounded-xl bg-brand-primary px-4 py-3 text-sm font-black text-white shadow-md"
                 @click.native="close"
               >
-                <div class="flex items-center gap-5">
-                  <div class="h-10 w-10 overflow-hidden rounded-full border border-gray-100 bg-white shadow-sm">
-                    <img v-if="isImageUrl(cat.icon)" :src="cat.icon" :alt="cat.name" class="h-full w-full object-cover" />
-                    <span v-else class="flex h-full w-full items-center justify-center text-2xl opacity-80 group-hover:scale-110 transition-transform">{{ cat.icon }}</span>
-                  </div>
-                  <span class="text-sm font-bold text-gray-700 tracking-[0.1em] group-hover:text-brand-primary transition-colors">{{ cat.name }}</span>
-                </div>
-                <svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+                前往會員中心
               </router-link>
-            </nav>
-          </div>
+            </div>
 
-          <!-- 3. Specialized Zones -->
-          <div class="px-8 py-8 bg-brand-surface/30">
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-5 text-center">專屬優惠專區</p>
-            <div class="grid grid-cols-2 gap-4">
-              <router-link to="/op-exchange" @click.native="close" class="bg-white p-5 rounded-md border border-brand-primary/10 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all active:scale-95">
-                <span class="text-2xl mb-2">💰</span>
-                <span class="text-[10px] font-black text-gray-800 tracking-widest">點數換購</span>
+            <div v-else class="grid grid-cols-2 gap-3">
+              <router-link
+                to="/login"
+                class="flex items-center justify-center rounded-xl bg-brand-primary px-4 py-3 text-sm font-black text-white shadow-md"
+                @click.native="close"
+              >
+                登入
               </router-link>
-              <router-link to="/event/SUMMER2026" @click.native="close" class="bg-white p-5 rounded-md border border-brand-primary/10 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all active:scale-95">
-                <span class="text-2xl mb-2">🔥</span>
-                <span class="text-[10px] font-black text-gray-800 tracking-widest">活動專區</span>
+              <router-link
+                to="/register"
+                class="flex items-center justify-center rounded-xl bg-brand-primary px-4 py-3 text-sm font-black text-white shadow-md"
+                @click.native="close"
+              >
+                註冊
               </router-link>
             </div>
           </div>
-
-          <!-- 4. Brand Services: Minimalist List -->
-          <div class="py-10 space-y-1">
-            <p class="px-8 text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] mb-5">品牌服務 Information</p>
-            <router-link v-for="item in staticLinks" :key="item.to" :to="item.to" @click.native="close" class="block px-8 py-3 text-sm font-bold text-gray-500 hover:text-brand-primary active:pl-10 transition-all">
-              {{ item.label }}
-            </router-link>
-          </div>
-        </div>
-
-        <!-- Sticky Bottom CTA (Optional) -->
-        <div class="p-6 border-t border-gray-100 bg-white">
-          <div class="flex items-center justify-between text-gray-400 px-2">
-            <router-link to="/stores" @click.native="close" class="text-[10px] font-black tracking-widest hover:text-brand-primary">通路據點</router-link>
-            <span class="w-1 h-1 bg-gray-200 rounded-full"></span>
-            <router-link to="/faq" @click.native="close" class="text-[10px] font-black tracking-widest hover:text-brand-primary">常見問題</router-link>
-            <span class="w-1 h-1 bg-gray-200 rounded-full"></span>
-            <router-link to="/privacy" @click.native="close" class="text-[10px] font-black tracking-widest hover:text-brand-primary">隱私政策</router-link>
-          </div>
-        </div>
-      </div>
+        </aside>
+      </transition>
     </div>
   </transition>
 </template>
@@ -108,6 +188,16 @@ export default Vue.extend({
   data() {
     return {
       categories: mockCategories,
+      openSubmenu: null as string | null,
+      childMenuMap: {
+        fresh: [],
+        frozen: [],
+        nuts: [],
+        grains: [],
+        pantry: [],
+        elderly: [],
+        beverage: [],
+      } as Record<string, Array<{ label: string; to: string }>>,
       staticLinks: [
         { to: '/about', label: '品牌故事' },
         { to: '/news', label: '健康誌 (品牌消息)' },
@@ -122,8 +212,22 @@ export default Vue.extend({
     userName(): string { return this.$store.getters['auth/currentUser']?.name ?? '會員' },
     nameInitial(): string { return this.userName.charAt(0) }
   },
+  watch: {
+    $route() {
+      this.openSubmenu = null
+    }
+  },
   methods: {
     close() { this.$store.dispatch('ui/closeMobileMenu') },
+    hasChildren(categoryId: string) {
+      return (this.childMenuMap[categoryId] || []).length > 0
+    },
+    toggleSubmenu(categoryId: string) {
+      this.openSubmenu = this.openSubmenu === categoryId ? null : categoryId
+    },
+    isActiveCategory(categoryId: string) {
+      return this.$route.path.startsWith(`/category/${categoryId}`)
+    },
     isImageUrl(value: string) {
       return /^https?:\/\//.test(value) || value.startsWith('/')
     }
@@ -132,12 +236,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.drawer-enter-active, .drawer-leave-active { transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
-.drawer-enter, .drawer-leave-to { opacity: 0; }
-.drawer-enter-active div:last-child { transform: translateX(0); }
-.drawer-enter div:last-child { transform: translateX(-100%); }
-.drawer-leave-to div:last-child { transform: translateX(-100%); }
-
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
