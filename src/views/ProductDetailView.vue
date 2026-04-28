@@ -37,14 +37,17 @@
               class="bg-brand-surface rounded-3xl flex items-center justify-center cursor-zoom-in select-none relative overflow-hidden"
               style="aspect-ratio: 1/1; max-height: 480px;"
               @click="lightboxOpen = true"
+              @touchstart="onGalleryTouchStart"
+              @touchend="onGalleryTouchEnd"
             >
               <img
-                v-if="isImageUrl(product.image)"
-                :src="product.image"
+                v-if="selectedGalleryImage && isImageUrl(selectedGalleryImage.src)"
+                :src="selectedGalleryImage.src"
                 :alt="product.name"
                 class="w-full h-full object-cover"
+                :style="{ objectPosition: selectedGalleryImage.objectPosition || 'center' }"
               />
-              <span v-else class="text-[120px] md:text-[160px]">{{ product.image }}</span>
+              <span v-else class="text-[120px] md:text-[160px]">{{ selectedGalleryImage ? selectedGalleryImage.src : product.image }}</span>
 
               <!-- Temp badge -->
               <span :class="tempBadgeClass" class="absolute top-4 left-4 text-white text-sm px-3 py-1 rounded-full font-medium shadow">
@@ -58,6 +61,26 @@
               <span class="absolute bottom-3 right-3 text-xs text-gray-400 bg-white bg-opacity-70 px-2 py-1 rounded-full">
                 點擊放大
               </span>
+            </div>
+
+            <div v-if="galleryImages.length > 1" class="mt-4 flex items-center gap-3 overflow-x-auto pb-1">
+              <button
+                v-for="(image, index) in galleryImages"
+                :key="`${image.src}-${index}`"
+                :aria-label="`查看第 ${index + 1} 張商品圖`"
+                class="w-24 flex-shrink-0 overflow-hidden rounded-sm border bg-white transition-all"
+                :class="selectedImageIndex === index ? 'border-brand-primary shadow-sm' : 'border-gray-200 hover:border-brand-primary/40'"
+                @click="selectedImageIndex = index"
+              >
+                <img
+                  v-if="isImageUrl(image.src)"
+                  :src="image.src"
+                  :alt="`${product.name}-${index + 1}`"
+                  class="h-16 w-full object-cover"
+                  :style="{ objectPosition: image.objectPosition || 'center' }"
+                />
+                <span v-else class="flex h-16 w-full items-center justify-center text-3xl">{{ image.src }}</span>
+              </button>
             </div>
           </div>
 
@@ -263,40 +286,6 @@
               {{ product.description }}
             </div>
 
-            <!-- 訂閱制 -->
-            <div class="bg-gradient-to-br from-brand-surface to-white rounded-2xl p-4 border border-brand-surface">
-              <div class="flex items-center gap-2 mb-3">
-                <span class="text-xl">🔄</span>
-                <div>
-                  <h3 class="font-bold text-brand-dark text-sm">定期訂閱</h3>
-                  <p class="text-xs text-gray-500">自動配送，享 <strong class="text-brand-accent">9 折優惠</strong></p>
-                </div>
-              </div>
-              <p class="mb-3 text-[11px] font-bold text-gray-400">訂閱制功能待確認</p>
-              <div class="flex gap-2 mb-3">
-                <button
-                  v-for="period in subscriptionPeriods"
-                  :key="period.value"
-                  class="flex-1 py-2 rounded-xl text-xs font-medium border transition-all"
-                  :class="subscriptionPeriod === period.value
-                    ? 'bg-brand-primary text-white border-brand-primary'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-brand-primary hover:text-brand-primary'"
-                  @click="subscriptionPeriod = period.value"
-                >
-                  {{ period.label }}
-                </button>
-              </div>
-              <button
-                class="w-full py-2.5 rounded-xl bg-brand-dark text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-                @click="subscribe"
-              >
-                立即訂閱（{{ currentSubscriptionLabel }}）
-              </button>
-              <p class="mt-3 text-xs text-gray-500">
-                訂閱方案將由客服協助開通，點擊後會帶您前往聯絡頁。
-              </p>
-            </div>
-
           </div>
         </div>
 
@@ -398,12 +387,13 @@
             </svg>
           </button>
           <img
-            v-if="product && isImageUrl(product.image)"
-            :src="product.image"
+            v-if="selectedGalleryImage && isImageUrl(selectedGalleryImage.src)"
+            :src="selectedGalleryImage.src"
             :alt="product.name"
             class="max-w-[70vw] max-h-[70vh] object-contain"
+            :style="{ objectPosition: selectedGalleryImage.objectPosition || 'center' }"
           />
-          <span v-else class="text-[200px] leading-none select-none">{{ product && product.image }}</span>
+          <span v-else class="text-[200px] leading-none select-none">{{ selectedGalleryImage ? selectedGalleryImage.src : product && product.image }}</span>
         </div>
       </div>
     </transition>
@@ -425,14 +415,14 @@ const ZONE_RULES: Record<TempZone, { fee: number; freeAt: number; label: string 
   fresh:   { fee: 120, freeAt: 800,  label: '產地直送' },
 }
 
-interface SubscriptionPeriod {
-  value: string
-  label: string
-}
-
 interface Tab {
   key: string
   label: string
+}
+
+interface GalleryImage {
+  src: string
+  objectPosition?: string
 }
 
 export default Vue.extend({
@@ -444,9 +434,10 @@ export default Vue.extend({
       quantity:           1,
       isWishlisted:       false,
       lightboxOpen:       false,
+      selectedImageIndex: 0,
+      galleryTouchStartX: 0,
       activeTab:          'features' as string,
       addedNotice:        false,
-      subscriptionPeriod: 'monthly' as string,
       shareNotice:        '',
 
       tabs: [
@@ -454,12 +445,6 @@ export default Vue.extend({
         { key: 'introduction', label: '產品介紹' },
         { key: 'specs',        label: '成分規格' },
       ] as Tab[],
-
-      subscriptionPeriods: [
-        { value: 'weekly',    label: '每週' },
-        { value: 'biweekly',  label: '每兩週' },
-        { value: 'monthly',   label: '每月' },
-      ] as SubscriptionPeriod[],
     }
   },
 
@@ -480,6 +465,17 @@ export default Vue.extend({
         this.product.categoryId,
         this.product.id
       )
+    },
+    galleryImages(): GalleryImage[] {
+      if (!this.product) return []
+      const rawImages = this.product.images?.length ? this.product.images : [this.product.image]
+      return rawImages.map((src, index) => ({
+        src,
+        objectPosition: this.galleryObjectPosition(index),
+      }))
+    },
+    selectedGalleryImage(): GalleryImage | null {
+      return this.galleryImages[this.selectedImageIndex] || this.galleryImages[0] || null
     },
 
     // 庫存狀態：優先使用 stockStatus 欄位，否則從 inStock 推斷
@@ -587,12 +583,6 @@ export default Vue.extend({
       return window.location.href
     },
 
-    currentSubscriptionLabel(): string {
-      const found = (this as any).subscriptionPeriods.find(
-        (p: SubscriptionPeriod) => p.value === this.subscriptionPeriod
-      )
-      return found ? found.label : ''
-    },
     displayFeatures(): string[] {
       if (this.product?.features?.length) return this.product.features
       return [
@@ -616,6 +606,7 @@ export default Vue.extend({
     '$route.params.id'() {
       this.quantity = 1
       this.isWishlisted = false
+      this.selectedImageIndex = 0
       this.activeTab = 'features'
       this.addedNotice = false
       this.shareNotice = ''
@@ -628,6 +619,41 @@ export default Vue.extend({
       return /^https?:\/\//.test(image) || image.startsWith('/')
     },
 
+    galleryObjectPosition(index: number) {
+      if (!this.product) return 'center center'
+      if (this.product.images && this.product.images.length > 1) return 'center center'
+      if (this.product.id === 'op202') {
+        return ['center center', '34% center', '78% center'][index] || 'center center'
+      }
+      return 'center center'
+    },
+
+    previousImage() {
+      if (this.galleryImages.length <= 1) return
+      this.selectedImageIndex = (this.selectedImageIndex - 1 + this.galleryImages.length) % this.galleryImages.length
+    },
+
+    nextImage() {
+      if (this.galleryImages.length <= 1) return
+      this.selectedImageIndex = (this.selectedImageIndex + 1) % this.galleryImages.length
+    },
+
+    onGalleryTouchStart(event: TouchEvent) {
+      this.galleryTouchStartX = event.changedTouches[0]?.clientX || 0
+    },
+
+    onGalleryTouchEnd(event: TouchEvent) {
+      const touchEndX = event.changedTouches[0]?.clientX || 0
+      const deltaX = touchEndX - this.galleryTouchStartX
+
+      if (Math.abs(deltaX) < 40) return
+      if (deltaX < 0) {
+        this.nextImage()
+        return
+      }
+      this.previousImage()
+    },
+
     addToCart() {
       if (!this.product || !this.canAddToCart) return
       for (let i = 0; i < this.quantity; i++) {
@@ -636,10 +662,6 @@ export default Vue.extend({
       this.$store.dispatch('ui/openCartDrawer')
       this.addedNotice = true
       setTimeout(() => { this.addedNotice = false }, 3000)
-    },
-
-    subscribe() {
-      this.$router.push({ path: '/contact', query: { type: 'member' } })
     },
 
     shareTo(platform: 'line' | 'facebook') {

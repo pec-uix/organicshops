@@ -154,8 +154,8 @@ export default Vue.extend({
       identifier: '',
       password: '',
       loginTabs: [
-        { value: 'email', label: '信箱 + 密碼' },
-        { value: 'phone', label: '手機 + 密碼' },
+        { value: 'email', label: '信箱' },
+        { value: 'phone', label: '手機' },
       ],
     }
   },

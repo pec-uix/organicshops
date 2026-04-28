@@ -23,10 +23,10 @@
       <router-link to="/products" class="btn-primary px-8 py-3 text-base">去逛逛</router-link>
     </div>
 
-    <div v-else class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <div v-else class="space-y-6">
 
-      <!-- ══ 左側：溫層分區商品列表 ══ -->
-      <div class="xl:col-span-2 space-y-6">
+      <!-- ══ 溫層分區商品列表 ══ -->
+      <div class="space-y-6">
 
         <!-- ── 溫層分開結帳說明 ── -->
         <div class="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
@@ -58,9 +58,14 @@
                 {{ zone.items.length }} 項
               </span>
             </div>
-            <span class="text-sm font-semibold text-gray-700">
-              小計 <span class="text-base" :style="{ color: zone.color }">${{ zoneSubtotal(zone) }}</span>
-            </span>
+            <div class="text-right">
+              <p class="text-sm font-semibold text-gray-700">
+                小計 <span class="text-base" :style="{ color: zone.color }">${{ zoneSubtotal(zone) }}</span>
+              </p>
+              <p v-if="zoneOpPoints(zone) > 0" class="text-xs font-semibold text-brand-accent mt-0.5">
+                此溫層 OP 換購 {{ zoneOpPoints(zone).toLocaleString() }} 點
+              </p>
+            </div>
           </div>
 
           <!-- 商品列表 -->
@@ -100,6 +105,13 @@
                   </span>
                   <span v-if="item.product.memberPrice" class="text-xs text-brand-accent">會員價</span>
                 </div>
+                <p
+                  v-if="lineOpPoints(item) > 0"
+                  class="mt-1 text-xs font-semibold text-brand-accent"
+                >
+                  OP 換購：{{ item.product.requiredOpPoints }} 點 / 件
+                  <span class="text-gray-400">，本項共 {{ lineOpPoints(item).toLocaleString() }} 點</span>
+                </p>
               </div>
 
               <!-- 數量 +/- -->
@@ -121,6 +133,9 @@
               <div class="w-20 text-right flex-shrink-0">
                 <p class="text-sm font-bold text-gray-800">
                   ${{ displayPrice(item.product) * item.quantity }}
+                </p>
+                <p v-if="lineOpPoints(item) > 0" class="mt-1 text-[11px] font-bold text-brand-accent">
+                  + {{ lineOpPoints(item).toLocaleString() }} OP
                 </p>
               </div>
 
@@ -161,13 +176,18 @@
           <!-- 結帳按鈕 -->
           <div class="px-5 py-4 bg-gray-50 flex items-center justify-between">
             <div class="text-sm text-gray-600">
-              小計 ${{ zoneSubtotal(zone) }}
-              <span class="text-gray-400">
-                + 運費 <span :class="zoneRemaining(zone) <= 0 ? 'line-through text-gray-400' : ''">
-                  ${{ zone.fee }}
+              <div>
+                小計 ${{ zoneSubtotal(zone) }}
+                <span class="text-gray-400">
+                  + 運費 <span :class="zoneRemaining(zone) <= 0 ? 'line-through text-gray-400' : ''">
+                    ${{ zone.fee }}
+                  </span>
+                  <span v-if="zoneRemaining(zone) <= 0" class="text-brand-primary font-medium ml-1">免運</span>
                 </span>
-                <span v-if="zoneRemaining(zone) <= 0" class="text-brand-primary font-medium ml-1">免運</span>
-              </span>
+              </div>
+              <p v-if="zoneOpPoints(zone) > 0" class="mt-1 text-xs font-semibold text-brand-accent">
+                此溫層需 {{ zoneOpPoints(zone).toLocaleString() }} OP 點
+              </p>
             </div>
             <button
               class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 shadow-sm hover:shadow-md"
@@ -179,58 +199,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </button>
-          </div>
-        </div>
-
-        <!-- ── 活動滿額提示 ── -->
-        <div class="bg-white rounded-2xl shadow-sm p-5">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="text-xl">🎊</span>
-            <h3 class="font-bold text-gray-800">滿額活動</h3>
-          </div>
-          <div class="space-y-3">
-            <div
-              v-for="(tier, idx) in promotionTiers"
-              :key="idx"
-              class="flex items-center gap-3 rounded-xl px-4 py-3 border transition-all"
-              :class="totalPrice >= tier.minTotal
-                ? 'border-brand-primary bg-brand-surface'
-                : 'border-gray-100 bg-gray-50'"
-            >
-              <span
-                class="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
-                :class="totalPrice >= tier.minTotal ? 'bg-brand-primary text-white' : 'bg-gray-200 text-gray-400'"
-              >
-                {{ totalPrice >= tier.minTotal ? '✓' : idx + 1 }}
-              </span>
-              <span
-                class="text-sm flex-1"
-                :class="totalPrice >= tier.minTotal ? 'text-brand-primary font-semibold' : 'text-gray-500'"
-              >{{ tier.label }}</span>
-              <template v-if="totalPrice < tier.minTotal">
-                <span class="text-xs text-gray-400">
-                  再買 ${{ (tier.minTotal - totalPrice).toLocaleString() }}
-                </span>
-              </template>
-              <template v-else>
-                <span class="text-xs font-bold text-brand-primary">已達成 ✨</span>
-              </template>
-            </div>
-          </div>
-
-          <!-- 當前最高折扣提示 -->
-          <div v-if="currentTier" class="mt-4 bg-brand-accent bg-opacity-10 rounded-xl px-4 py-2.5 flex items-center gap-2">
-            <span class="text-brand-accent text-base">🏆</span>
-            <p class="text-sm text-gray-700">
-              目前享有 <strong class="text-brand-accent">{{ currentTier.label }}</strong> 優惠！
-            </p>
-          </div>
-          <div v-else-if="nextTier" class="mt-4 bg-gray-50 rounded-xl px-4 py-2.5 flex items-center gap-2">
-            <span class="text-base">💡</span>
-            <p class="text-sm text-gray-600">
-              再消費 <strong class="text-brand-primary">${{ (nextTier.minTotal - totalPrice).toLocaleString() }}</strong>，
-              即享 <strong>{{ nextTier.discountPercent }} 折</strong>
-            </p>
           </div>
         </div>
 
@@ -267,139 +235,14 @@
         </div>
 
       </div>
-
-      <!-- ══ 右側：優惠券 + 結帳摘要 ══ -->
-      <div class="space-y-4">
-
-        <!-- ── 優惠券 / 折扣碼 ── -->
-        <div class="bg-white rounded-2xl shadow-sm p-5">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="text-xl">🎫</span>
-            <h3 class="font-bold text-gray-800">優惠券 / 折扣碼</h3>
-          </div>
-
-          <div class="flex gap-2 mb-3">
-            <input
-              v-model="couponInput"
-              type="text"
-              placeholder="輸入折扣碼"
-              class="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary uppercase tracking-wider"
-              @keyup.enter="applyCoupon"
-            />
-            <button
-              class="px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors flex-shrink-0"
-              :class="couponInput.trim()
-                ? 'bg-brand-primary text-white hover:bg-brand-dark'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'"
-              :disabled="!couponInput.trim()"
-              @click="applyCoupon"
-            >套用</button>
-          </div>
-
-          <!-- 套用成功 -->
-          <div v-if="appliedCoupon" class="flex items-center justify-between bg-brand-surface rounded-xl px-3 py-2.5 text-sm">
-            <div class="flex items-center gap-2">
-              <span class="text-brand-primary text-base">✅</span>
-              <div>
-                <p class="font-semibold text-brand-primary">{{ appliedCoupon.code }}</p>
-                <p class="text-xs text-gray-500">{{ appliedCoupon.label }}</p>
-              </div>
-            </div>
-            <button
-              class="text-xs text-gray-400 hover:text-red-400 transition-colors ml-2"
-              @click="removeCoupon"
-            >移除</button>
-          </div>
-
-          <!-- 錯誤訊息 -->
-          <p v-else-if="couponError" class="text-xs text-red-500 mt-1 flex items-center gap-1">
-            <span>❌</span>{{ couponError }}
-          </p>
-
-          <!-- 折扣碼提示 -->
-          <div class="mt-3 space-y-1">
-            <p class="text-xs text-gray-400 font-medium mb-1">可用折扣碼：</p>
-            <button
-              v-for="hint in couponHints"
-              :key="hint.code"
-              class="block w-full text-left text-xs text-gray-500 hover:text-brand-primary transition-colors py-0.5"
-              @click="couponInput = hint.code"
-            >
-              <span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-xs">{{ hint.code }}</span>
-              <span class="ml-1.5">{{ hint.label }}</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ── 訂單摘要 ── -->
-        <div class="bg-white rounded-2xl shadow-sm p-5 sticky top-24">
-          <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span class="text-xl">🧾</span>訂單摘要
-          </h3>
-
-          <!-- 各溫層費用 -->
-          <div class="space-y-2 pb-3 border-b border-gray-100">
-            <div
-              v-for="zone in visibleZones"
-              :key="zone.key"
-              class="flex items-center justify-between text-sm"
-            >
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full" :style="{ backgroundColor: zone.color }" />
-                <span class="text-gray-600">{{ zone.label }}小計</span>
-              </div>
-              <span class="text-gray-800">${{ zoneSubtotal(zone) }}</span>
-            </div>
-          </div>
-
-          <!-- 運費 -->
-          <div class="py-3 border-b border-gray-100 space-y-1.5">
-            <div
-              v-for="zone in visibleZones"
-              :key="`fee-${zone.key}`"
-              class="flex items-center justify-between text-sm"
-            >
-              <span class="text-gray-500">{{ zone.label }}運費</span>
-              <span :class="zoneRemaining(zone) <= 0 ? 'text-brand-primary font-medium' : 'text-gray-700'">
-                {{ zoneRemaining(zone) <= 0 ? '免運 🎉' : `$${zone.fee}` }}
-              </span>
-            </div>
-          </div>
-
-          <!-- 折扣 -->
-          <div v-if="couponDiscount > 0 || tierDiscount > 0" class="py-3 border-b border-gray-100 space-y-1.5">
-            <div v-if="couponDiscount > 0" class="flex items-center justify-between text-sm">
-              <span class="text-gray-500">優惠券折扣</span>
-              <span class="text-brand-primary font-medium">-${{ couponDiscount }}</span>
-            </div>
-            <div v-if="tierDiscount > 0" class="flex items-center justify-between text-sm">
-              <span class="text-gray-500">滿額折扣（{{ currentTier && currentTier.discountPercent }}折）</span>
-              <span class="text-brand-primary font-medium">-${{ tierDiscount }}</span>
-            </div>
-          </div>
-
-          <!-- 總計 -->
-          <div class="flex items-center justify-between pt-3 mb-4">
-            <span class="font-bold text-gray-800">合計（含運）</span>
-            <span class="text-xl font-bold text-brand-primary">${{ grandTotal }}</span>
-          </div>
-
-          <!-- 清空購物車 -->
-          <button
-            class="w-full text-xs text-gray-400 hover:text-red-400 transition-colors py-2 mb-2"
-            @click="clearCart"
-          >清空購物車</button>
-        </div>
-
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { CartItem, Product, TempZone, AddOnItem, Coupon, PromotionTier } from '@/types'
-import { mockAddOnItems, mockCoupons, mockPromotionTiers } from '@/mock/data'
+import { CartItem, Product, TempZone, AddOnItem, PromotionTier } from '@/types'
+import { mockAddOnItems, mockPromotionTiers } from '@/mock/data'
 
 interface ZoneConfig {
   key: TempZone
@@ -416,12 +259,8 @@ export default Vue.extend({
 
   data() {
     return {
-      couponInput:   '' as string,
-      appliedCoupon: null as Coupon | null,
-      couponError:   '' as string,
       addOns:        mockAddOnItems as AddOnItem[],
       promotionTiers: mockPromotionTiers as PromotionTier[],
-      couponHints:   mockCoupons as Coupon[],
 
       ZONE_META: [
         { key: 'fresh'   as TempZone, label: '產地直送', icon: '🌱', color: '#E8A020', fee: 120, freeAt: 800  },
@@ -440,11 +279,6 @@ export default Vue.extend({
     totalPrice(): number {
       return this.$store.getters['cart/totalPrice']
     },
-
-    shippingFee(): number {
-      return this.$store.getters['cart/shippingFee']
-    },
-
     itemsByZone(): Record<TempZone, CartItem[]> {
       return this.$store.getters['cart/itemsByZone']
     },
@@ -476,19 +310,6 @@ export default Vue.extend({
       return Math.round(this.totalPrice * discount)
     },
 
-    couponDiscount(): number {
-      if (!this.appliedCoupon) return 0
-      const base = this.totalPrice - this.tierDiscount
-      if (this.appliedCoupon.type === 'percent') {
-        return Math.round(base * (this.appliedCoupon.value / 100))
-      }
-      return Math.min(this.appliedCoupon.value, base)
-    },
-
-    grandTotal(): number {
-      const total = this.totalPrice + this.shippingFee - this.tierDiscount - this.couponDiscount
-      return Math.max(0, total)
-    },
   },
 
   methods: {
@@ -504,6 +325,14 @@ export default Vue.extend({
     // ── 溫層運算 ──
     zoneSubtotal(zone: ZoneConfig): number {
       return zone.items.reduce((sum, i) => sum + this.displayPrice(i.product) * i.quantity, 0)
+    },
+
+    lineOpPoints(item: CartItem): number {
+      return (item.product.requiredOpPoints || 0) * item.quantity
+    },
+
+    zoneOpPoints(zone: ZoneConfig): number {
+      return zone.items.reduce((sum, item) => sum + this.lineOpPoints(item), 0)
     },
 
     zoneRemaining(zone: ZoneConfig): number {
@@ -558,29 +387,6 @@ export default Vue.extend({
         tags:         ['加價購'],
       }
       this.$store.dispatch('cart/addItem', product)
-    },
-
-    // ── 優惠券 ──
-    applyCoupon() {
-      this.couponError = ''
-      const code = this.couponInput.trim().toUpperCase()
-      const coupon = mockCoupons.find(c => c.code === code)
-
-      if (!coupon) {
-        this.couponError = '此折扣碼不存在或已過期'
-        return
-      }
-      if (this.totalPrice < coupon.minTotal) {
-        this.couponError = `此折扣碼需滿 $${coupon.minTotal} 才可使用`
-        return
-      }
-      this.appliedCoupon = coupon
-      this.couponInput   = ''
-    },
-
-    removeCoupon() {
-      this.appliedCoupon = null
-      this.couponError   = ''
     },
 
     // ── 結帳 ──

@@ -101,21 +101,7 @@
       </div>
 
       <!-- Bottom Bar with Certification -->
-      <div class="py-12 flex flex-col md:flex-row items-center justify-between gap-8 border-t border-gray-700/30 mt-12">
-        <!-- TWCA Badge -->
-        <div class="flex items-center gap-4 group cursor-pointer grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
-          <div class="bg-white p-2 rounded-full shadow-sm">
-            <div class="w-14 h-14 border-4 border-blue-600 rounded-full flex flex-col items-center justify-center text-blue-600 leading-none">
-              <span class="text-[7px] font-black uppercase">Secured By</span>
-              <span class="text-base font-black tracking-tighter">TWCA</span>
-              <span class="text-[6px] font-bold">臺灣網路認證</span>
-            </div>
-          </div>
-          <div class="bg-gray-200 text-gray-800 px-3 py-1 rounded text-[10px] font-black font-mono">
-            26/04/22
-          </div>
-        </div>
-
+      <div class="py-12 flex justify-center md:justify-end border-t border-gray-700/30 mt-12">
         <!-- Copyright -->
         <div class="text-center md:text-right">
           <p class="text-[11px] font-black tracking-widest mb-3 text-gray-500">© {{ new Date().getFullYear() }} 統一生機開發股份有限公司，版權所有</p>

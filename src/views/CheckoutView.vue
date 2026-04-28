@@ -51,43 +51,45 @@
             </div>
 
             <div class="rounded-2xl border border-brand-primary/10 bg-brand-surface/30 p-4">
-              <div class="mb-3 flex items-center justify-between gap-4">
-                <div>
-                  <p class="text-sm font-black text-gray-800">常用收件資料</p>
-                  <p class="text-xs font-bold text-gray-400">預設地址已帶入，需要時再更換</p>
-                </div>
-                <button type="button" class="text-xs font-black text-brand-primary hover:text-brand-dark" @click="showSavedAddresses = !showSavedAddresses">
-                  {{ showSavedAddresses ? '收合其他常用地址' : '選擇其他常用地址' }}
-                </button>
-              </div>
-
-              <div v-if="selectedAddress && !requiresStoreSelection" class="rounded-2xl border border-gray-200 bg-white p-4">
-                <div class="mb-1 flex items-center gap-2">
-                  <span class="text-sm font-black text-gray-800">{{ selectedAddress.name }}</span>
-                  <span class="text-xs font-bold text-gray-400">{{ selectedAddress.phone }}</span>
-                  <span class="rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-black text-white">目前使用</span>
-                </div>
-                <p class="text-sm text-gray-500">{{ selectedAddress.city }}{{ selectedAddress.district }}{{ selectedAddress.detail }}</p>
-              </div>
-
-              <div v-if="showSavedAddresses && !requiresStoreSelection" class="mt-3 grid gap-3 md:grid-cols-2">
-                <button
-                  v-for="address in otherAddresses"
-                  :key="address.id"
-                  type="button"
-                  class="rounded-2xl border border-gray-200 bg-white p-4 text-left transition-all hover:border-brand-primary/40"
-                  @click="applySavedAddress(address.id)"
-                >
-                  <div class="mb-1 flex items-center gap-2">
-                    <span class="text-sm font-black text-gray-800">{{ address.name }}</span>
-                    <span class="text-xs font-bold text-gray-400">{{ address.phone }}</span>
-                    <span v-if="address.isDefault" class="rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-black text-white">預設</span>
+              <template v-if="!requiresStoreSelection">
+                <div class="mb-3 flex items-center justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-black text-gray-800">常用收件資料</p>
+                    <p class="text-xs font-bold text-gray-400">預設地址已帶入，需要時再更換</p>
                   </div>
-                  <p class="text-sm text-gray-500">{{ address.city }}{{ address.district }}{{ address.detail }}</p>
-                </button>
-              </div>
+                  <button type="button" class="text-xs font-black text-brand-primary hover:text-brand-dark" @click="showSavedAddresses = !showSavedAddresses">
+                    {{ showSavedAddresses ? '收合其他常用地址' : '選擇其他常用地址' }}
+                  </button>
+                </div>
 
-              <div v-if="requiresStoreSelection" class="mt-4 rounded-2xl border border-[#0f8f62]/15 bg-[#f3fbf7] p-4">
+                <div v-if="selectedAddress" class="rounded-2xl border border-gray-200 bg-white p-4">
+                  <div class="mb-1 flex items-center gap-2">
+                    <span class="text-sm font-black text-gray-800">{{ selectedAddress.name }}</span>
+                    <span class="text-xs font-bold text-gray-400">{{ selectedAddress.phone }}</span>
+                    <span class="rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-black text-white">目前使用</span>
+                  </div>
+                  <p class="text-sm text-gray-500">{{ selectedAddress.city }}{{ selectedAddress.district }}{{ selectedAddress.detail }}</p>
+                </div>
+
+                <div v-if="showSavedAddresses" class="mt-3 grid gap-3 md:grid-cols-2">
+                  <button
+                    v-for="address in otherAddresses"
+                    :key="address.id"
+                    type="button"
+                    class="rounded-2xl border border-gray-200 bg-white p-4 text-left transition-all hover:border-brand-primary/40"
+                    @click="applySavedAddress(address.id)"
+                  >
+                    <div class="mb-1 flex items-center gap-2">
+                      <span class="text-sm font-black text-gray-800">{{ address.name }}</span>
+                      <span class="text-xs font-bold text-gray-400">{{ address.phone }}</span>
+                      <span v-if="address.isDefault" class="rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-black text-white">預設</span>
+                    </div>
+                    <p class="text-sm text-gray-500">{{ address.city }}{{ address.district }}{{ address.detail }}</p>
+                  </button>
+                </div>
+              </template>
+
+              <div v-if="requiresStoreSelection" class="rounded-2xl border border-[#0f8f62]/15 bg-[#f3fbf7] p-4">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p class="text-sm font-black text-gray-800">7-ELEVEN 取貨門市</p>
@@ -140,9 +142,17 @@
           <section class="bg-white p-8 rounded-md border border-gray-100 shadow-sm space-y-6">
             <h2 class="text-xl font-serif font-black text-gray-800 tracking-widest border-b border-gray-50 pb-4">付款方式</h2>
             <div v-if="payableTotal > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <label v-for="opt in paymentOptions" :key="opt.value" class="flex items-center gap-3 border rounded-md p-4 cursor-pointer" :class="form.paymentMethod === opt.value ? 'border-brand-primary bg-brand-surface' : 'border-gray-100'">
+              <label v-for="opt in filteredPaymentOptions" :key="opt.value" class="flex items-center gap-3 border rounded-md p-4 cursor-pointer" :class="form.paymentMethod === opt.value ? 'border-brand-primary bg-brand-surface' : 'border-gray-100'">
                 <input v-model="form.paymentMethod" type="radio" :value="opt.value" class="accent-brand-primary" />
-                <span class="text-sm font-black text-gray-700">{{ opt.label }}</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-black text-gray-700">{{ opt.label }}</span>
+                  <img
+                    v-if="opt.image"
+                    :src="opt.image"
+                    :alt="opt.label"
+                    class="h-6 w-auto object-contain"
+                  />
+                </div>
               </label>
             </div>
             <div v-else class="bg-brand-surface border border-brand-primary/10 p-6 rounded-md shadow-sm">
@@ -159,8 +169,17 @@
               <div class="flex items-start justify-between gap-4">
                 <div>
                   <p class="text-sm font-black text-gray-800">OP 點數換購折抵</p>
-                  <p class="text-xs text-gray-400 mt-1">已使用換購點數</p>
-                  <p class="text-xs text-gray-400 mt-1">待確認計算規則</p>
+                  <p class="text-xs text-gray-400 mt-1">換購商品會依數量自動累計所需 OP 點數。</p>
+                  <div class="mt-3 space-y-2">
+                    <div
+                      v-for="item in opExchangeItems"
+                      :key="`op-${item.product.id}`"
+                      class="flex items-center justify-between text-xs font-semibold text-gray-500"
+                    >
+                      <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                      <span>{{ lineOpPoints(item).toLocaleString() }} 點</span>
+                    </div>
+                  </div>
                 </div>
                 <div class="text-right">
                   <p class="text-lg font-black text-brand-accent">{{ totalRequiredOpPoints.toLocaleString() }} 點</p>
@@ -203,7 +222,7 @@
               <div class="flex items-start justify-between gap-4">
                 <div>
                   <p class="text-sm font-black text-gray-800">折扣碼</p>
-                  <p class="text-xs text-gray-400 mt-1">待確認計算規則</p>
+                  <p class="text-xs text-gray-400 mt-1">優惠券 / 折扣碼已從購物車移至此步驟設定。</p>
                 </div>
                 <div class="w-full max-w-[12rem]">
                   <input v-model="couponCode" type="text" class="form-input text-right" placeholder="輸入折扣碼" />
@@ -239,6 +258,9 @@
                     <div class="flex-1 min-w-0">
                       <p class="text-sm font-black text-gray-800 truncate">{{ item.product.name }}</p>
                       <p class="text-[10px] text-gray-400">數量 x{{ item.quantity }} · 單價 ${{ itemLineTotal(item).toLocaleString() }}</p>
+                      <p v-if="lineOpPoints(item) > 0" class="text-[10px] font-bold text-brand-accent">
+                        OP 換購 {{ lineOpPoints(item).toLocaleString() }} 點
+                      </p>
                     </div>
                     <p class="text-sm font-black text-gray-700">${{ itemLineTotal(item).toLocaleString() }}</p>
                   </div>
@@ -320,6 +342,9 @@
                   <p class="text-[10px] font-bold text-gray-400">x{{ item.quantity }}</p>
                   <p class="text-xs font-black text-gray-700">${{ itemLineTotal(item).toLocaleString() }}</p>
                 </div>
+                <p v-if="lineOpPoints(item) > 0" class="mt-1 text-[10px] font-bold text-brand-accent">
+                  OP 換購 {{ lineOpPoints(item).toLocaleString() }} 點
+                </p>
               </div>
             </div>
           </div>
@@ -382,6 +407,8 @@ const ZONE_RULES: Record<TempZone, { fee: number; freeAt: number }> = {
 export default Vue.extend({
   name: 'CheckoutView',
   data() {
+    const icashPayImage = require('../../images/icash Pay.png')
+
     return {
       currentStep: 1,
       sameAsOrderer: false,
@@ -397,21 +424,21 @@ export default Vue.extend({
         receiver: { name: '', phone: '', city: '', district: '', detail: '' },
         note: '',
         agreeToTerms: false,
-        deliveryMethod: 'home-hct',
+        deliveryMethod: 'home',
         paymentMethod: 'credit'
       },
       selectedStore: null as null | { name: string; address: string },
       savedAddresses: mockAddresses.map((address) => ({ ...address })) as SavedAddress[],
       deliveryOptions: [
-        { value: 'home-hct', icon: '🚛', label: '黑貓宅配', desc: '安心溫層配送' },
-        { value: 'home-bf', icon: '🚚', label: '新竹貨運宅配', desc: '一般宅配到府' },
-        { value: 'cvs-711', icon: '🏪', label: '7-ELEVEN 超商取貨（含取貨付款）', desc: '可選超商取貨或取貨付款' }
+        { value: 'home', icon: '🚛', label: '宅配', desc: '安心配送到府' },
+        { value: 'cvs-pickup', icon: '🏪', label: '7-ELEVEN 超商取貨', desc: '超商取貨，線上先付款' },
+        { value: 'cvs-cod', icon: '💵', label: '7-ELEVEN 取貨付款', desc: '超商取貨時於門市付款' }
       ],
       paymentOptions: [
         { value: 'credit', label: '信用卡' },
         { value: 'credit-installment', label: '信用卡分期' },
         { value: 'linepay', label: 'LINE Pay' },
-        { value: 'icash', label: 'icash Pay' },
+        { value: 'icash', label: 'icash Pay', image: icashPayImage },
         { value: 'cod', label: '貨到付款' },
         { value: 'cvs-cod', label: '超商貨到付款' }
       ]
@@ -427,6 +454,9 @@ export default Vue.extend({
     },
     checkoutItems(): CartItem[] {
       return this.$store.state.cart.items.filter((item: CartItem) => item.product.tempZone === this.currentZone)
+    },
+    opExchangeItems(): CartItem[] {
+      return this.checkoutItems.filter((item) => (item.product.requiredOpPoints || 0) > 0)
     },
     totalPrice(): number {
       return this.checkoutItems.reduce((sum, item) => sum + this.itemLineTotal(item), 0)
@@ -446,7 +476,16 @@ export default Vue.extend({
       return this.deliveryOptions
     },
     requiresStoreSelection(): boolean {
-      return this.form.deliveryMethod === 'cvs-711'
+      return this.form.deliveryMethod === 'cvs-pickup' || this.form.deliveryMethod === 'cvs-cod'
+    },
+    filteredPaymentOptions(): { value: string; label: string }[] {
+      if (this.form.deliveryMethod === 'cvs-cod') {
+        return this.paymentOptions.filter((item) => item.value === 'cvs-cod')
+      }
+      if (this.form.deliveryMethod === 'cvs-pickup') {
+        return this.paymentOptions.filter((item) => !['cod', 'cvs-cod'].includes(item.value))
+      }
+      return this.paymentOptions.filter((item) => item.value !== 'cvs-cod')
     },
     pointBalance(): number {
       return this.$store.getters['user/pointBalance']
@@ -488,9 +527,9 @@ export default Vue.extend({
       return Math.max(0, this.totalPrice + this.shippingFee - this.couponDiscount - this.appliedPointDiscount - this.appliedCreditDiscount)
     },
     deliverySummary(): string {
-      if (this.form.deliveryMethod === 'cvs-711') return '7-ELEVEN 超商取貨'
-      if (this.form.deliveryMethod === 'home-bf') return '新竹貨運宅配'
-      return '黑貓宅配'
+      if (this.form.deliveryMethod === 'cvs-cod') return '7-ELEVEN 取貨付款'
+      if (this.form.deliveryMethod === 'cvs-pickup') return '7-ELEVEN 超商取貨'
+      return '宅配'
     },
     paymentSummary(): string {
       return this.paymentOptions.find((item) => item.value === this.form.paymentMethod)?.label || '未選擇'
@@ -504,6 +543,7 @@ export default Vue.extend({
     },
     canProceedStep2(): boolean {
       if (this.pointError || this.creditError) return false
+      if (this.payableTotal > 0 && !this.filteredPaymentOptions.some((item) => item.value === this.form.paymentMethod)) return false
       if (this.payableTotal > 0 && !this.form.paymentMethod) return false
       return true
     },
@@ -529,6 +569,14 @@ export default Vue.extend({
     itemLineTotal(item: CartItem): number {
       const price = item.product.memberPrice ?? item.product.originalPrice ?? item.product.price
       return Math.round(price) * item.quantity
+    },
+    lineOpPoints(item: CartItem): number {
+      return (item.product.requiredOpPoints || 0) * item.quantity
+    },
+    syncPaymentMethodForDelivery() {
+      const allowed = this.filteredPaymentOptions.map((item) => item.value)
+      if (allowed.includes(this.form.paymentMethod)) return
+      this.form.paymentMethod = allowed[0] || ''
     },
     onSameAsOrderer() {
       if (this.sameAsOrderer) {
@@ -588,6 +636,12 @@ export default Vue.extend({
     if (this.savedAddresses.length > 0) {
       const defaultAddress = this.savedAddresses.find((address) => address.isDefault) || this.savedAddresses[0]
       this.applySavedAddress(defaultAddress.id)
+    }
+    this.syncPaymentMethodForDelivery()
+  },
+  watch: {
+    'form.deliveryMethod'() {
+      this.syncPaymentMethodForDelivery()
     }
   }
 })

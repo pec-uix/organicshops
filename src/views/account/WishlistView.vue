@@ -22,6 +22,7 @@
           >
             <ProductCard
               :product="item"
+              :show-wishlist-button="false"
             />
 
             <button
@@ -66,52 +67,26 @@ import ProductCard from '@/components/product/ProductCard.vue'
 import { Product } from '@/types'
 import AccountSidebar from '@/components/account/AccountSidebar.vue'
 import AccountContentHeader from '@/components/account/AccountContentHeader.vue'
+import { getWishlist, removeFromWishlist } from '@/utils/wishlist'
 
 export default Vue.extend({
   name: 'WishlistView',
   components: { AccountSidebar, AccountContentHeader, ProductCard },
   created() {
     document.title = '收藏清單'
+    this.syncWishlist()
   },
   data() {
     return {
-      wishlist: [
-        {
-          id:            'p101',
-          name:          '有機鮮採花椰菜',
-          image:         'https://images.unsplash.com/photo-1592394533824-9440e5d68530?auto=format&fit=crop&q=80&w=800',
-          origin:        '桃園大溪',
-          unit:          '400g / 包',
-          price:         120,
-          originalPrice: 120,
-          memberPrice:   99,
-          inStock:       true,
-          tempZone:      'fresh',
-          isOrganic:     true,
-          description:   '',
-          categoryId:    'fresh',
-          tags:          []
-        },
-        {
-          id:            'p102',
-          name:          '放牧土雞蛋',
-          image:         'https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&q=80&w=800',
-          origin:        '屏東萬丹',
-          unit:          '10入 / 盒',
-          price:         180,
-          originalPrice: 180,
-          inStock:       true,
-          tempZone:      'ambient',
-          description:   '',
-          categoryId:    'ambient',
-          tags:          []
-        },
-      ] as Product[],
+      wishlist: [] as Product[],
     }
   },
   methods: {
+    syncWishlist() {
+      this.wishlist = getWishlist()
+    },
     removeWishlistItem(itemId: string) {
-      this.wishlist = this.wishlist.filter((item) => item.id !== itemId)
+      this.wishlist = removeFromWishlist(itemId)
     },
   },
 })

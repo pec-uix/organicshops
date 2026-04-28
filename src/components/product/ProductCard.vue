@@ -20,6 +20,18 @@
         </span>
       </div>
 
+      <button
+        v-if="showWishlistButton"
+        class="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm transition-all"
+        :class="isWishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-400'"
+        :title="isWishlisted ? '取消收藏' : '加入收藏'"
+        @click.stop="toggleWishlist"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" :fill="isWishlisted ? 'currentColor' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      </button>
+
       <!-- 圖片區 (嚴格 1:1, object-cover) -->
       <router-link 
         :to="`/products/${product.id}`"
@@ -64,7 +76,7 @@
           <p v-if="product.originalPrice && product.originalPrice > (product.memberPrice || product.price)" class="text-xs text-gray-400 line-through">
             ${{ Math.round(product.originalPrice).toLocaleString() }}
           </p>
-          <p v-else class="text-xs h-4"></p> <!-- 佔位符保持高度一致 -->
+          <p v-else class="text-xs h-4"></p>
 
           <!-- 會員價 / OP 點數 -->
           <div class="flex items-baseline gap-1 mt-0.5">
@@ -192,6 +204,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Product, TEMP_ZONE_LABEL } from '@/types'
+import { addToWishlist, isWishlisted as checkIsWishlisted, removeFromWishlist } from '@/utils/wishlist'
 
 export default Vue.extend({
   name: 'ProductCard',
@@ -199,10 +212,12 @@ export default Vue.extend({
     product: { type: Object as PropType<Product>, required: true },
     layout:  { type: String as PropType<'grid' | 'list'>, default: 'grid' },
     availableOpPoints: { type: Number, default: null },
+    showWishlistButton: { type: Boolean, default: true },
   },
   data() {
     return {
       isModalOpen: false,
+      isWishlisted: false,
       selectedSpec: '',
       currentPrice: 0,
       qty: 1,
@@ -244,6 +259,14 @@ export default Vue.extend({
     isImageUrl(image: string) {
       return /^https?:\/\//.test(image) || image.startsWith('/')
     },
+    toggleWishlist() {
+      this.isWishlisted = !this.isWishlisted
+      if (this.isWishlisted) {
+        addToWishlist(this.product)
+        return
+      }
+      removeFromWishlist(this.product.id)
+    },
 
     openSpecModal() {
       if (!this.product.inStock) return
@@ -269,6 +292,7 @@ export default Vue.extend({
     }
   },
   created() {
+    this.isWishlisted = checkIsWishlisted(this.product.id)
     this.selectedSpec = this.mockSpecs[0].label
     this.currentPrice = Math.round(this.mockSpecs[0].price)
   }

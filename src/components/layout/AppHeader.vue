@@ -8,7 +8,7 @@
     <!-- 主導覽列 -->
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-6">
       <!-- 品牌標誌 -->
-      <router-link to="/" class="flex items-center gap-3 flex-shrink-0 group">
+      <router-link to="/" class="flex items-center gap-3 flex-shrink-0 group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
         <div class="w-12 h-12 bg-brand-surface text-brand-primary rounded-md flex items-center justify-center text-3xl shadow-sm">
           🌿
         </div>
@@ -36,6 +36,7 @@
       <div class="flex items-center gap-4 lg:gap-6 flex-shrink-0">
         <button
           class="md:hidden flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group"
+          style="-webkit-tap-highlight-color: transparent;"
           @click="toggleMobileSearch"
         >
           <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors">
@@ -63,7 +64,7 @@
         </div>
 
         <!-- 會員中心 -->
-        <router-link to="/account" class="flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group">
+        <router-link to="/account" class="flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40" style="-webkit-tap-highlight-color: transparent;">
           <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -75,6 +76,7 @@
         <!-- 我的購物籃 -->
         <button
           class="relative flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group"
+          style="-webkit-tap-highlight-color: transparent;"
           @click="openCartDrawer"
         >
           <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors relative">
@@ -90,6 +92,7 @@
 
         <button
           class="md:hidden flex flex-col items-center text-brand-primary transition-colors"
+          style="-webkit-tap-highlight-color: transparent;"
           @click="toggleMobileMenu"
         >
           <div class="h-11 w-11 rounded-full bg-brand-primary text-white flex items-center justify-center shadow-md transition-transform duration-300">
@@ -146,7 +149,24 @@
     </transition>
 
     <!-- 行動版：輔助導覽列 (維持單行捲動) -->
-    <div class="lg:hidden border-t border-gray-100 bg-brand-surface/50 px-4 py-3 overflow-x-auto scrollbar-hide flex flex-nowrap gap-6 items-center">
+    <div class="lg:hidden relative border-t border-gray-100 bg-brand-surface/50">
+      <div class="pointer-events-none absolute left-0 top-0 bottom-0 z-10 flex items-center pl-2">
+        <div class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-gray-400 shadow-sm">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 z-10 flex items-center pr-2">
+        <div class="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-gray-400 shadow-sm">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto scrollbar-hide px-10 py-3 flex flex-nowrap gap-6 items-center">
       <router-link
         v-for="cat in categories"
         :key="'m-'+cat.id"
@@ -155,6 +175,7 @@
       >
         {{ cat.name }}
       </router-link>
+      </div>
     </div>
   </header>
 </template>

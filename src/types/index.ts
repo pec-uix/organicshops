@@ -28,6 +28,7 @@ export interface Product {
   categoryId: string
   tempZone: TempZone
   image: string        // emoji or URL placeholder
+  images?: string[]
   inStock: boolean
   isOrganic: boolean
   origin: string
