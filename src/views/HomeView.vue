@@ -100,23 +100,15 @@
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 lg:mb-12 gap-6">
           <div class="space-y-2">
             <h2 class="text-2xl lg:text-3xl font-serif font-black text-gray-800 tracking-widest border-l-4 border-brand-primary pl-4">新品上市專區</h2>
-            <p class="text-[10px] lg:text-xs font-sans font-black text-brand-primary tracking-[0.35em] opacity-80 pl-5">最新上架 NEW ARRIVALS</p>
           </div>
           <router-link to="/products" class="text-[10px] lg:text-xs font-black text-brand-dark hover:text-brand-primary tracking-widest border-b border-brand-dark pb-1">查看全部新品</router-link>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
-          <div
+          <ProductCard
             v-for="product in newArrivalProducts"
             :key="'new-'+product.id"
-            class="relative"
-          >
-            <div class="absolute -top-2 left-3 z-10 rounded-full bg-brand-primary px-3 py-1 text-[10px] font-black tracking-[0.25em] text-white shadow-sm">
-              最新上架
-            </div>
-            <ProductCard
-              :product="product"
-            />
-          </div>
+            :product="product"
+          />
         </div>
       </div>
     </section>

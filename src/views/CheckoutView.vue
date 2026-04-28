@@ -221,6 +221,31 @@
             <div class="rounded-2xl border border-gray-100 p-4">
               <div class="flex items-start justify-between gap-4">
                 <div>
+                  <p class="text-sm font-black text-gray-800">折價券</p>
+                  <p class="text-xs text-gray-400 mt-1">請選擇本次結帳要使用的折價券。</p>
+                </div>
+                <div class="w-full max-w-[16rem]">
+                  <select v-model.number="selectedCouponId" class="form-input text-right">
+                    <option :value="null">不使用折價券</option>
+                    <option
+                      v-for="coupon in selectableCoupons"
+                      :key="coupon.id"
+                      :value="coupon.id"
+                    >
+                      {{ coupon.title }} - 折抵 ${{ coupon.amount }}
+                    </option>
+                  </select>
+                  <p v-if="selectedCoupon" class="mt-2 text-xs text-gray-400 text-right">
+                    {{ selectedCoupon.scope }}｜{{ selectedCoupon.expiryDate }} 到期
+                  </p>
+                  <p class="mt-2 text-xs text-gray-400 text-right">折抵 NT.{{ selectedCouponDiscount.toLocaleString() }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-100 p-4">
+              <div class="flex items-start justify-between gap-4">
+                <div>
                   <p class="text-sm font-black text-gray-800">折扣碼</p>
                   <p class="text-xs text-gray-400 mt-1">優惠券 / 折扣碼已從購物車移至此步驟設定。</p>
                 </div>
@@ -258,11 +283,24 @@
                     <div class="flex-1 min-w-0">
                       <p class="text-sm font-black text-gray-800 truncate">{{ item.product.name }}</p>
                       <p class="text-[10px] text-gray-400">數量 x{{ item.quantity }} · 單價 ${{ itemLineTotal(item).toLocaleString() }}</p>
+                      <p v-if="item.product.promotionMessage" class="text-[10px] font-bold text-orange-500">
+                        {{ item.product.promotionMessage }}
+                      </p>
+                      <p v-if="giftProgressText(item)" class="text-[10px] font-bold text-brand-primary">
+                        {{ giftProgressText(item) }}
+                      </p>
                       <p v-if="lineOpPoints(item) > 0" class="text-[10px] font-bold text-brand-accent">
                         OP 換購 {{ lineOpPoints(item).toLocaleString() }} 點
                       </p>
                     </div>
                     <p class="text-sm font-black text-gray-700">${{ itemLineTotal(item).toLocaleString() }}</p>
+                  </div>
+                </div>
+                <div v-if="giftSummaries.length > 0" class="mt-4 rounded-2xl border border-brand-primary/15 bg-brand-surface/40 p-3">
+                  <p class="text-xs font-black text-gray-800 mb-2">本次贈品</p>
+                  <div v-for="gift in giftSummaries" :key="`${gift.sourceProductId}-${gift.giftProductId}`" class="flex items-center justify-between text-xs text-gray-600">
+                    <span>{{ gift.giftName }}</span>
+                    <span class="font-black text-brand-primary">x{{ gift.giftQuantity }}</span>
                   </div>
                 </div>
               </div>
@@ -279,7 +317,7 @@
                 <div class="rounded-2xl border border-gray-100 p-4 space-y-3">
                   <p class="text-sm font-black text-gray-800">付款資訊</p>
                   <p class="text-sm text-gray-600">付款方式：{{ paymentSummary }}</p>
-                  <p class="text-sm text-gray-600">折扣碼：{{ couponCode || '未使用' }}</p>
+                  <p class="text-sm text-gray-600">折價券 / 折扣碼：{{ couponSummary }}</p>
                   <p class="text-sm text-gray-600">OP 點數折抵：{{ appliedPointDiscount.toLocaleString() }} 點</p>
                   <p class="text-sm text-gray-600">購物金折抵：${{ appliedCreditDiscount.toLocaleString() }}</p>
                 </div>
@@ -288,7 +326,8 @@
               <div class="rounded-2xl border border-gray-100 bg-gray-50 p-4 space-y-3">
                 <div class="flex justify-between text-sm font-bold text-gray-500"><span>商品小計</span><span>${{ totalPrice.toLocaleString() }}</span></div>
                 <div class="flex justify-between text-sm font-bold text-gray-500"><span>運費</span><span>{{ shippingFee === 0 ? '免運' : `$${shippingFee.toLocaleString()}` }}</span></div>
-                <div v-if="couponDiscount > 0" class="flex justify-between text-sm font-bold text-gray-500"><span>折扣碼折抵</span><span>-${{ couponDiscount.toLocaleString() }}</span></div>
+                <div v-if="giftSummaries.length > 0" class="flex justify-between text-sm font-bold text-brand-primary"><span>活動贈品</span><span>{{ giftSummaries.map((gift) => `${gift.giftName} x${gift.giftQuantity}`).join('、') }}</span></div>
+                <div v-if="couponDiscount > 0" class="flex justify-between text-sm font-bold text-gray-500"><span>折價券 / 折扣碼折抵</span><span>-${{ couponDiscount.toLocaleString() }}</span></div>
                 <div v-if="totalRequiredOpPoints > 0" class="flex justify-between text-sm font-bold text-gray-500"><span>OP 換購折抵</span><span>{{ totalRequiredOpPoints.toLocaleString() }} 點</span></div>
                 <div v-if="appliedPointDiscount > 0" class="flex justify-between text-sm font-bold text-gray-500"><span>OP 點數折抵</span><span>-${{ appliedPointDiscount.toLocaleString() }}</span></div>
                 <div v-if="appliedCreditDiscount > 0" class="flex justify-between text-sm font-bold text-gray-500"><span>購物金折抵</span><span>-${{ appliedCreditDiscount.toLocaleString() }}</span></div>
@@ -342,16 +381,30 @@
                   <p class="text-[10px] font-bold text-gray-400">x{{ item.quantity }}</p>
                   <p class="text-xs font-black text-gray-700">${{ itemLineTotal(item).toLocaleString() }}</p>
                 </div>
+                <p v-if="item.product.promotionMessage" class="mt-1 text-[10px] font-bold text-orange-500">
+                  {{ item.product.promotionMessage }}
+                </p>
+                <p v-if="giftProgressText(item)" class="mt-1 text-[10px] font-bold text-brand-primary">
+                  {{ giftProgressText(item) }}
+                </p>
                 <p v-if="lineOpPoints(item) > 0" class="mt-1 text-[10px] font-bold text-brand-accent">
                   OP 換購 {{ lineOpPoints(item).toLocaleString() }} 點
                 </p>
               </div>
             </div>
           </div>
+          <div v-if="giftSummaries.length > 0" class="mb-6 rounded-2xl border border-brand-primary/15 bg-brand-surface/40 p-3">
+            <p class="text-xs font-black text-gray-800 mb-2">本次贈品</p>
+            <div v-for="gift in giftSummaries" :key="`${gift.sourceProductId}-${gift.giftProductId}-aside`" class="flex items-center justify-between text-xs text-gray-600">
+              <span>{{ gift.giftName }}</span>
+              <span class="font-black text-brand-primary">x{{ gift.giftQuantity }}</span>
+            </div>
+          </div>
           <div class="space-y-3 pt-6 border-t border-gray-50 font-bold">
             <div class="flex justify-between text-xs text-gray-400"><span>商品小計</span><span>${{ totalPrice.toLocaleString() }}</span></div>
             <div class="flex justify-between text-xs text-gray-400"><span>運費</span><span>{{ shippingFee === 0 ? '免運' : `$${shippingFee.toLocaleString()}` }}</span></div>
-            <div v-if="couponDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>折扣碼折抵</span><span>- ${{ couponDiscount.toLocaleString() }}</span></div>
+            <div v-if="giftSummaries.length > 0" class="flex justify-between text-xs text-brand-primary"><span>活動贈品</span><span>{{ giftSummaries.map((gift) => `${gift.giftName} x${gift.giftQuantity}`).join('、') }}</span></div>
+            <div v-if="couponDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>折價券 / 折扣碼折抵</span><span>- ${{ couponDiscount.toLocaleString() }}</span></div>
             <div v-if="totalRequiredOpPoints > 0" class="flex justify-between text-xs text-brand-accent"><span>OP 換購折抵</span><span>{{ totalRequiredOpPoints.toLocaleString() }} 點</span></div>
             <div v-if="appliedPointDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>OP 點數折抵</span><span>- ${{ appliedPointDiscount.toLocaleString() }}</span></div>
             <div v-if="appliedCreditDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>購物金折抵</span><span>- ${{ appliedCreditDiscount.toLocaleString() }}</span></div>
@@ -377,7 +430,8 @@
           <div class="space-y-3 pt-4 font-bold">
             <div class="flex justify-between text-xs text-gray-400"><span>商品小計</span><span>${{ totalPrice.toLocaleString() }}</span></div>
             <div class="flex justify-between text-xs text-gray-400"><span>運費</span><span>{{ shippingFee === 0 ? '免運' : `$${shippingFee.toLocaleString()}` }}</span></div>
-            <div v-if="couponDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>折扣碼折抵</span><span>- ${{ couponDiscount.toLocaleString() }}</span></div>
+            <div v-if="giftSummaries.length > 0" class="flex justify-between text-xs text-brand-primary"><span>活動贈品</span><span>{{ giftSummaries.map((gift) => `${gift.giftName} x${gift.giftQuantity}`).join('、') }}</span></div>
+            <div v-if="couponDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>折價券 / 折扣碼折抵</span><span>- ${{ couponDiscount.toLocaleString() }}</span></div>
             <div v-if="totalRequiredOpPoints > 0" class="flex justify-between text-xs text-brand-accent"><span>OP 換購折抵</span><span>{{ totalRequiredOpPoints.toLocaleString() }} 點</span></div>
             <div v-if="appliedPointDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>OP 點數折抵</span><span>- ${{ appliedPointDiscount.toLocaleString() }}</span></div>
             <div v-if="appliedCreditDiscount > 0" class="flex justify-between text-xs text-brand-primary"><span>購物金折抵</span><span>- ${{ appliedCreditDiscount.toLocaleString() }}</span></div>
@@ -396,12 +450,29 @@
 import Vue from 'vue'
 import { CartItem, TempZone, TEMP_ZONE_LABEL } from '@/types'
 import { mockAddresses, SavedAddress } from '@/mock/addresses'
+import { getCartGiftSummaries, getGiftProgressText } from '@/utils/promotions'
 
 const ZONE_RULES: Record<TempZone, { fee: number; freeAt: number }> = {
   ambient: { fee: 60, freeAt: 1200 },
   chilled: { fee: 100, freeAt: 800 },
   frozen: { fee: 150, freeAt: 800 },
   fresh: { fee: 120, freeAt: 800 },
+}
+
+const CART_COUPON_DRAFT_KEY = 'organicshops:cart-coupon-draft'
+
+interface CheckoutCouponOption {
+  id: number
+  title: string
+  amount: number
+  minTotal: number
+  scope: string
+  expiryDate: string
+}
+
+interface ZoneCouponDraft {
+  selectedCouponId: number | null
+  couponCode: string
 }
 
 export default Vue.extend({
@@ -417,6 +488,7 @@ export default Vue.extend({
       selectedAddressId: 1,
       pointsToRedeem: 0,
       creditsToRedeem: 0,
+      selectedCouponId: null as number | null,
       couponCode: '',
       steps: ['配送資料', '付款方式', '完成訂單'],
       form: {
@@ -441,7 +513,17 @@ export default Vue.extend({
         { value: 'icash', label: 'icash Pay', image: icashPayImage },
         { value: 'cod', label: '貨到付款' },
         { value: 'cvs-cod', label: '超商貨到付款' }
-      ]
+      ],
+      availableCoupons: [
+        { id: 1, title: '新會員專屬禮金', amount: 100, minTotal: 1000, scope: '全館商品', expiryDate: '2026-04-29' },
+        { id: 2, title: '端午佳節慶祝券', amount: 50, minTotal: 500, scope: '冷凍/冷藏商品', expiryDate: '2026-05-13' },
+        { id: 3, title: '綠色生活節', amount: 200, minTotal: 1500, scope: '有機蔬菜、在地水果', expiryDate: '2026-05-28' },
+        { id: 4, title: 'APP 下單首購禮', amount: 80, minTotal: 0, scope: '全館商品', expiryDate: '2026-06-12' },
+      ] as CheckoutCouponOption[],
+      couponCodeOffers: {
+        ORGANIC100: 100,
+        GREEN50: 50,
+      } as Record<string, number>
     }
   },
   computed: {
@@ -457,6 +539,12 @@ export default Vue.extend({
     },
     opExchangeItems(): CartItem[] {
       return this.checkoutItems.filter((item) => (item.product.requiredOpPoints || 0) > 0)
+    },
+    giftSummaries() {
+      const zone = this.$route.query.zone as TempZone | undefined
+      const currentZone = zone && ['ambient', 'chilled', 'frozen', 'fresh'].includes(zone) ? zone : 'ambient'
+      const zoneItems = (this.$store.state.cart.items as CartItem[]).filter((item) => item.product.tempZone === currentZone)
+      return getCartGiftSummaries(zoneItems)
     },
     totalPrice(): number {
       return this.checkoutItems.reduce((sum, item) => sum + this.itemLineTotal(item), 0)
@@ -499,6 +587,20 @@ export default Vue.extend({
     totalRequiredOpPoints(): number {
       return this.checkoutItems.reduce((sum, item) => sum + (item.product.requiredOpPoints || 0) * item.quantity, 0)
     },
+    selectableCoupons(): CheckoutCouponOption[] {
+      return this.availableCoupons.filter((coupon) => this.totalPrice >= coupon.minTotal && this.couponMatchesZone(coupon))
+    },
+    selectedCoupon(): CheckoutCouponOption | null {
+      return this.availableCoupons.find((coupon) => coupon.id === this.selectedCouponId) || null
+    },
+    selectedCouponDiscount(): number {
+      if (!this.selectedCoupon) return 0
+      return this.totalPrice >= this.selectedCoupon.minTotal ? this.selectedCoupon.amount : 0
+    },
+    couponCodeDiscount(): number {
+      const code = this.couponCode.trim().toUpperCase()
+      return this.couponCodeOffers[code] || 0
+    },
     maxRedeemablePoints(): number {
       return Math.max(0, Math.min(this.pointBalance - this.totalRequiredOpPoints, this.totalPrice))
     },
@@ -514,7 +616,13 @@ export default Vue.extend({
       return Math.max(0, Math.min(this.creditBalance, this.totalPrice - this.appliedPointDiscount - this.couponDiscount))
     },
     couponDiscount(): number {
-      return this.couponCode.trim() ? 100 : 0
+      return this.selectedCouponDiscount + this.couponCodeDiscount
+    },
+    couponSummary(): string {
+      const parts = []
+      if (this.selectedCoupon) parts.push(this.selectedCoupon.title)
+      if (this.couponCode.trim()) parts.push(this.couponCode.trim().toUpperCase())
+      return parts.length ? parts.join(' / ') : '未使用'
     },
     appliedCreditDiscount(): number {
       return Math.max(0, Math.min(Number(this.creditsToRedeem) || 0, this.maxCreditRedeemable))
@@ -573,10 +681,66 @@ export default Vue.extend({
     lineOpPoints(item: CartItem): number {
       return (item.product.requiredOpPoints || 0) * item.quantity
     },
+    giftProgressText(item: CartItem): string {
+      return getGiftProgressText(item.product, item.quantity)
+    },
     syncPaymentMethodForDelivery() {
       const allowed = this.filteredPaymentOptions.map((item) => item.value)
       if (allowed.includes(this.form.paymentMethod)) return
       this.form.paymentMethod = allowed[0] || ''
+    },
+    syncSelectedCoupon() {
+      if (!this.selectedCoupon) return
+      if (this.totalPrice >= this.selectedCoupon.minTotal && this.couponMatchesZone(this.selectedCoupon)) return
+      this.selectedCouponId = null
+    },
+    couponMatchesZone(coupon: CheckoutCouponOption) {
+      if (coupon.scope.includes('全館')) return true
+      if (coupon.scope.includes('冷凍/冷藏')) return ['chilled', 'frozen'].includes(this.currentZone)
+      if (coupon.scope.includes('有機蔬菜、在地水果')) return ['fresh', 'ambient'].includes(this.currentZone)
+      return true
+    },
+    restoreCouponDraft() {
+      if (typeof window === 'undefined') return
+      const rawDraft = window.localStorage.getItem(CART_COUPON_DRAFT_KEY)
+      if (!rawDraft) return
+
+      try {
+        const draft = JSON.parse(rawDraft) as Partial<Record<TempZone, Partial<ZoneCouponDraft>>> & {
+          selectedCouponId?: number | null
+          couponCode?: string
+        }
+        const zoneDraft = draft[this.currentZone]
+
+        this.selectedCouponId = zoneDraft?.selectedCouponId ?? draft.selectedCouponId ?? null
+        this.couponCode = zoneDraft?.couponCode ?? draft.couponCode ?? ''
+        this.syncSelectedCoupon()
+      } catch (_error) {
+        window.localStorage.removeItem(CART_COUPON_DRAFT_KEY)
+      }
+    },
+    persistCouponDraft() {
+      if (typeof window === 'undefined') return
+      let draftMap: Partial<Record<TempZone, ZoneCouponDraft>> = {}
+
+      try {
+        const rawDraft = window.localStorage.getItem(CART_COUPON_DRAFT_KEY)
+        if (rawDraft) {
+          draftMap = JSON.parse(rawDraft) as Partial<Record<TempZone, ZoneCouponDraft>>
+        }
+      } catch (_error) {
+        draftMap = {}
+      }
+
+      draftMap[this.currentZone] = {
+        selectedCouponId: this.selectedCouponId,
+        couponCode: this.couponCode,
+      }
+
+      window.localStorage.setItem(
+        CART_COUPON_DRAFT_KEY,
+        JSON.stringify(draftMap)
+      )
     },
     onSameAsOrderer() {
       if (this.sameAsOrderer) {
@@ -637,11 +801,22 @@ export default Vue.extend({
       const defaultAddress = this.savedAddresses.find((address) => address.isDefault) || this.savedAddresses[0]
       this.applySavedAddress(defaultAddress.id)
     }
+    this.restoreCouponDraft()
     this.syncPaymentMethodForDelivery()
   },
   watch: {
     'form.deliveryMethod'() {
       this.syncPaymentMethodForDelivery()
+    },
+    totalPrice() {
+      this.syncSelectedCoupon()
+      this.persistCouponDraft()
+    },
+    selectedCouponId() {
+      this.persistCouponDraft()
+    },
+    couponCode() {
+      this.persistCouponDraft()
     }
   }
 })

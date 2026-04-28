@@ -87,6 +87,7 @@ export const mockProducts: Product[] = [
     isOrganic: false,
     origin: '智利',
     tags: ['OP換購'],
+    promotionMessage: '促銷方案：鮭魚買四送一',
     salesCount: 680,
   },
   {
@@ -105,6 +106,7 @@ export const mockProducts: Product[] = [
     isOrganic: true,
     origin: '桃園大溪',
     tags: ['產地直送'],
+    promotionMessage: '促銷方案：花椰菜買四送一',
     salesCount: 3200,
   }
 ]

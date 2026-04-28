@@ -138,7 +138,12 @@
               <!-- 促銷訊息 -->
               <div v-if="product.promotionMessage" class="mt-3 flex items-start gap-2 bg-brand-accent bg-opacity-10 rounded-xl px-3 py-2">
                 <span class="text-brand-accent text-base flex-shrink-0">🎁</span>
-                <p class="text-sm text-gray-700">{{ product.promotionMessage }}</p>
+                <div class="min-w-0">
+                  <p class="text-sm text-gray-700">{{ product.promotionMessage }}</p>
+                  <p v-if="giftProgressText" class="mt-1 text-xs font-semibold text-brand-accent">
+                    {{ giftProgressText }}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -405,6 +410,7 @@
 import Vue from 'vue'
 import { Product, Category, TempZone, TEMP_ZONE_LABEL } from '@/types'
 import ProductCard from '@/components/product/ProductCard.vue'
+import { getGiftProgressText } from '@/utils/promotions'
 
 type StockStatus = 'in-stock' | 'sold-out' | 'restocking' | 'preorder'
 
@@ -550,6 +556,10 @@ export default Vue.extend({
 
     subtotal(): number {
       return this.displayPrice * this.quantity
+    },
+    giftProgressText(): string {
+      if (!this.product) return ''
+      return getGiftProgressText(this.product, this.quantity)
     },
 
     zoneRule(): { fee: number; freeAt: number; label: string } {

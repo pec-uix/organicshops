@@ -112,6 +112,18 @@
                   OP 換購：{{ item.product.requiredOpPoints }} 點 / 件
                   <span class="text-gray-400">，本項共 {{ lineOpPoints(item).toLocaleString() }} 點</span>
                 </p>
+                <p
+                  v-if="item.product.promotionMessage"
+                  class="mt-1 text-xs font-semibold text-orange-500"
+                >
+                  {{ item.product.promotionMessage }}
+                </p>
+                <p
+                  v-if="giftProgressText(item)"
+                  class="mt-1 text-xs font-semibold text-brand-primary"
+                >
+                  {{ giftProgressText(item) }}
+                </p>
               </div>
 
               <!-- 數量 +/- -->
@@ -170,6 +182,52 @@
                 class="h-full rounded-full transition-all duration-500"
                 :style="{ width: `${zoneProgress(zone)}%`, backgroundColor: zone.color }"
               />
+            </div>
+          </div>
+
+          <div class="px-5 py-4 border-t border-gray-50 space-y-4">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">🎟</span>
+              <h3 class="text-sm font-bold text-gray-800">{{ zone.label }}折價券 / 折扣碼</h3>
+            </div>
+
+            <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,16rem)]">
+              <div>
+                <p class="text-xs font-bold text-gray-400 mb-2">選擇折價券</p>
+                <select
+                  v-model.number="zoneCouponDrafts[zone.key].selectedCouponId"
+                  class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+                >
+                  <option :value="null">不使用折價券</option>
+                  <option
+                    v-for="coupon in zoneSelectableCoupons(zone)"
+                    :key="coupon.id"
+                    :value="coupon.id"
+                  >
+                    {{ coupon.title }} - 折抵 ${{ coupon.amount }}
+                  </option>
+                </select>
+                <p v-if="zoneSelectedCoupon(zone)" class="mt-2 text-xs text-gray-400">
+                  {{ zoneSelectedCoupon(zone).scope }}｜{{ zoneSelectedCoupon(zone).expiryDate }} 到期｜折抵 NT.{{ zoneSelectedCouponDiscount(zone).toLocaleString() }}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-xs font-bold text-gray-400 mb-2">輸入折價券 / 折扣碼</p>
+                <input
+                  v-model="zoneCouponDrafts[zone.key].couponCode"
+                  type="text"
+                  placeholder="輸入券號或折扣碼"
+                  class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm uppercase tracking-wider text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+                />
+                <p class="mt-2 text-xs text-gray-400">
+                  折價券 / 折扣碼折抵 NT.{{ zoneCouponCodeDiscount(zone).toLocaleString() }}
+                </p>
+              </div>
+            </div>
+
+            <div v-if="zoneCouponDiscount(zone) > 0" class="rounded-xl bg-brand-surface px-4 py-3 text-sm font-semibold text-brand-primary">
+              本溫層折抵：NT.{{ zoneCouponDiscount(zone).toLocaleString() }}
             </div>
           </div>
 
@@ -243,6 +301,9 @@
 import Vue from 'vue'
 import { CartItem, Product, TempZone, AddOnItem, PromotionTier } from '@/types'
 import { mockAddOnItems, mockPromotionTiers } from '@/mock/data'
+import { getGiftProgressText, getGiftQuantity } from '@/utils/promotions'
+
+const CART_COUPON_DRAFT_KEY = 'organicshops:cart-coupon-draft'
 
 interface ZoneConfig {
   key: TempZone
@@ -254,6 +315,20 @@ interface ZoneConfig {
   items: CartItem[]
 }
 
+interface CartCouponOption {
+  id: number
+  title: string
+  amount: number
+  minTotal: number
+  scope: string
+  expiryDate: string
+}
+
+interface ZoneCouponDraft {
+  selectedCouponId: number | null
+  couponCode: string
+}
+
 export default Vue.extend({
   name: 'CartView',
 
@@ -261,6 +336,22 @@ export default Vue.extend({
     return {
       addOns:        mockAddOnItems as AddOnItem[],
       promotionTiers: mockPromotionTiers as PromotionTier[],
+      zoneCouponDrafts: {
+        fresh: { selectedCouponId: null, couponCode: '' },
+        chilled: { selectedCouponId: null, couponCode: '' },
+        frozen: { selectedCouponId: null, couponCode: '' },
+        ambient: { selectedCouponId: null, couponCode: '' },
+      } as Record<TempZone, ZoneCouponDraft>,
+      availableCoupons: [
+        { id: 1, title: '新會員專屬禮金', amount: 100, minTotal: 1000, scope: '全館商品', expiryDate: '2026-04-29' },
+        { id: 2, title: '端午佳節慶祝券', amount: 50, minTotal: 500, scope: '冷凍/冷藏商品', expiryDate: '2026-05-13' },
+        { id: 3, title: '綠色生活節', amount: 200, minTotal: 1500, scope: '有機蔬菜、在地水果', expiryDate: '2026-05-28' },
+        { id: 4, title: 'APP 下單首購禮', amount: 80, minTotal: 0, scope: '全館商品', expiryDate: '2026-06-12' },
+      ] as CartCouponOption[],
+      couponCodeOffers: {
+        ORGANIC100: 100,
+        GREEN50: 50,
+      } as Record<string, number>,
 
       ZONE_META: [
         { key: 'fresh'   as TempZone, label: '產地直送', icon: '🌱', color: '#E8A020', fee: 120, freeAt: 800  },
@@ -309,7 +400,6 @@ export default Vue.extend({
       const discount = 1 - this.currentTier.discountPercent / 100
       return Math.round(this.totalPrice * discount)
     },
-
   },
 
   methods: {
@@ -330,6 +420,12 @@ export default Vue.extend({
     lineOpPoints(item: CartItem): number {
       return (item.product.requiredOpPoints || 0) * item.quantity
     },
+    lineGiftQuantity(item: CartItem): number {
+      return getGiftQuantity(item.product.id, item.quantity)
+    },
+    giftProgressText(item: CartItem): string {
+      return getGiftProgressText(item.product, item.quantity)
+    },
 
     zoneOpPoints(zone: ZoneConfig): number {
       return zone.items.reduce((sum, item) => sum + this.lineOpPoints(item), 0)
@@ -341,6 +437,94 @@ export default Vue.extend({
 
     zoneProgress(zone: ZoneConfig): number {
       return Math.min(100, Math.round((this.zoneSubtotal(zone) / zone.freeAt) * 100))
+    },
+    couponMatchesZone(coupon: CartCouponOption, zoneKey: TempZone): boolean {
+      if (coupon.scope.includes('全館')) return true
+      if (coupon.scope.includes('冷凍/冷藏')) return ['chilled', 'frozen'].includes(zoneKey)
+      if (coupon.scope.includes('有機蔬菜、在地水果')) return ['fresh', 'ambient'].includes(zoneKey)
+      return true
+    },
+
+    zoneDraft(zoneKey: TempZone): ZoneCouponDraft {
+      return this.zoneCouponDrafts[zoneKey]
+    },
+
+    zoneSelectableCoupons(zone: ZoneConfig): CartCouponOption[] {
+      return this.availableCoupons.filter((coupon) => {
+        return this.zoneSubtotal(zone) >= coupon.minTotal && this.couponMatchesZone(coupon, zone.key)
+      })
+    },
+
+    zoneSelectedCoupon(zone: ZoneConfig): CartCouponOption | null {
+      return this.availableCoupons.find((coupon) => coupon.id === this.zoneDraft(zone.key).selectedCouponId) || null
+    },
+
+    zoneSelectedCouponDiscount(zone: ZoneConfig): number {
+      const selectedCoupon = this.zoneSelectedCoupon(zone)
+      if (!selectedCoupon) return 0
+      const canUseCoupon = this.zoneSubtotal(zone) >= selectedCoupon.minTotal && this.couponMatchesZone(selectedCoupon, zone.key)
+      return canUseCoupon ? selectedCoupon.amount : 0
+    },
+
+    zoneCouponCodeDiscount(zone: ZoneConfig): number {
+      const code = this.zoneDraft(zone.key).couponCode.trim().toUpperCase()
+      if (!code) return 0
+      return this.zoneSubtotal(zone) > 0 ? (this.couponCodeOffers[code] || 0) : 0
+    },
+
+    zoneCouponDiscount(zone: ZoneConfig): number {
+      return this.zoneSelectedCouponDiscount(zone) + this.zoneCouponCodeDiscount(zone)
+    },
+
+    syncSelectedCoupon(zoneKey: TempZone) {
+      const zone = this.visibleZones.find((item) => item.key === zoneKey)
+      if (!zone) return
+
+      const selectedCoupon = this.availableCoupons.find((coupon) => coupon.id === this.zoneDraft(zoneKey).selectedCouponId)
+      if (!selectedCoupon) return
+
+      const canUseCoupon = this.zoneSubtotal(zone) >= selectedCoupon.minTotal && this.couponMatchesZone(selectedCoupon, zoneKey)
+      if (canUseCoupon) return
+
+      this.zoneDraft(zoneKey).selectedCouponId = null
+    },
+
+    syncAllZoneCoupons() {
+      ;(['fresh', 'chilled', 'frozen', 'ambient'] as TempZone[]).forEach((zoneKey) => this.syncSelectedCoupon(zoneKey))
+    },
+    persistCouponDraft() {
+      if (typeof window === 'undefined') return
+      window.localStorage.setItem(CART_COUPON_DRAFT_KEY, JSON.stringify(this.zoneCouponDrafts))
+    },
+    restoreCouponDraft() {
+      if (typeof window === 'undefined') return
+      const rawDraft = window.localStorage.getItem(CART_COUPON_DRAFT_KEY)
+      if (!rawDraft) return
+
+      try {
+        const draft = JSON.parse(rawDraft) as Partial<Record<TempZone, Partial<ZoneCouponDraft>>> & {
+          selectedCouponId?: number | null
+          couponCode?: string
+        }
+
+        ;(['fresh', 'chilled', 'frozen', 'ambient'] as TempZone[]).forEach((zoneKey) => {
+          const zoneDraft = draft[zoneKey]
+          if (zoneDraft) {
+            this.zoneCouponDrafts[zoneKey].selectedCouponId = zoneDraft.selectedCouponId ?? null
+            this.zoneCouponDrafts[zoneKey].couponCode = zoneDraft.couponCode ?? ''
+          }
+        })
+
+        // backward compatibility for the old single-draft format
+        if (draft.selectedCouponId !== undefined || draft.couponCode !== undefined) {
+          this.zoneCouponDrafts.ambient.selectedCouponId = draft.selectedCouponId ?? null
+          this.zoneCouponDrafts.ambient.couponCode = draft.couponCode ?? ''
+        }
+
+        this.syncAllZoneCoupons()
+      } catch (_error) {
+        window.localStorage.removeItem(CART_COUPON_DRAFT_KEY)
+      }
     },
 
     // ── 購物車操作 ──
@@ -392,6 +576,21 @@ export default Vue.extend({
     // ── 結帳 ──
     checkoutZone(zoneKey: TempZone) {
       this.$router.push(`/checkout?zone=${zoneKey}`).catch(() => {/* ignore */})
+    },
+  },
+  created() {
+    this.restoreCouponDraft()
+  },
+  watch: {
+    totalPrice() {
+      this.syncAllZoneCoupons()
+      this.persistCouponDraft()
+    },
+    zoneCouponDrafts: {
+      deep: true,
+      handler() {
+        this.persistCouponDraft()
+      },
     },
   },
 })
