@@ -184,7 +184,7 @@ export default Vue.extend({
         tag: 'Bundle Offer',
         title: '家庭常備箱\n一次備齊一週餐桌',
         subtitle: '精選生鮮、雜糧與人氣商品，適合第一次選購或固定補貨。',
-        image: '/site-assets/breakfast.png',
+        image: `${process.env.BASE_URL || '/'}site-assets/breakfast.png`,
         cta: '查看組合商品',
         to: '/combo/FAMILY-SET',
       },
