@@ -106,19 +106,32 @@
           </div>
           <div class="p-6">
             <div class="space-y-4">
-              <div v-for="social in socialBindings" :key="social.type" class="flex items-center justify-between p-4 rounded-xl border border-gray-50 hover:border-brand-primary/20 transition-all group">
+              <div
+                v-for="social in socialBindings"
+                :key="social.type"
+                class="flex items-center justify-between rounded-2xl border p-4 transition-all"
+                :class="social.bound ? 'border-[#DCE8CB] bg-[#FBFDF8]' : 'border-gray-100 bg-white hover:border-gray-200'"
+              >
                 <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center text-xl grayscale group-hover:grayscale-0 transition-all bg-gray-50">
-                    {{ social.icon }}
-                  </div>
                   <div>
-                    <p class="text-sm font-bold text-gray-800">{{ social.name }}</p>
-                    <p class="text-xs text-gray-400">{{ social.bound ? '已綁定：' + social.account : '尚未綁定' }}</p>
+                    <div class="flex items-center gap-2">
+                      <p class="text-sm font-bold text-gray-800">{{ social.name }}</p>
+                      <span
+                        class="rounded-full px-2.5 py-1 text-[11px] font-bold"
+                        :class="social.bound ? 'bg-[#EAF4DD] text-[#6E9C35]' : 'bg-gray-100 text-gray-400'"
+                      >
+                        {{ social.bound ? '已綁定' : '未綁定' }}
+                      </span>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-400">
+                      {{ social.bound ? social.account : '尚未連結此社群帳號' }}
+                    </p>
                   </div>
                 </div>
                 <button 
-                  class="text-xs font-bold px-4 py-1.5 rounded-full transition-all"
-                  :class="social.bound ? 'text-gray-400 bg-gray-100 hover:bg-gray-200' : 'text-brand-primary border border-brand-primary hover:bg-brand-surface'"
+                  class="rounded-full px-4 py-2 text-xs font-bold transition-all"
+                  :class="social.bound ? 'bg-white text-gray-500 border border-gray-200 hover:border-gray-300 hover:text-gray-700' : 'text-white shadow-sm hover:brightness-95'"
+                  :style="social.bound ? {} : { backgroundColor: social.color }"
                 >
                   {{ social.bound ? '解除綁定' : '立即綁定' }}
                 </button>
@@ -145,6 +158,14 @@
 import Vue from 'vue'
 import AccountSidebar from '@/components/account/AccountSidebar.vue'
 import AccountContentHeader from '@/components/account/AccountContentHeader.vue'
+
+interface SocialBinding {
+  type: string
+  name: string
+  color: string
+  bound: boolean
+  account: string
+}
 
 export default Vue.extend({
   name: 'ProfileView',
@@ -178,10 +199,10 @@ export default Vue.extend({
       ],
 
       socialBindings: [
-        { type: 'fb',     name: 'Facebook', icon: '🔵', bound: true,  account: 'Ming Wang' },
-        { type: 'line',   name: 'LINE',     icon: '🟢', bound: true,  account: '小明' },
-        { type: 'google', name: 'Google',   icon: '🔴', bound: false, account: '' },
-      ],
+        { type: 'fb',     name: 'Facebook', color: '#1877F2', bound: true,  account: 'Ming Wang' },
+        { type: 'line',   name: 'LINE',     color: '#06C755', bound: true,  account: '小明' },
+        { type: 'google', name: 'Google',   color: '#4285F4', bound: false, account: '' },
+      ] as SocialBinding[],
 
       saveNotice: '',
     }

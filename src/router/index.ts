@@ -82,7 +82,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/onboarding',
     name: 'onboarding',
-    component: () => import(/* webpackChunkName: "auth" */ '../views/OnboardingView.vue')
+    redirect: '/login'
   },
   {
     path: '/account',

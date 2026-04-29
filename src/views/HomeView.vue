@@ -165,8 +165,8 @@
           tag="Community"
           title="加入官方 LINE<br />領取免運券"
           image="https://picsum.photos/seed/harvest-field/800/400"
-          cta="完成會員設定"
-          to="/onboarding?provider=line&name=LINE%E6%9C%83%E5%93%A1"
+          cta="立即登入"
+          to="/login"
         />
       </div>
     </section>

@@ -70,17 +70,33 @@
           <div class="mt-12 pt-8 border-t border-gray-50">
             <p class="text-[10px] font-black text-gray-300 text-center tracking-[0.4em] mb-6">第三方快速登入</p>
             <div class="grid grid-cols-2 gap-4">
-              <button type="button" class="flex-1 py-4 border border-[#1877F2]/20 bg-[#1877F2]/5 rounded-xl flex items-center justify-center hover:bg-[#1877F2]/10 transition-all" @click="startThirdPartyFlow('facebook')">
-                <span class="text-sm font-black text-[#1877F2]">Facebook</span>
+              <button
+                type="button"
+                class="flex items-center justify-center rounded-2xl border border-[#1877F2]/20 bg-[#F5F8FF] px-4 py-4 transition-all hover:border-[#1877F2]/35 hover:bg-[#EEF4FF]"
+                @click="startThirdPartyFlow('facebook')"
+              >
+                <span class="text-sm font-black tracking-[0.08em] text-[#1877F2]">Facebook</span>
               </button>
-              <button type="button" class="flex-1 py-4 border border-[#06C755]/20 bg-[#06C755]/5 rounded-xl flex items-center justify-center hover:bg-[#06C755]/10 transition-all" @click="startThirdPartyFlow('line')">
-                <span class="text-sm font-black text-[#06C755]">LINE</span>
+              <button
+                type="button"
+                class="flex items-center justify-center rounded-2xl border border-[#06C755]/20 bg-[#F2FFF7] px-4 py-4 transition-all hover:border-[#06C755]/35 hover:bg-[#EBFFF2]"
+                @click="startThirdPartyFlow('line')"
+              >
+                <span class="text-sm font-black tracking-[0.12em] text-[#06C755]">LINE</span>
               </button>
-              <button type="button" class="flex-1 py-4 border border-[#4285F4]/20 bg-[#4285F4]/5 rounded-xl flex items-center justify-center hover:bg-[#4285F4]/10 transition-all" @click="startThirdPartyFlow('google')">
-                <span class="text-sm font-black text-[#4285F4]">Google</span>
+              <button
+                type="button"
+                class="flex items-center justify-center rounded-2xl border border-[#DADCE0] bg-white px-4 py-4 transition-all hover:border-[#C4C7CC] hover:bg-[#FAFAFA]"
+                @click="startThirdPartyFlow('google')"
+              >
+                <span class="text-sm font-black tracking-[0.04em] text-[#3C4043]">Google</span>
               </button>
-              <button type="button" class="flex-1 py-4 border border-orange-100 bg-orange-50/30 rounded-xl flex items-center justify-center hover:bg-orange-50 transition-all" @click="startThirdPartyFlow('openpoint')">
-                <span class="text-sm font-black text-orange-600">OPENPOINT</span>
+              <button
+                type="button"
+                class="flex items-center justify-center rounded-2xl border border-[#F3C29D] bg-[#FFF8F2] px-4 py-4 transition-all hover:border-[#F0A971] hover:bg-[#FFF2E7]"
+                @click="startThirdPartyFlow('openpoint')"
+              >
+                <span class="text-sm font-black tracking-[0.08em] text-[#E06422]">OPENPOINT</span>
               </button>
             </div>
           </div>
@@ -133,19 +149,6 @@ import Vue from 'vue'
 
 type Provider = 'facebook' | 'line' | 'google' | 'openpoint'
 
-const THIRD_PARTY_SETUP_KEY = 'organicshops.thirdPartySetupProviders'
-
-function readCompletedProviders(): Provider[] {
-  if (typeof window === 'undefined') return []
-  try {
-    const raw = window.localStorage.getItem(THIRD_PARTY_SETUP_KEY)
-    const parsed = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? parsed.filter((p): p is Provider => ['facebook', 'line', 'google', 'openpoint'].includes(p)) : []
-  } catch {
-    return []
-  }
-}
-
 export default Vue.extend({
   name: 'LoginView',
   data() {
@@ -166,26 +169,6 @@ export default Vue.extend({
       this.$router.push(redirect)
     },
     startThirdPartyFlow(provider: Provider) {
-      const names = {
-        facebook: 'Facebook 會員',
-        google: 'Google 會員',
-        openpoint: 'OPENPOINT 會員',
-        line: 'LINE 會員',
-      }
-      const completedProviders = readCompletedProviders()
-      const isFirstTime = !completedProviders.includes(provider)
-
-      if (isFirstTime) {
-        this.$router.push({
-          name: 'onboarding',
-          query: {
-            provider,
-            name: names[provider],
-          }
-        })
-        return
-      }
-
       this.$router.push((this.$route.query.redirect as string) || '/')
     },
     continueAsGuest() {

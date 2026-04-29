@@ -247,7 +247,6 @@
               <div class="flex items-start justify-between gap-4">
                 <div>
                   <p class="text-sm font-black text-gray-800">折扣碼</p>
-                  <p class="text-xs text-gray-400 mt-1">優惠券 / 折扣碼已從購物車移至此步驟設定。</p>
                 </div>
                 <div class="w-full max-w-[12rem]">
                   <input v-model="couponCode" type="text" class="form-input text-right" placeholder="輸入折扣碼" />
