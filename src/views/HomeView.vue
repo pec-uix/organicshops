@@ -228,7 +228,7 @@
             </p>
             <router-link to="/category/fresh" class="inline-block text-xs font-black text-brand-primary tracking-[0.3em] border-b border-brand-primary pb-1 ml-5">前往產地直送商品</router-link>
           </div>
-          <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 w-full">
+          <div class="flex-1 grid grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 w-full">
             <ProductCard
               v-for="product in products.slice(2, 5)"
               :key="'seasonal-'+product.id"

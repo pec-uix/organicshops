@@ -6,17 +6,17 @@
     </div>
 
     <!-- 主導覽列 -->
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-6">
+    <div class="mobile-header-shell max-w-7xl mx-auto flex min-w-0 items-center justify-between gap-3 px-3 py-3 sm:px-4 sm:py-4 sm:gap-6">
       <!-- 品牌標誌 -->
-      <router-link to="/" class="flex items-center gap-3 flex-shrink-0 group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
-        <div class="w-12 h-12 bg-brand-surface text-brand-primary rounded-md flex items-center justify-center text-3xl shadow-sm">
+      <router-link to="/" class="mobile-brand flex min-w-0 items-center gap-2 sm:gap-3 flex-shrink-0 group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
+        <div class="mobile-brand-mark h-10 w-10 sm:w-12 sm:h-12 bg-brand-surface text-brand-primary rounded-md flex items-center justify-center text-2xl sm:text-3xl shadow-sm">
           🌿
         </div>
-        <div class="leading-tight">
-          <div class="text-brand-dark font-black text-2xl tracking-tighter group-hover:text-brand-primary transition-colors">
+        <div class="min-w-0 leading-tight">
+          <div class="mobile-brand-title text-brand-dark font-black text-xl sm:text-2xl tracking-tighter group-hover:text-brand-primary transition-colors whitespace-nowrap">
             統一生機
           </div>
-          <p class="text-brand-secondary text-[10px] font-black tracking-widest mt-1">有機讓生命更生機</p>
+          <p class="hidden sm:block text-brand-secondary text-[10px] font-black tracking-widest mt-1">有機讓生命更生機</p>
         </div>
       </router-link>
 
@@ -33,18 +33,18 @@
       </nav>
 
       <!-- 功能操作區 (真實精品 Icon 導入) -->
-      <div class="flex items-center gap-4 lg:gap-6 flex-shrink-0">
+      <div class="mobile-header-actions flex items-center gap-2 sm:gap-4 lg:gap-6 flex-shrink-0">
         <button
           class="md:hidden flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group"
           style="-webkit-tap-highlight-color: transparent;"
           @click="toggleMobileSearch"
         >
-          <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <div class="rounded-full p-1 group-hover:bg-brand-surface transition-colors">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
           </div>
-          <span class="text-[10px] font-black mt-1">搜尋</span>
+          <span class="mt-1 hidden text-[10px] font-black sm:block">搜尋</span>
         </button>
 
         <!-- 搜尋 (新增輸入框連動) -->
@@ -64,42 +64,42 @@
         </div>
 
         <!-- 會員中心 -->
-        <router-link to="/account" class="flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40" style="-webkit-tap-highlight-color: transparent;">
-          <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <router-link to="/account" class="mobile-condensed-hide flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40" style="-webkit-tap-highlight-color: transparent;">
+          <div class="rounded-full p-1 group-hover:bg-brand-surface transition-colors">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
           </div>
-          <span class="text-[10px] font-black mt-1">會員中心</span>
+          <span class="mt-1 hidden text-[10px] font-black sm:block">會員中心</span>
         </router-link>
 
-        <router-link to="/account/notifications" class="relative flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40" style="-webkit-tap-highlight-color: transparent;">
-          <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors relative">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <router-link to="/account/notifications" class="mobile-condensed-hide relative flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40" style="-webkit-tap-highlight-color: transparent;">
+          <div class="rounded-full p-1 group-hover:bg-brand-surface transition-colors relative">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0a3 3 0 11-6 0m6 0H9" />
             </svg>
             <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center font-black border border-white shadow-sm">
               3
             </span>
           </div>
-          <span class="text-[10px] font-black mt-1">通知中心</span>
+          <span class="mt-1 hidden text-[10px] font-black sm:block">通知中心</span>
         </router-link>
 
         <!-- 我的購物籃 -->
         <button
-          class="relative flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group"
+          class="mobile-condensed-hide relative flex flex-col items-center text-gray-500 hover:text-brand-primary transition-colors group"
           style="-webkit-tap-highlight-color: transparent;"
           @click="openCartDrawer"
         >
-          <div class="p-1 rounded-full group-hover:bg-brand-surface transition-colors relative">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <div class="rounded-full p-1 group-hover:bg-brand-surface transition-colors relative">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
             <span v-if="cartCount > 0" class="absolute -top-1 -right-1 bg-brand-accent text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-black border border-white shadow-sm">
               {{ cartCount }}
             </span>
           </div>
-          <span class="text-[10px] font-black mt-1">我的購物籃</span>
+          <span class="mt-1 hidden text-[10px] font-black sm:block">我的購物籃</span>
         </button>
 
         <button
@@ -107,9 +107,9 @@
           style="-webkit-tap-highlight-color: transparent;"
           @click="toggleMobileMenu"
         >
-          <div class="h-11 w-11 rounded-full bg-brand-primary text-white flex items-center justify-center shadow-md transition-transform duration-300">
+          <div class="h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-brand-primary text-white flex items-center justify-center shadow-md transition-transform duration-300">
             <svg
-              class="w-6 h-6 transition-transform duration-300"
+              class="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300"
               :class="isMenuOpen ? 'rotate-90' : ''"
               fill="none"
               stroke="currentColor"
@@ -130,7 +130,7 @@
               />
             </svg>
           </div>
-          <span class="text-[10px] font-black mt-1">選單</span>
+          <span class="mt-1 hidden text-[10px] font-black sm:block">選單</span>
         </button>
       </div>
     </div>
@@ -178,7 +178,7 @@
         </div>
       </div>
 
-      <div class="overflow-x-auto scrollbar-hide px-10 py-3 flex flex-nowrap gap-6 items-center">
+      <div class="mobile-category-strip overflow-x-auto scrollbar-hide px-10 py-3 flex flex-nowrap gap-6 items-center">
       <router-link
         v-for="cat in categories"
         :key="'m-'+cat.id"
@@ -248,5 +248,83 @@ export default Vue.extend({
 .mobile-search-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+@media (max-width: 483px) {
+  .mobile-header-shell {
+    gap: 0.5rem;
+    padding: 0.75rem 0.75rem;
+  }
+
+  .mobile-brand {
+    gap: 0.5rem;
+  }
+
+  .mobile-brand-mark {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+  }
+
+  .mobile-brand-title {
+    font-size: 1.9rem;
+    line-height: 1;
+  }
+
+  .mobile-header-actions {
+    gap: 0.15rem;
+  }
+
+  .mobile-condensed-hide {
+    display: none;
+  }
+
+  .mobile-category-strip {
+    gap: 1rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 484px) and (max-width: 640px) {
+  .mobile-header-shell {
+    gap: 0.85rem;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .mobile-brand {
+    gap: 0.65rem;
+  }
+
+  .mobile-brand-mark {
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 1.65rem;
+  }
+
+  .mobile-brand-title {
+    font-size: 2.05rem;
+    line-height: 1;
+  }
+
+  .mobile-header-actions {
+    gap: 0.45rem;
+  }
+
+  .mobile-header-actions > a,
+  .mobile-header-actions > button {
+    min-width: 2.2rem;
+  }
+
+  .mobile-header-actions span.mt-1 {
+    font-size: 9px;
+    letter-spacing: 0.02em;
+  }
+
+  .mobile-category-strip {
+    gap: 1.25rem;
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
 }
 </style>

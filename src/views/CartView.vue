@@ -110,18 +110,18 @@
             <div
               v-for="item in activeZone.items"
               :key="item.product.id"
-              class="flex items-center gap-3 px-5 py-4"
+              class="flex items-start gap-3 px-5 py-4"
             >
               <!-- 商品圖 -->
               <div
-                class="w-16 h-16 flex-shrink-0 rounded-xl flex items-center justify-center text-3xl select-none"
+                class="h-24 w-24 min-h-[6rem] min-w-[6rem] flex-shrink-0 rounded-xl flex items-center justify-center text-3xl select-none sm:h-16 sm:w-16 sm:min-h-[4rem] sm:min-w-[4rem]"
                 :style="{ backgroundColor: activeZone.color + '15' }"
               >
                 <img
                   v-if="isImageUrl(item.product.image)"
                   :src="item.product.image"
                   :alt="item.product.name"
-                  class="w-full h-full object-cover rounded-xl"
+                  class="h-full w-full rounded-xl object-cover"
                 />
                 <span v-else>{{ item.product.image }}</span>
               </div>

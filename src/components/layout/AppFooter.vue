@@ -116,7 +116,7 @@
 
     <!-- ── Right Floating Sidebar ── -->
     <div
-      class="fixed right-[20px] bottom-[80px] z-[1000] pointer-events-auto"
+      class="fixed right-4 bottom-6 z-[1000] hidden pointer-events-auto md:block lg:right-[20px] lg:bottom-[80px]"
       style="border: 0.5px solid #E5E7EB; box-shadow: 0 4px 16px rgba(0,0,0,0.15); border-radius: 16px;"
     >
       <div class="flex flex-col gap-2 bg-white p-2 rounded-[16px]">

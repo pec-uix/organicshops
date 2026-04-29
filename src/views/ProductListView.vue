@@ -127,7 +127,7 @@
                   v-model.trim="localSearch"
                   type="text"
                   placeholder="搜尋商品名稱、產地、標籤"
-                  class="min-w-[220px] flex-1 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm focus:border-brand-primary focus:outline-none"
+                  class="min-w-0 flex-1 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm sm:min-w-[220px] focus:border-brand-primary focus:outline-none"
                   @keyup.enter="applySearch"
                 />
                 <button

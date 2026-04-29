@@ -58,6 +58,51 @@
               </div>
             </div>
 
+            <div class="border-b border-gray-100 px-5 py-5">
+              <p class="mb-3 text-[10px] font-black tracking-[0.22em] text-gray-300">快捷功能</p>
+              <div class="grid grid-cols-3 gap-3">
+                <router-link
+                  to="/account"
+                  class="flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white px-3 py-4 text-center transition-colors hover:bg-brand-surface"
+                  @click.native="close"
+                >
+                  <svg class="h-5 w-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  </svg>
+                  <span class="text-xs font-black text-gray-600">會員中心</span>
+                </router-link>
+
+                <router-link
+                  to="/account/notifications"
+                  class="relative flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white px-3 py-4 text-center transition-colors hover:bg-brand-surface"
+                  @click.native="close"
+                >
+                  <svg class="h-5 w-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0m6 0H9" />
+                  </svg>
+                  <span class="text-xs font-black text-gray-600">通知中心</span>
+                  <span class="absolute right-3 top-3 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-black text-white">3</span>
+                </router-link>
+
+                <button
+                  type="button"
+                  class="relative flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white px-3 py-4 text-center transition-colors hover:bg-brand-surface"
+                  @click="openCartFromMenu"
+                >
+                  <svg class="h-5 w-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                  <span class="text-xs font-black text-gray-600">我的購物籃</span>
+                  <span
+                    v-if="cartCount > 0"
+                    class="absolute right-3 top-3 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand-accent px-1 text-[9px] font-black text-white"
+                  >
+                    {{ cartCount }}
+                  </span>
+                </button>
+              </div>
+            </div>
+
             <nav>
               <div
                 v-for="item in categories"
@@ -210,6 +255,7 @@ export default Vue.extend({
     isOpen(): boolean { return this.$store.getters['ui/mobileMenuOpen'] },
     isLoggedIn(): boolean { return this.$store.getters['auth/isLoggedIn'] },
     userName(): string { return this.$store.getters['auth/currentUser']?.name ?? '會員' },
+    cartCount(): number { return this.$store.getters['cart/totalCount'] || 0 },
     nameInitial(): string { return this.userName.charAt(0) }
   },
   watch: {
@@ -219,6 +265,10 @@ export default Vue.extend({
   },
   methods: {
     close() { this.$store.dispatch('ui/closeMobileMenu') },
+    openCartFromMenu() {
+      this.close()
+      this.$store.dispatch('ui/openCartDrawer')
+    },
     hasChildren(categoryId: string) {
       return (this.childMenuMap[categoryId] || []).length > 0
     },

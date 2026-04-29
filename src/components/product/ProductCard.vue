@@ -1,13 +1,13 @@
 <template>
   <div
-    class="h-full w-full"
+    class="h-full w-full min-w-0"
     :class="layout === 'grid' ? 'mx-auto max-w-[15.5rem] md:max-w-[16rem] xl:max-w-[15rem] 2xl:max-w-[15.5rem]' : ''"
   >
     <!-- ── 1. 商品卡主體 (統一標準規格) ── -->
     <div
       class="bg-white border border-gray-100 rounded-2xl transition-all duration-300 overflow-hidden relative flex h-full shadow-sm hover:shadow-md group"
       :class="[
-        layout === 'list' ? 'flex-col sm:flex-row items-stretch' : 'flex-col min-h-[17.5rem] sm:min-h-[18rem]'
+        layout === 'list' ? 'w-full min-w-0 flex-row items-stretch' : 'flex-col min-h-[17.5rem] sm:min-h-[18rem]'
       ]"
     >
       <!-- 溫層標籤 (圖片左上角) -->
@@ -36,7 +36,9 @@
       <router-link 
         :to="`/products/${product.id}`"
         class="relative w-full bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0"
-        :class="layout === 'list' ? 'aspect-square sm:w-44 lg:w-52' : 'aspect-square'"
+        :class="layout === 'list'
+          ? 'h-[9.25rem] w-[9.25rem] min-h-[9.25rem] min-w-[9.25rem] sm:h-44 sm:w-44 sm:min-h-[11rem] sm:min-w-[11rem] lg:h-52 lg:w-52 lg:min-h-[13rem] lg:min-w-[13rem]'
+          : 'aspect-square'"
       >
         <img
           v-if="isImageUrl(product.image)"
@@ -57,7 +59,10 @@
       </router-link>
 
       <!-- 資訊內容區 -->
-      <div class="flex-1 flex flex-col p-3.5 sm:p-4 min-w-0">
+      <div
+        class="flex-1 min-w-0 flex flex-col p-3.5 sm:p-4"
+        :class="layout === 'list' ? 'overflow-hidden' : ''"
+      >
         <!-- 商品名稱 (最多 2 行) -->
         <h3
           class="font-medium text-sm text-brand-dark leading-snug mb-2 tracking-tight line-clamp-2 overflow-hidden"
@@ -66,7 +71,7 @@
           {{ product.name }}
         </h3>
 
-        <p v-if="layout === 'list'" class="mb-3 text-xs leading-relaxed text-gray-500 line-clamp-2">
+        <p v-if="layout === 'list'" class="mb-3 text-xs leading-relaxed text-gray-500 line-clamp-2 pr-2">
           {{ product.description }}
         </p>
         
@@ -98,7 +103,7 @@
           </p>
         </div>
 
-        <div class="mb-3 flex flex-wrap gap-2">
+        <div class="mb-3 flex flex-wrap gap-2 overflow-hidden">
           <span class="rounded-full bg-brand-surface px-2.5 py-1 text-[10px] font-bold text-brand-primary">
             {{ tempLabel }}
           </span>
@@ -111,11 +116,14 @@
         </div>
 
         <!-- 底部主按鈕 (全寬) -->
-        <div class="mt-auto">
+        <div class="mt-auto pt-1">
           <button
             @click.stop="openSpecModal"
             :disabled="!canAddToCart"
-            class="w-full h-9 rounded bg-brand-primary text-white text-sm font-bold transition-all flex items-center justify-center gap-2 active:scale-95 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            class="h-9 rounded bg-brand-primary text-white text-sm font-bold transition-all flex items-center justify-center gap-2 active:scale-95 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            :class="layout === 'list'
+              ? 'w-full max-w-[9.5rem] sm:max-w-[10.5rem] lg:max-w-[11rem]'
+              : 'w-full'"
           >
             <template v-if="canAddToCart">加入購物車</template>
             <template v-else>

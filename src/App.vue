@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="min-h-screen flex flex-col bg-brand-bg">
+  <div id="app" class="min-h-screen flex flex-col overflow-x-hidden bg-brand-bg">
     <AppHeader />
     <main class="flex-1">
       <router-view />
