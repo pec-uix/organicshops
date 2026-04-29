@@ -1,6 +1,27 @@
 <template>
   <div class="bg-white min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div v-if="isCatalogLanding" class="max-w-4xl mx-auto px-4 py-20">
+      <div class="overflow-hidden rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+        <div class="bg-[#F6EFD9] px-8 py-10 text-center">
+          <div class="text-5xl">🎁</div>
+          <h1 class="mt-4 text-3xl font-black text-gray-800">禮盒型錄</h1>
+          <p class="mt-3 text-sm text-gray-500">頁面內容待確認中</p>
+        </div>
+
+        <div class="px-8 py-10 text-center">
+          <p class="mx-auto max-w-2xl text-sm leading-8 text-gray-600">
+            這一頁目前先保留為待確認狀態。待禮盒型錄的內容架構、展示方式與送禮情境版型確認後，再進一步補上正式頁面內容。
+          </p>
+
+          <div class="mt-8 inline-flex rounded-full bg-gray-100 px-5 py-2 text-sm font-bold text-gray-500">
+            待確認
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="max-w-7xl mx-auto px-4 py-8">
+
       <!-- ── Breadcrumb ── -->
       <nav class="flex items-center gap-1.5 text-[11px] text-gray-400 mb-6 font-bold uppercase tracking-wider">
         <router-link to="/" class="hover:text-brand-primary">首頁</router-link>
@@ -315,6 +336,9 @@ export default Vue.extend({
   computed: {
     routeCategoryId(): string | null { return (this.$route.params.categoryId as string) || null },
     searchQuery(): string { return (this.$route.query.q as string) || '' },
+    isCatalogLanding(): boolean {
+      return this.$route.path === '/products' && !this.routeCategoryId && !this.searchQuery
+    },
     categories(): Category[] {
       return this.$store.getters['products/allCategories']
     },
@@ -326,12 +350,12 @@ export default Vue.extend({
     pageTitle(): string {
       if (this.searchQuery) return `搜尋「${this.searchQuery}」`
       if (this.currentCategory) return this.currentCategory.name
-      return '全部商品'
+      return this.isCatalogLanding ? '禮盒型錄' : '全部商品'
     },
     breadcrumbLabel(): string {
       if (this.searchQuery) return '搜尋結果'
       if (this.currentCategory) return this.currentCategory.name
-      return '全部商品'
+      return this.isCatalogLanding ? '禮盒型錄' : '全部商品'
     },
     activeSummary(): string {
       const parts = [`共 ${this.totalCount} 件商品`]
