@@ -40,30 +40,67 @@
           </div>
         </div>
 
-        <!-- ── 各溫層區塊 ── -->
-        <div
-          v-for="zone in visibleZones"
-          :key="zone.key"
-          class="bg-white rounded-2xl shadow-sm overflow-hidden"
-        >
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="border-b border-gray-100 px-3 py-3 sm:px-5">
+            <div class="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 snap-x snap-mandatory">
+              <button
+                v-for="zone in visibleZones"
+                :key="zone.key"
+                type="button"
+                class="snap-start flex min-w-[10.5rem] flex-shrink-0 items-center justify-between gap-3 rounded-full border px-4 py-3 text-left transition-all sm:min-w-[11.5rem]"
+                :class="activeZoneKey === zone.key
+                  ? 'shadow-sm ring-2 ring-offset-2 ring-offset-white'
+                  : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+                :style="activeZoneKey === zone.key ? {
+                  borderColor: zone.color,
+                  backgroundColor: `${zone.color}14`,
+                  color: zone.color,
+                  ringColor: `${zone.color}22`,
+                } : {}"
+                @click="activeZoneKey = zone.key"
+              >
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">{{ zone.icon }}</span>
+                    <span class="text-sm font-bold whitespace-nowrap">{{ zone.label }}</span>
+                  </div>
+                  <p class="mt-1 text-[11px] font-medium opacity-70">
+                    {{ zone.items.length }} 項商品
+                  </p>
+                </div>
+                <span
+                  class="inline-flex flex-shrink-0 items-center rounded-full px-3 py-1 text-xs font-bold"
+                  :style="{
+                    backgroundColor: activeZoneKey === zone.key ? '#FFFFFFCC' : `${zone.color}12`,
+                    color: zone.color,
+                  }"
+                >
+                  ${{ zoneSubtotal(zone).toLocaleString() }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── 目前溫層區塊 ── -->
+          <template v-if="activeZone">
           <!-- 溫層標題 -->
           <div
             class="flex items-center justify-between px-5 py-3"
-            :style="{ backgroundColor: zone.color + '18', borderLeft: `4px solid ${zone.color}` }"
+            :style="{ backgroundColor: activeZone.color + '18', borderLeft: `4px solid ${activeZone.color}` }"
           >
             <div class="flex items-center gap-2">
-              <span class="text-xl">{{ zone.icon }}</span>
-              <span class="font-bold text-base" :style="{ color: zone.color }">{{ zone.label }}</span>
+              <span class="text-xl">{{ activeZone.icon }}</span>
+              <span class="font-bold text-base" :style="{ color: activeZone.color }">{{ activeZone.label }}</span>
               <span class="text-xs text-gray-500 bg-white bg-opacity-70 px-2 py-0.5 rounded-full">
-                {{ zone.items.length }} 項
+                {{ activeZone.items.length }} 項
               </span>
             </div>
             <div class="text-right">
               <p class="text-sm font-semibold text-gray-700">
-                小計 <span class="text-base" :style="{ color: zone.color }">${{ zoneSubtotal(zone) }}</span>
+                小計 <span class="text-base" :style="{ color: activeZone.color }">${{ zoneSubtotal(activeZone).toLocaleString() }}</span>
               </p>
-              <p v-if="zoneOpPoints(zone) > 0" class="text-xs font-semibold text-brand-accent mt-0.5">
-                此溫層 OP 換購 {{ zoneOpPoints(zone).toLocaleString() }} 點
+              <p v-if="zoneOpPoints(activeZone) > 0" class="text-xs font-semibold text-brand-accent mt-0.5">
+                此溫層 OP 換購 {{ zoneOpPoints(activeZone).toLocaleString() }} 點
               </p>
             </div>
           </div>
@@ -71,14 +108,14 @@
           <!-- 商品列表 -->
           <div class="divide-y divide-gray-50">
             <div
-              v-for="item in zone.items"
+              v-for="item in activeZone.items"
               :key="item.product.id"
               class="flex items-center gap-3 px-5 py-4"
             >
               <!-- 商品圖 -->
               <div
                 class="w-16 h-16 flex-shrink-0 rounded-xl flex items-center justify-center text-3xl select-none"
-                :style="{ backgroundColor: zone.color + '15' }"
+                :style="{ backgroundColor: activeZone.color + '15' }"
               >
                 <img
                   v-if="isImageUrl(item.product.image)"
@@ -165,22 +202,22 @@
           </div>
 
           <!-- 免運進度條 -->
-          <div class="px-5 py-3 border-t border-gray-50" :style="{ backgroundColor: zone.color + '08' }">
+          <div class="px-5 py-3 border-t border-gray-50" :style="{ backgroundColor: activeZone.color + '08' }">
             <div class="flex items-center justify-between text-xs mb-1.5">
-              <span :style="{ color: zone.color }" class="font-medium">
-                <template v-if="zoneRemaining(zone) > 0">
-                  再買 <strong>${{ zoneRemaining(zone) }}</strong> 享{{ zone.label }}免運
+              <span :style="{ color: activeZone.color }" class="font-medium">
+                <template v-if="zoneRemaining(activeZone) > 0">
+                  再買 <strong>${{ zoneRemaining(activeZone).toLocaleString() }}</strong> 享{{ activeZone.label }}免運
                 </template>
                 <template v-else>
-                  🎉 已達{{ zone.label }}免運門檻！
+                  🎉 已達{{ activeZone.label }}免運門檻！
                 </template>
               </span>
-              <span class="text-gray-400">門檻 ${{ zone.freeAt.toLocaleString() }}｜運費 ${{ zone.fee }}</span>
+              <span class="text-gray-400">門檻 ${{ activeZone.freeAt.toLocaleString() }}｜運費 ${{ activeZone.fee }}</span>
             </div>
             <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
                 class="h-full rounded-full transition-all duration-500"
-                :style="{ width: `${zoneProgress(zone)}%`, backgroundColor: zone.color }"
+                :style="{ width: `${zoneProgress(activeZone)}%`, backgroundColor: activeZone.color }"
               />
             </div>
           </div>
@@ -188,46 +225,46 @@
           <div class="px-5 py-4 border-t border-gray-50 space-y-4">
             <div class="flex items-center gap-2">
               <span class="text-lg">🎟</span>
-              <h3 class="text-sm font-bold text-gray-800">{{ zone.label }}折價券 / 折扣碼</h3>
+              <h3 class="text-sm font-bold text-gray-800">{{ activeZone.label }}折價券 / 折扣碼</h3>
             </div>
 
             <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,16rem)]">
               <div>
                 <p class="text-xs font-bold text-gray-400 mb-2">選擇折價券</p>
                 <select
-                  v-model.number="zoneCouponDrafts[zone.key].selectedCouponId"
+                  v-model.number="zoneCouponDrafts[activeZone.key].selectedCouponId"
                   class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                 >
                   <option :value="null">不使用折價券</option>
                   <option
-                    v-for="coupon in zoneSelectableCoupons(zone)"
+                    v-for="coupon in zoneSelectableCoupons(activeZone)"
                     :key="coupon.id"
                     :value="coupon.id"
                   >
                     {{ coupon.title }} - 折抵 ${{ coupon.amount }}
                   </option>
                 </select>
-                <p v-if="zoneSelectedCoupon(zone)" class="mt-2 text-xs text-gray-400">
-                  {{ zoneSelectedCoupon(zone).scope }}｜{{ zoneSelectedCoupon(zone).expiryDate }} 到期｜折抵 NT.{{ zoneSelectedCouponDiscount(zone).toLocaleString() }}
+                <p v-if="zoneSelectedCoupon(activeZone)" class="mt-2 text-xs text-gray-400">
+                  {{ zoneSelectedCoupon(activeZone).scope }}｜{{ zoneSelectedCoupon(activeZone).expiryDate }} 到期｜折抵 NT.{{ zoneSelectedCouponDiscount(activeZone).toLocaleString() }}
                 </p>
               </div>
 
               <div>
                 <p class="text-xs font-bold text-gray-400 mb-2">輸入折價券 / 折扣碼</p>
                 <input
-                  v-model="zoneCouponDrafts[zone.key].couponCode"
+                  v-model="zoneCouponDrafts[activeZone.key].couponCode"
                   type="text"
                   placeholder="輸入券號或折扣碼"
                   class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm uppercase tracking-wider text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                 />
                 <p class="mt-2 text-xs text-gray-400">
-                  折價券 / 折扣碼折抵 NT.{{ zoneCouponCodeDiscount(zone).toLocaleString() }}
+                  折價券 / 折扣碼折抵 NT.{{ zoneCouponCodeDiscount(activeZone).toLocaleString() }}
                 </p>
               </div>
             </div>
 
-            <div v-if="zoneCouponDiscount(zone) > 0" class="rounded-xl bg-brand-surface px-4 py-3 text-sm font-semibold text-brand-primary">
-              本溫層折抵：NT.{{ zoneCouponDiscount(zone).toLocaleString() }}
+            <div v-if="zoneCouponDiscount(activeZone) > 0" class="rounded-xl bg-brand-surface px-4 py-3 text-sm font-semibold text-brand-primary">
+              本溫層折抵：NT.{{ zoneCouponDiscount(activeZone).toLocaleString() }}
             </div>
           </div>
 
@@ -235,22 +272,22 @@
           <div class="px-5 py-4 bg-gray-50 flex items-center justify-between">
             <div class="text-sm text-gray-600">
               <div>
-                小計 ${{ zoneSubtotal(zone) }}
+                小計 ${{ zoneSubtotal(activeZone).toLocaleString() }}
                 <span class="text-gray-400">
-                  + 運費 <span :class="zoneRemaining(zone) <= 0 ? 'line-through text-gray-400' : ''">
-                    ${{ zone.fee }}
+                  + 運費 <span :class="zoneRemaining(activeZone) <= 0 ? 'line-through text-gray-400' : ''">
+                    ${{ activeZone.fee }}
                   </span>
-                  <span v-if="zoneRemaining(zone) <= 0" class="text-brand-primary font-medium ml-1">免運</span>
+                  <span v-if="zoneRemaining(activeZone) <= 0" class="text-brand-primary font-medium ml-1">免運</span>
                 </span>
               </div>
-              <p v-if="zoneOpPoints(zone) > 0" class="mt-1 text-xs font-semibold text-brand-accent">
-                此溫層需 {{ zoneOpPoints(zone).toLocaleString() }} OP 點
+              <p v-if="zoneOpPoints(activeZone) > 0" class="mt-1 text-xs font-semibold text-brand-accent">
+                此溫層需 {{ zoneOpPoints(activeZone).toLocaleString() }} OP 點
               </p>
             </div>
             <button
               class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 shadow-sm hover:shadow-md"
-              :style="{ backgroundColor: zone.color }"
-              @click="checkoutZone(zone.key)"
+              :style="{ backgroundColor: activeZone.color }"
+              @click="checkoutZone(activeZone.key)"
             >
               前往結帳
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -258,6 +295,7 @@
               </svg>
             </button>
           </div>
+          </template>
         </div>
 
         <!-- ── 加價購區塊 ── -->
@@ -336,6 +374,7 @@ export default Vue.extend({
     return {
       addOns:        mockAddOnItems as AddOnItem[],
       promotionTiers: mockPromotionTiers as PromotionTier[],
+      activeZoneKey: 'fresh' as TempZone,
       zoneCouponDrafts: {
         fresh: { selectedCouponId: null, couponCode: '' },
         chilled: { selectedCouponId: null, couponCode: '' },
@@ -378,6 +417,9 @@ export default Vue.extend({
       return (this as any).ZONE_META
         .map((meta: any) => ({ ...meta, items: this.itemsByZone[meta.key as TempZone] }))
         .filter((z: ZoneConfig) => z.items.length > 0)
+    },
+    activeZone(): ZoneConfig | null {
+      return this.visibleZones.find((zone) => zone.key === this.activeZoneKey) || this.visibleZones[0] || null
     },
 
     // 加價購：依購物車總額解鎖
@@ -577,11 +619,23 @@ export default Vue.extend({
     checkoutZone(zoneKey: TempZone) {
       this.$router.push(`/checkout?zone=${zoneKey}`).catch(() => {/* ignore */})
     },
+    syncActiveZone() {
+      if (!this.visibleZones.length) return
+      if (this.visibleZones.some((zone) => zone.key === this.activeZoneKey)) return
+      this.activeZoneKey = this.visibleZones[0].key
+    },
   },
   created() {
     this.restoreCouponDraft()
+    this.syncActiveZone()
   },
   watch: {
+    visibleZones: {
+      immediate: true,
+      handler() {
+        this.syncActiveZone()
+      },
+    },
     totalPrice() {
       this.syncAllZoneCoupons()
       this.persistCouponDraft()
@@ -595,3 +649,14 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>

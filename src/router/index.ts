@@ -162,6 +162,11 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "static" */ '../views/PrivacyView.vue')
   },
   {
+    path: '/member-terms',
+    name: 'member-terms',
+    component: () => import(/* webpackChunkName: "static" */ '../views/MemberTermsView.vue')
+  },
+  {
     path: '/news',
     name: 'news-list',
     component: () => import(/* webpackChunkName: "news" */ '../views/NewsListView.vue')
@@ -170,6 +175,21 @@ const routes: Array<RouteConfig> = [
     path: '/news/:id',
     name: 'news-detail',
     component: () => import(/* webpackChunkName: "news" */ '../views/NewsDetailView.vue')
+  },
+  {
+    path: '/content-center',
+    name: 'content-center',
+    component: () => import(/* webpackChunkName: "static" */ '../views/ContentCenterView.vue')
+  },
+  {
+    path: '/health-journal',
+    name: 'health-journal',
+    component: () => import(/* webpackChunkName: "static" */ '../views/HealthJournalView.vue')
+  },
+  {
+    path: '/recipes',
+    name: 'recipes',
+    component: () => import(/* webpackChunkName: "static" */ '../views/RecipeView.vue')
   },
   {
     path: '/inspections',

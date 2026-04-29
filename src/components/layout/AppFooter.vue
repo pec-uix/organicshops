@@ -37,7 +37,7 @@
           <ul class="space-y-3 text-sm font-medium text-gray-300">
             <li><router-link to="/account/profile" class="hover:text-brand-primary transition-colors">會員資料</router-link></li>
             <li><router-link to="/account/orders" class="hover:text-brand-primary transition-colors">我的訂單</router-link></li>
-            <li><router-link to="/privacy" class="hover:text-brand-primary transition-colors">會員條款</router-link></li>
+            <li><router-link to="/member-terms" class="hover:text-brand-primary transition-colors">會員條款</router-link></li>
           </ul>
         </div>
 
@@ -57,8 +57,8 @@
           <h4 class="text-white font-black mb-6 text-base tracking-widest border-l-4 border-brand-primary pl-3">安心購</h4>
           <ul class="space-y-3 text-sm font-medium text-gray-300">
             <li><router-link to="/inspections" class="hover:text-brand-primary transition-colors">檢驗報告</router-link></li>
-            <li><router-link to="/shopping-guide" class="hover:text-brand-primary transition-colors">食譜</router-link></li>
-            <li><router-link to="/news" class="hover:text-brand-primary transition-colors">健康誌</router-link></li>
+            <li><router-link to="/recipes" class="hover:text-brand-primary transition-colors">食譜</router-link></li>
+            <li><router-link to="/health-journal" class="hover:text-brand-primary transition-colors">健康誌</router-link></li>
             <li><router-link to="/products" class="hover:text-brand-primary transition-colors">禮盒型錄</router-link></li>
           </ul>
         </div>

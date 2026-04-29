@@ -213,7 +213,7 @@
               />
               <span class="text-sm text-gray-700">
                 我已詳閱並同意
-                <router-link to="/privacy" class="text-brand-primary hover:underline">服務條款</router-link>
+                <router-link to="/member-terms" class="text-brand-primary hover:underline">服務條款</router-link>
                 及
                 <router-link to="/privacy" class="text-brand-primary hover:underline">隱私權政策</router-link>
                 <span class="text-red-400 ml-0.5">*</span>

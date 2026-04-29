@@ -341,7 +341,7 @@
                 <input v-model="form.agreeToTerms" type="checkbox" class="mt-1 accent-brand-primary" />
                 <span class="text-sm text-gray-700 leading-relaxed">
                   我已詳閱並同意
-                  <router-link to="/privacy" class="font-bold text-brand-primary hover:underline">退貨條款</router-link>
+                  <router-link to="/member-terms" class="font-bold text-brand-primary hover:underline">會員條款</router-link>
                   與
                   <router-link to="/privacy" class="font-bold text-brand-primary hover:underline">隱私權政策</router-link>
                 </span>
