@@ -60,6 +60,7 @@ export default Vue.extend({
       }
       return [
         { key: 'account', icon: '🏠', label: '會員中心', to: '/account' },
+        { key: 'notifications', icon: '🔔', label: '通知中心', to: '/account/notifications' },
         { key: 'orders', icon: '📦', label: '我的訂單', to: '/account/orders' },
         { key: 'addresses', icon: '📍', label: '常用地址', to: '/account/addresses' },
         { key: 'coupons', icon: '🎟', label: '折價券', to: '/account/coupons' },

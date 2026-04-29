@@ -106,6 +106,11 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "account" */ '../views/account/OrderListView.vue')
   },
   {
+    path: '/account/notifications',
+    name: 'notification-center',
+    component: () => import(/* webpackChunkName: "account" */ '../views/account/NotificationCenterView.vue')
+  },
+  {
     path: '/account/orders/:id',
     name: 'order-detail',
     component: () => import(/* webpackChunkName: "account" */ '../views/account/OrderDetailView.vue')

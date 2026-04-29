@@ -113,6 +113,9 @@
                 <svg v-if="item.iconKey === 'orders'" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 7h18M6 7l1 13h10l1-13M9 11h6" />
                 </svg>
+                <svg v-else-if="item.iconKey === 'notifications'" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0m6 0H9" />
+                </svg>
                 <svg v-else-if="item.iconKey === 'addresses'" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 21s6-4.35 6-10a6 6 0 10-12 0c0 5.65 6 10 6 10z" />
                   <circle cx="12" cy="11" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8" />
@@ -187,6 +190,7 @@ export default Vue.extend({
       return {
       memberData: { totalOrders: 7, pendingShipments: 2, credits: 900, creditsExpiry: '06/30', opPoints: 1250, couponCount: 3 },
       quickActions: [
+        { to: '/account/notifications', iconKey: 'notifications', label: '通知中心' },
         { to: '/account/orders',    iconKey: 'orders', label: '我的訂單' },
         { to: '/account/addresses', iconKey: 'addresses', label: '常用地址' },
         { to: '/account/coupons',   iconKey: 'coupons', label: '折價券' },
