@@ -195,9 +195,9 @@ export default Vue.extend({
         },
         {
           id:         4,
-          title:      'APP 下單首購禮',
+          title:      '會員首購禮',
           amount:     80,
-          condition:  'APP 首次下單不限金額',
+          condition:  '會員首次下單不限金額',
           expiryDate: getRelativeDate(45),
           scope:      '全館商品',
           status:     'available',

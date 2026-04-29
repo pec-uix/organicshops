@@ -385,7 +385,7 @@ export default Vue.extend({
         { id: 1, title: '新會員專屬禮金', amount: 100, minTotal: 1000, scope: '全館商品', expiryDate: '2026-04-29' },
         { id: 2, title: '端午佳節慶祝券', amount: 50, minTotal: 500, scope: '冷凍/冷藏商品', expiryDate: '2026-05-13' },
         { id: 3, title: '綠色生活節', amount: 200, minTotal: 1500, scope: '有機蔬菜、在地水果', expiryDate: '2026-05-28' },
-        { id: 4, title: 'APP 下單首購禮', amount: 80, minTotal: 0, scope: '全館商品', expiryDate: '2026-06-12' },
+        { id: 4, title: '會員首購禮', amount: 80, minTotal: 0, scope: '全館商品', expiryDate: '2026-06-12' },
       ] as CartCouponOption[],
       couponCodeOffers: {
         ORGANIC100: 100,
