@@ -66,7 +66,7 @@
         <!-- Column 5: Corporate Info & Social -->
         <div class="col-span-2 lg:col-span-1 border-l border-gray-700/50 pl-0 lg:pl-8">
           <div class="text-[12px] md:text-[13px] leading-6 space-y-1.5 font-medium opacity-90 mb-8">
-            <p class="text-white font-black text-base md:text-[17px] leading-tight mb-3 tracking-tight max-w-[16rem]">統一生機開發股份有限公司</p>
+            <p class="text-white font-black text-base md:text-[17px] leading-tight mb-3 tracking-tight max-w-[16rem]">統一企業集團</p>
             <p>免付費訂購電話：0800-777-000</p>
             <p>公司地址：桃園市中壢區定寧路15號1樓</p>
             <p>愛用者免付費電話：0800-880-988</p>
@@ -104,7 +104,7 @@
       <div class="py-12 flex justify-center md:justify-end border-t border-gray-700/30 mt-12">
         <!-- Copyright -->
         <div class="text-center md:text-right">
-          <p class="text-[11px] font-black tracking-widest mb-3 text-gray-500">© {{ new Date().getFullYear() }} 統一生機開發股份有限公司，版權所有</p>
+          <p class="text-[11px] font-black tracking-widest mb-3 text-gray-500">© {{ new Date().getFullYear() }} 統一企業集團，版權所有</p>
           <div class="flex justify-center md:justify-end gap-6 opacity-30">
             <span class="text-[9px] font-bold border border-gray-400 px-1.5 rounded tracking-tighter">SSL 安全連線</span>
             <span class="text-[9px] font-bold border border-gray-400 px-1.5 rounded tracking-tighter">HACCP 認證</span>
