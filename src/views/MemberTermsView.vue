@@ -1,12 +1,38 @@
 <template>
   <div class="min-h-screen bg-brand-bg pb-20">
-    <div class="bg-white border-b border-gray-100 py-12 text-center">
-      <h1 class="text-3xl font-black text-gray-800 mb-2">會員服務條款</h1>
-      <p class="text-gray-400">修訂日期：2026/1/14</p>
-    </div>
+    <section class="relative overflow-hidden bg-[#F0F4F1]">
+      <img
+        :src="termsBannerImage"
+        alt="會員服務條款"
+        class="absolute inset-0 h-full w-full object-cover opacity-90"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-white/15 to-transparent"></div>
+      <div class="relative z-10 mx-auto max-w-7xl px-4 py-14 lg:px-8 lg:py-20">
+        <h1 class="text-3xl font-black leading-tight tracking-[0.16em] text-brand-dark lg:text-5xl">會員服務條款</h1>
+      </div>
+    </section>
 
-    <div class="max-w-4xl mx-auto px-4 py-10">
-      <div class="rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm lg:p-10">
+    <main class="mx-auto max-w-7xl px-4 pt-8 lg:px-8">
+      <nav class="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 border-b border-gray-100 pb-8 text-sm text-gray-500">
+        <router-link to="/" class="inline-flex items-center gap-1 whitespace-nowrap transition-colors hover:text-brand-primary" aria-label="返回首頁">
+          <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11.5L12 4l9 7.5M5.5 10.5V20h13v-9.5M9.5 20v-5.5h5V20" />
+          </svg>
+          <span>首頁</span>
+        </router-link>
+        <span class="inline-flex items-center gap-1.5 whitespace-nowrap text-gray-800">
+          <span>›</span>
+          會員服務條款
+        </span>
+      </nav>
+
+      <section class="mx-auto max-w-4xl py-2">
+        <div class="mb-8 pt-4 text-center">
+          <h2 class="text-3xl font-black leading-tight text-gray-800">會員服務條款</h2>
+          <p class="mt-2 text-base font-semibold text-gray-400">修訂日期：2026/1/14</p>
+        </div>
+
+        <div class="px-0 py-2">
         <div class="rounded-2xl bg-brand-surface px-5 py-5 text-sm leading-7 text-gray-600">
           <p>
             本統一生機購物網服務條款（以下簡稱「服務條款」）適用於統一生機開發股份有限公司（以下簡稱「統一生機」或「本公司」）
@@ -180,7 +206,10 @@
                 <div class="bg-gray-50 px-4 py-4 font-bold text-gray-700">統一編號</div>
                 <div class="px-4 py-4">16781797</div>
                 <div class="bg-gray-50 px-4 py-4 font-bold text-gray-700">客服專線</div>
-                <div class="px-4 py-4">0800-777-000（服務時間：週一~週五 AM8:00~PM18:00；國定例假日 AM8:30~PM17:30；周六及週日休假）</div>
+                <div class="px-4 py-4">
+                  <span class="block">0800-777-000（服務時間：週一~週五 AM8:00~PM18:00；</span>
+                  <span class="block">國定例假日 AM8:30~PM17:30；周六及週日休假）</span>
+                </div>
                 <div class="bg-gray-50 px-4 py-4 font-bold text-gray-700">聯絡信箱</div>
                 <div class="px-4 py-4 break-all">
                   <a href="https://www.organicshops.cc/service.aspx" target="_blank" rel="noopener noreferrer" class="text-brand-primary hover:underline">
@@ -191,8 +220,9 @@
             </div>
           </section>
         </div>
-      </div>
-    </div>
+        </div>
+      </section>
+    </main>
   </div>
 </template>
 
@@ -201,5 +231,10 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'MemberTermsView',
+  data() {
+    return {
+      termsBannerImage: require('../../images/背景圖.png'),
+    }
+  },
 })
 </script>

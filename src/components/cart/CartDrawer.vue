@@ -13,13 +13,13 @@
     <transition name="drawer-slide">
       <div
         v-if="isOpen"
-        class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-2xl flex flex-col"
+        class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-xl flex flex-col"
       >
 
         <!-- ── Header ── -->
         <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100 flex-shrink-0 bg-brand-surface/20">
           <div class="flex items-center gap-3">
-            <h2 class="text-lg font-black text-brand-dark tracking-widest italic">我的購物籃</h2>
+            <h2 class="text-lg font-bold text-brand-dark tracking-widest">我的購物籃</h2>
           </div>
           <button
             class="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-brand-primary transition-all active:scale-90"
@@ -33,27 +33,32 @@
 
         <!-- ── 統一空狀態 (Empty State Pattern) ── -->
         <div v-if="totalCount === 0" class="flex-1 flex flex-col items-center p-8 text-center animate-fade-in overflow-y-auto custom-scrollbar">
-          <div class="w-24 h-24 bg-brand-surface rounded-full flex items-center justify-center text-5xl grayscale opacity-30 mb-8 shadow-inner flex-shrink-0 mt-12">🛒</div>
-          <h3 class="text-xl font-black text-brand-dark mb-2 tracking-tight">您的購物籃是空的</h3>
-          <p class="text-sm text-gray-400 mb-8 leading-loose font-medium">
+          <div class="mt-10 mb-7 flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-full bg-brand-surface text-5xl grayscale opacity-30 shadow-inner">🛒</div>
+          <h3 class="mb-3 text-xl font-bold tracking-tight text-brand-dark">您的購物籃是空的</h3>
+          <p class="mb-6 text-sm font-medium leading-relaxed text-gray-400">
             挑選一些新鮮有機食材，<br />開啟您的健康美味之旅吧！
           </p>
           <button
-            class="w-full bg-brand-primary text-white py-4 rounded-md font-black text-sm uppercase tracking-widest shadow-lg shadow-brand-primary/20 hover:bg-brand-dark transition-all active:scale-95 mb-12 flex-shrink-0"
+            class="w-full py-3 rounded-xl bg-[#76B82A] text-white font-medium text-sm shadow-sm hover:bg-[#659e22] transition tracking-wide active:scale-[0.98] mb-10 flex-shrink-0"
             @click="goShopping"
           >
             立即去逛逛
           </button>
 
+          <div class="border-b border-gray-100 my-6 mx-4"></div>
+
           <!-- 推薦區塊 (優化為單欄橫排以適應狹窄空間) -->
-          <div class="w-full border-t border-gray-100 pt-10">
-            <h3 class="mb-8 text-center text-base font-black text-brand-primary">為您推薦的商品</h3>
+          <div class="w-full pt-4">
+            <h3 class="text-sm font-bold text-gray-800 border-l-4 border-[#76B82A] pl-3 mb-4 mt-2 block text-left ml-4">為您推薦的商品</h3>
             <div class="space-y-4">
               <ProductCard
                 v-for="product in recommendedProducts"
                 :key="'cart-rec-'+product.id"
                 :product="product"
                 layout="list"
+                variant="editorial"
+                full-width
+                :is-mini="true"
               />
             </div>
           </div>
@@ -68,8 +73,8 @@
           >
             <div class="flex items-center gap-3 px-6 py-3 sticky top-0 z-10 bg-white/90 backdrop-blur-md border-y border-gray-50">
               <div class="w-2 h-2 rounded-full shadow-sm" :style="{ backgroundColor: zone.color }" />
-              <span class="text-xs font-black tracking-widest" :style="{ color: zone.color }">{{ zone.label }}</span>
-              <span class="text-[10px] font-black text-gray-300 ml-auto tracking-tighter">{{ zone.items.length }} 件商品</span>
+              <span class="text-xs font-bold tracking-widest" :style="{ color: zone.color }">{{ zone.label }}</span>
+              <span class="text-[10px] font-bold text-gray-700 ml-auto tracking-tighter">{{ zone.items.length }} 件商品</span>
             </div>
 
             <div class="px-6 space-y-4 pt-4 text-left">
@@ -78,33 +83,42 @@
                   <img :src="item.product.image" class="w-full h-full object-contain p-2" />
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-sm font-black text-gray-800 truncate group-hover:text-brand-primary transition-colors cursor-pointer">{{ item.product.name }}</p>
-                  <p class="text-[10px] text-gray-400 mt-1 font-bold">{{ item.product.unit }}</p>
-                  <p class="text-sm font-black mt-2 tracking-tight" :style="{ color: zone.color }">${{ itemDisplayPrice(item.product).toLocaleString() }}</p>
+                  <p class="line-clamp-2 text-sm font-bold leading-snug text-gray-800 group-hover:text-brand-primary transition-colors cursor-pointer">{{ item.product.name }}</p>
+                  <div class="mt-1 grid gap-y-1">
+                    <p class="text-sm font-black tracking-tight text-red-600">${{ itemDisplayPrice(item.product).toLocaleString() }}</p>
+                    <p v-if="item.product.requiredOpPoints" class="text-[11px] font-bold text-brand-primary">
+                      加價換購{{ item.product.requiredOpPoints.toLocaleString() }} OP 點 / 件
+                    </p>
+                  </div>
                 </div>
                 <div class="flex flex-col items-center gap-2">
                   <div class="flex items-center border border-gray-100 rounded-md overflow-hidden bg-white shadow-sm">
                     <button class="w-7 h-7 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors" @click="decrement(item)">−</button>
-                    <span class="w-8 text-center text-xs font-black text-gray-800">{{ item.quantity }}</span>
+                    <span class="w-8 text-center text-xs font-bold text-gray-800">{{ item.quantity }}</span>
                     <button class="w-7 h-7 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors" @click="increment(item)">+</button>
                   </div>
-                  <button class="text-[10px] font-black text-gray-300 hover:text-red-400 tracking-tighter transition-colors" @click="removeItem(item.product.id)">移除</button>
+                  <button class="text-[10px] font-bold text-gray-300 hover:text-red-400 tracking-tighter transition-colors" @click="removeItem(item.product.id)">移除</button>
                 </div>
               </div>
             </div>
 
             <div class="mx-6 mb-4 mt-6 rounded-md p-4 bg-gray-50 border border-gray-100 text-left">
-              <template v-if="zone.key === 'ambient'">
-                <div class="flex items-center justify-between text-[10px] font-black mb-2">
-                  <span :style="{ color: zone.color }">{{ ambientRemaining > 0 ? `再買 $${ambientRemaining} 即可享常溫免運` : '已達常溫免運門檻' }}</span>
-                </div>
-                <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
-                  <div class="h-full rounded-full transition-all duration-1000" :style="{ width: `${ambientProgress}%`, backgroundColor: zone.color }" />
-                </div>
-              </template>
-              <template v-else>
-                <div class="flex items-center justify-between text-[10px] font-black"><span class="text-gray-400">{{ zone.label }}運費</span><span :style="{ color: zone.color }">+${{ zone.fee }}</span></div>
-              </template>
+              <div class="mb-2 flex items-center justify-between gap-3 text-[10px] font-bold">
+                <span :style="{ color: zone.color }">{{ zoneProgressTitle(zone) }}</span>
+                <span class="flex-shrink-0 text-gray-400">門檻 ${{ zoneProgressThreshold(zone).toLocaleString() }}</span>
+              </div>
+              <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000" :style="{ width: `${zoneProgress(zone)}%`, backgroundColor: zone.color }" />
+              </div>
+              <div class="mt-3 grid gap-y-1 border-l-2 border-brand-primary/20 pl-3 text-[10px] font-bold leading-5">
+                <p
+                  v-for="note in zoneShippingNotes(zone)"
+                  :key="note"
+                  class="text-gray-500"
+                >
+                  {{ note }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -113,11 +127,11 @@
         <div v-if="totalCount > 0" class="border-t border-gray-100 flex-shrink-0 px-6 py-6 space-y-4 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.03)] text-left">
           <div class="space-y-2">
             <div class="flex justify-between text-xs font-bold text-gray-400 tracking-widest"><span>商品小計</span><span>${{ totalPrice.toLocaleString() }}</span></div>
-            <div class="flex justify-between text-xs font-bold text-gray-400 tracking-widest"><span>運費</span><span :class="shippingFee === 0 ? 'text-brand-primary' : ''">{{ shippingFee === 0 ? '免運' : `$${shippingFee}` }}</span></div>
-            <div class="flex justify-between items-baseline pt-4"><span class="text-sm font-black text-brand-dark tracking-widest">總計</span><span class="text-3xl font-black text-brand-primary tracking-tighter italic"><span class="text-sm not-italic">$</span>{{ (totalPrice + shippingFee).toLocaleString() }}</span></div>
+            <div class="flex justify-between text-xs font-bold text-gray-400 tracking-widest"><span>預估運費</span><span :class="shippingFee === 0 ? 'text-brand-primary' : ''">{{ shippingFee === 0 ? '免運' : `$${shippingFee}` }}</span></div>
+            <div class="flex justify-between items-baseline pt-4"><span class="text-sm font-bold text-brand-dark tracking-widest">總計</span><span class="text-3xl font-black text-brand-primary"><span class="mr-1 text-sm">$</span>{{ (totalPrice + shippingFee).toLocaleString() }}</span></div>
           </div>
-          <button class="w-full bg-brand-primary text-white py-4 rounded-md font-black text-sm tracking-[0.12em] shadow-xl shadow-brand-primary/20 hover:bg-brand-dark transition-all active:scale-[0.98]" @click="checkout">結帳</button>
-          <button class="w-full text-[10px] font-black text-gray-300 hover:text-gray-500 tracking-widest transition-colors py-1" @click="clearCart">清空購物車</button>
+          <button class="w-full bg-brand-primary text-white py-4 rounded-xl font-black text-sm tracking-[0.12em] shadow-sm hover:bg-brand-dark transition-all active:scale-[0.98]" @click="checkout">查看購物車並結帳</button>
+          <button class="w-full text-[10px] font-bold text-gray-300 hover:text-gray-500 tracking-widest transition-colors py-1" @click="clearCart">清空購物車</button>
         </div>
       </div>
     </transition>
@@ -130,6 +144,37 @@ import { CartItem, Product, TempZone } from '@/types'
 import { mockProducts } from '@/mock/data'
 import ProductCard from '@/components/product/ProductCard.vue'
 
+interface DrawerZone {
+  key: TempZone
+  label: string
+  color: string
+  fee: number
+  items: CartItem[]
+}
+
+interface DrawerDeliveryRule {
+  label: string
+  threshold: number
+  fee: number
+}
+
+const DRAWER_DELIVERY_RULES: Record<TempZone, DrawerDeliveryRule[]> = {
+  ambient: [
+    { label: '宅配', threshold: 1200, fee: 120 },
+    { label: '超商取貨', threshold: 599, fee: 60 },
+  ],
+  chilled: [
+    { label: '宅配', threshold: 1500, fee: 100 },
+  ],
+  frozen: [
+    { label: '宅配', threshold: 800, fee: 120 },
+    { label: '超商取貨', threshold: 800, fee: 100 },
+  ],
+  fresh: [
+    { label: '宅配', threshold: 800, fee: 120 },
+  ],
+}
+
 export default Vue.extend({
   name: 'CartDrawer',
   components: { ProductCard },
@@ -139,12 +184,9 @@ export default Vue.extend({
     totalPrice(): number { return this.$store.getters['cart/totalPrice'] },
     shippingFee(): number { return this.$store.getters['cart/shippingFee'] },
     itemsByZone(): Record<TempZone, CartItem[]> { return this.$store.getters['cart/itemsByZone'] },
-    ambientSubtotal(): number { return this.$store.getters['cart/ambientSubtotal'] },
-    ambientRemaining(): number { return Math.max(0, 1200 - this.ambientSubtotal) },
-    ambientProgress(): number { return Math.min(100, Math.round((this.ambientSubtotal / 1200) * 100)) },
     recommendedProducts(): Product[] { return mockProducts.slice(0, 4) },
-    visibleZones(): any[] {
-      const allZones = [
+    visibleZones(): DrawerZone[] {
+      const allZones: DrawerZone[] = [
         { key: 'fresh', label: '產地直送', color: '#78B43F', fee: 120, items: this.itemsByZone.fresh },
         { key: 'chilled', label: '冷藏', color: '#29B6F6', fee: 100, items: this.itemsByZone.chilled },
         { key: 'frozen', label: '冷凍', color: '#5C6BC0', fee: 150, items: this.itemsByZone.frozen },
@@ -158,7 +200,49 @@ export default Vue.extend({
     close() { this.$store.dispatch('ui/closeCartDrawer') },
     goShopping() { this.close(); this.$router.push('/products').catch(() => {}) },
     checkout() { this.close(); this.$router.push('/cart').catch(() => {}) },
-    itemDisplayPrice(p: Product) { return p.memberPrice ?? p.originalPrice ?? p.price },
+    itemDisplayPrice(p: Product) { return Math.round(p.memberPrice ?? p.originalPrice ?? p.price) },
+    itemRegularPrice(p: Product) { return Math.round(p.originalPrice ?? p.price) },
+    hasMemberPrice(p: Product) { return !!p.memberPrice && this.itemRegularPrice(p) > this.itemDisplayPrice(p) },
+    itemSavingLabel(p: Product) {
+      const saving = Math.max(0, this.itemRegularPrice(p) - this.itemDisplayPrice(p))
+      return saving > 0 ? `省 $${saving.toLocaleString()}` : ''
+    },
+    itemPriceBadge(p: Product) {
+      if (p.requiredOpPoints) return 'OP 換購'
+      if (this.hasMemberPrice(p)) return '會員專屬價'
+      return ''
+    },
+    zoneSubtotal(zone: DrawerZone): number {
+      return zone.items.reduce((sum, item) => sum + this.itemDisplayPrice(item.product) * item.quantity, 0)
+    },
+    zoneDeliveryRules(zone: DrawerZone): DrawerDeliveryRule[] {
+      return DRAWER_DELIVERY_RULES[zone.key]
+    },
+    zonePrimaryRule(zone: DrawerZone): DrawerDeliveryRule {
+      return this.zoneDeliveryRules(zone)[0]
+    },
+    zoneProgressThreshold(zone: DrawerZone): number {
+      return this.zonePrimaryRule(zone).threshold
+    },
+    zoneRemaining(zone: DrawerZone): number {
+      return Math.max(0, this.zoneProgressThreshold(zone) - this.zoneSubtotal(zone))
+    },
+    zoneProgress(zone: DrawerZone): number {
+      return Math.min(100, Math.round((this.zoneSubtotal(zone) / this.zoneProgressThreshold(zone)) * 100))
+    },
+    zoneProgressTitle(zone: DrawerZone): string {
+      const remaining = this.zoneRemaining(zone)
+      if (remaining === 0) return `已達${zone.label}${this.zonePrimaryRule(zone).label}免運門檻`
+      return `再買 $${remaining.toLocaleString()} 享${zone.label}${this.zonePrimaryRule(zone).label}免運`
+    },
+    zoneShippingNotes(zone: DrawerZone): string[] {
+      const subtotal = this.zoneSubtotal(zone)
+      return this.zoneDeliveryRules(zone).map((rule) => {
+        const remaining = Math.max(0, rule.threshold - subtotal)
+        if (remaining === 0) return `${rule.label}：已達免運門檻`
+        return `${rule.label}：還差 ${remaining.toLocaleString()} 元免運費（未滿需加收 ${rule.fee} 元運費）`
+      })
+    },
     increment(i: CartItem) { this.$store.dispatch('cart/setQuantity', { productId: i.product.id, quantity: i.quantity + 1 }) },
     decrement(i: CartItem) { this.$store.dispatch('cart/setQuantity', { productId: i.product.id, quantity: i.quantity - 1 }) },
     removeItem(id: string) { this.$store.dispatch('cart/removeItem', id) },

@@ -12,8 +12,8 @@
 
     <!-- ── 文字內容區 ── -->
     <div 
-      class="relative z-10 h-full flex flex-col justify-center px-10 lg:px-16 space-y-4"
-      :class="size === 'small' ? 'px-6 space-y-2' : ''"
+      class="relative z-10 h-full flex flex-col justify-center px-6 lg:px-16 space-y-4"
+      :class="size === 'small' ? 'px-5 lg:px-6 space-y-2' : ''"
     >
       <div v-if="tag" class="inline-block self-start px-3 py-0.5 bg-brand-primary text-white text-[9px] font-black uppercase tracking-[0.3em] rounded-none shadow-sm">
         {{ tag }}
@@ -37,14 +37,14 @@
         <router-link
           v-if="to"
           :to="to"
-          class="inline-block px-8 py-3 bg-white text-brand-dark text-[10px] font-black tracking-[0.4em] uppercase border border-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-500 shadow-xl shadow-black/5"
+          class="inline-block rounded-xl px-6 py-3 bg-white text-brand-dark text-[10px] font-black tracking-[0.28em] uppercase border border-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-500 shadow-sm"
           :class="size === 'small' ? 'px-6 py-2' : ''"
         >
           {{ cta }}
         </router-link>
         <button
           v-else
-          class="px-8 py-3 bg-white text-brand-dark text-[10px] font-black tracking-[0.4em] uppercase border border-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-500 shadow-xl shadow-black/5"
+          class="rounded-xl px-6 py-3 bg-white text-brand-dark text-[10px] font-black tracking-[0.28em] uppercase border border-white hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-500 shadow-sm"
           :class="size === 'small' ? 'px-6 py-2' : ''"
         >
           {{ cta }}
@@ -71,9 +71,9 @@ export default Vue.extend({
   },
   computed: {
     containerClass(): string {
-      const base = 'rounded-md shadow-sm'
-      if (this.size === 'large')  return `${base} w-full h-[400px] lg:h-[520px]`
-      if (this.size === 'medium') return `${base} w-full h-[300px] lg:h-[380px]`
+      const base = 'rounded-2xl shadow-sm'
+      if (this.size === 'large')  return `${base} w-full h-[360px] sm:h-[400px] lg:h-[520px]`
+      if (this.size === 'medium') return `${base} w-full h-[280px] lg:h-[380px]`
       if (this.size === 'small')  return `${base} w-full h-[220px] lg:h-[260px]`
       return base
     },

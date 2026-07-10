@@ -1,19 +1,29 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import store from '../store'
 
 Vue.use(VueRouter)
+
+function firstQueryValue(value: unknown): string {
+  if (Array.isArray(value)) return typeof value[0] === 'string' ? value[0] : ''
+  return typeof value === 'string' ? value : ''
+}
+
+function normalizeRedirect(value: unknown): string {
+  const redirect = firstQueryValue(value)
+  if (!redirect.startsWith('/')) return ''
+  if (redirect.startsWith('//')) return ''
+  if (redirect === '/login' || redirect.startsWith('/login?')) return ''
+  if (redirect === '/register' || redirect.startsWith('/register?')) return ''
+  return redirect
+}
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'home',
     component: HomeView
-  },
-  {
-    path: '/layout-preview',
-    name: 'layout-preview',
-    component: () => import(/* webpackChunkName: "static" */ '../views/LayoutPreviewView.vue')
   },
   {
     path: '/products',
@@ -31,6 +41,21 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "product-detail" */ '../views/ComboProductView.vue')
   },
   {
+    path: '/event/:eventId/bundles/:id',
+    name: 'event-bundle-builder',
+    component: () => import(/* webpackChunkName: "bundle-builder" */ '../views/BundleBuilderView.vue')
+  },
+  {
+    path: '/bundles/:id',
+    name: 'bundle-builder',
+    component: () => import(/* webpackChunkName: "bundle-builder" */ '../views/BundleBuilderView.vue')
+  },
+  {
+    path: '/event/op-exchange',
+    name: 'event-op-exchange',
+    component: () => import(/* webpackChunkName: "event" */ '../views/OPExchangeView.vue')
+  },
+  {
     path: '/event/:id',
     name: 'event',
     component: () => import(/* webpackChunkName: "event" */ '../views/EventView.vue')
@@ -45,7 +70,7 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "account" */ '../views/OPExchangeView.vue')
   },
   {
-    path: '/category/:categoryId',
+    path: '/category/:root/:middle?/:leaf?',
     name: 'category',
     component: () => import(/* webpackChunkName: "products" */ '../views/ProductListView.vue')
   },
@@ -62,22 +87,44 @@ const routes: Array<RouteConfig> = [
   {
     path: '/checkout',
     name: 'checkout',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "checkout" */ '../views/CheckoutView.vue')
   },
   {
     path: '/order-complete',
     name: 'order-complete',
+    meta: { requiresOrderQuery: true },
     component: () => import(/* webpackChunkName: "order-complete" */ '../views/OrderCompleteView.vue')
   },
   {
     path: '/login',
     name: 'login',
+    meta: { guestOnly: true },
     component: () => import(/* webpackChunkName: "auth" */ '../views/LoginView.vue')
   },
   {
     path: '/register',
     name: 'register',
+    meta: { guestOnly: true },
     component: () => import(/* webpackChunkName: "auth" */ '../views/RegisterView.vue')
+  },
+  {
+    path: '/register-agreement',
+    name: 'register-agreement',
+    meta: { guestOnly: true },
+    component: () => import(/* webpackChunkName: "auth" */ '../views/RegisterAgreement.vue')
+  },
+  {
+    path: '/register-profile',
+    name: 'register-profile',
+    meta: { requiresAuth: true },
+    component: () => import(/* webpackChunkName: "auth" */ '../views/RegisterProfileView.vue')
+  },
+  {
+    path: '/register-success',
+    name: 'register-success',
+    meta: { requiresAuth: true },
+    component: () => import(/* webpackChunkName: "auth" */ '../views/RegisterSuccess.vue')
   },
   {
     path: '/onboarding',
@@ -86,54 +133,65 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/account',
+    alias: '/account/overview',
     name: 'account',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/AccountView.vue')
   },
   {
     path: '/account/addresses',
     alias: '/account/address',
     name: 'address-list',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/AddressView.vue')
   },
   {
     path: '/account/coupons',
     name: 'coupon-list',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/CouponView.vue')
   },
   {
     path: '/account/orders',
     name: 'order-list',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/OrderListView.vue')
   },
   {
     path: '/account/notifications',
     name: 'notification-center',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/NotificationCenterView.vue')
   },
   {
     path: '/account/orders/:id',
     name: 'order-detail',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/OrderDetailView.vue')
   },
   {
     path: '/account/credits',
-    alias: '/account/wallet',
+    alias: ['/account/wallet', '/account/bonus'],
     name: 'wallet',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/WalletView.vue')
   },
   {
     path: '/account/profile',
     name: 'profile',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/ProfileView.vue')
   },
   {
     path: '/account/password',
     name: 'password',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/ProfileView.vue')
   },
   {
     path: '/account/wishlist',
     name: 'wishlist',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "account" */ '../views/account/WishlistView.vue')
   },
   {
@@ -181,16 +239,9 @@ const routes: Array<RouteConfig> = [
     name: 'news-detail',
     component: () => import(/* webpackChunkName: "news" */ '../views/NewsDetailView.vue')
   },
-  {
-    path: '/content-center',
-    name: 'content-center',
-    component: () => import(/* webpackChunkName: "static" */ '../views/ContentCenterView.vue')
-  },
-  {
-    path: '/health-journal',
-    name: 'health-journal',
-    component: () => import(/* webpackChunkName: "static" */ '../views/HealthJournalView.vue')
-  },
+  { path: '/content-center', redirect: '/' },
+  { path: '/health-journal', redirect: '/' },
+  { path: '/gift-catalog', redirect: '/' },
   {
     path: '/recipes',
     name: 'recipes',
@@ -205,8 +256,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/inspections/:id',
     alias: '/inspection/:id',
-    name: 'inspection-detail',
-    component: () => import(/* webpackChunkName: "inspections" */ '../views/InspectionDetailView.vue')
+    redirect: '/inspections'
   }
 ]
 
@@ -217,6 +267,28 @@ const router = new VueRouter({
   scrollBehavior() {
     return { x: 0, y: 0 }
   }
+})
+
+router.beforeEach((to, _from, next) => {
+  const isLoggedIn = store.getters['auth/isLoggedIn']
+  const redirect = normalizeRedirect(to.query.redirect)
+
+  if (to.matched.some((record) => record.meta.requiresOrderQuery) && !to.query.orderNumber) {
+    next({ name: 'cart' })
+    return
+  }
+
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isLoggedIn) {
+    next({ name: 'login', query: { redirect: to.fullPath } })
+    return
+  }
+
+  if (to.matched.some((record) => record.meta.guestOnly) && isLoggedIn) {
+    next(redirect || { name: 'account' })
+    return
+  }
+
+  next()
 })
 
 export default router

@@ -1,104 +1,222 @@
 <template>
-  <div class="min-h-screen bg-brand-bg pb-20">
-    <!-- ══ 活動 Banner (Carousel) ══ -->
-    <div class="relative w-full h-[240px] lg:h-[400px] overflow-hidden bg-[#F2F7ED]">
-      <transition name="banner-fade" mode="out-in">
-        <div
-          :key="currentBanner.id"
-          class="absolute inset-0 flex items-center justify-center text-brand-dark text-center p-8"
-          :style="{ background: currentBanner.bg }"
-        >
-          <div class="max-w-4xl animate-fade-in relative z-10">
-            <p class="text-brand-primary font-sans font-black tracking-[0.4em] uppercase mb-4 text-xs lg:text-sm">{{ currentBanner.tag }}</p>
-            <h2 class="text-4xl lg:text-6xl font-serif font-black mb-6 leading-tight tracking-widest text-brand-dark">
-              {{ currentBanner.title }}
-            </h2>
-            <p class="text-brand-accent text-sm lg:text-lg font-serif italic tracking-widest bg-white/60 inline-block px-6 py-2 rounded-full shadow-sm border border-brand-accent/20">
-              {{ currentBanner.subtitle }}
-            </p>
-          </div>
-          <div class="absolute -right-20 top-0 w-64 h-full bg-brand-primary opacity-5"></div>
-          <div class="absolute -left-20 bottom-0 w-40 h-full bg-brand-accent opacity-5"></div>
-        </div>
-      </transition>
+  <div class="min-h-screen bg-brand-bg">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <nav class="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-gray-500">
+        <router-link to="/" class="inline-flex items-center gap-1 whitespace-nowrap transition-colors hover:text-brand-primary" aria-label="返回首頁">
+          <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11.5L12 4l9 7.5M5.5 10.5V20h13v-9.5M9.5 20v-5.5h5V20" />
+          </svg>
+          <span>首頁</span>
+        </router-link>
+        <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+          <span>›</span>
+          <router-link to="/events" class="transition-colors hover:text-brand-primary">活動專區</router-link>
+        </span>
+        <template v-if="activeGroup">
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 whitespace-nowrap transition-colors hover:text-brand-primary focus:outline-none focus-visible:text-brand-primary"
+            @click="backToGroup"
+          >
+            <span>›</span>
+            {{ activeGroup.title }}
+          </button>
+        </template>
+        <template v-if="activeItem">
+          <span class="inline-flex items-center gap-1.5 whitespace-nowrap text-gray-800">
+            <span>›</span>
+            {{ activeItem.label }}
+          </span>
+        </template>
+      </nav>
 
-      <button
-        type="button"
-        aria-label="上一張活動 Banner"
-        class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 text-brand-dark shadow-lg flex items-center justify-center hover:bg-white transition-colors"
-        @click="prevBanner"
-      >
-        <span class="text-xl leading-none">‹</span>
-      </button>
-      <button
-        type="button"
-        aria-label="下一張活動 Banner"
-        class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 text-brand-dark shadow-lg flex items-center justify-center hover:bg-white transition-colors"
-        @click="nextBanner"
-      >
-        <span class="text-xl leading-none">›</span>
-      </button>
-
-      <div class="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
-        <button
-          v-for="(banner, index) in banners"
-          :key="banner.id"
-          type="button"
-          class="h-2.5 rounded-full transition-all duration-300"
-          :class="index === currentBannerIndex ? 'w-8 bg-white shadow-md' : 'w-2.5 bg-white/60 hover:bg-white/80'"
-          :aria-label="`切換到第 ${index + 1} 張活動 Banner`"
-          @click="goToBanner(index)"
-        />
-      </div>
-    </div>
-
-    <!-- ══ 活動分類 Tab ══ -->
-    <div class="bg-white border-b border-gray-100 sticky top-0 z-20 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto scrollbar-hide justify-center">
-        <button 
-          v-for="tab in eventTabs" 
-          :key="tab.id"
-          @click="activeTab = tab.id"
-          class="flex-shrink-0 px-8 py-5 text-sm font-sans font-black transition-all relative whitespace-nowrap tracking-widest"
-          :class="activeTab === tab.id ? 'text-brand-primary' : 'text-gray-400 hover:text-brand-primary'"
-        >
-          {{ tab.label }}
-          <div v-if="activeTab === tab.id" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-brand-primary rounded-t-md"></div>
-        </button>
-      </div>
-    </div>
-
-    <div class="max-w-6xl mx-auto px-8 lg:px-12 pt-12">
-      <!-- 限時倒數 -->
-      <div v-if="activeTab === 'flash'" class="mb-12 flex flex-col sm:flex-row items-center justify-between bg-white rounded-2xl p-8 shadow-sm border border-gray-50 gap-6 relative overflow-hidden">
-        <div class="flex items-center gap-4 z-10">
-          <div class="w-12 h-12 rounded-full bg-brand-surface text-brand-primary flex items-center justify-center text-xl shadow-inner border border-brand-primary/10">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </div>
-          <div>
-            <h3 class="font-serif font-black text-xl text-gray-800 tracking-widest">限時旬味快閃</h3>
-            <p class="text-[10px] font-sans font-black text-brand-primary tracking-[0.2em] uppercase mt-1">Limited Time Offer</p>
-          </div>
-        </div>
-        
-        <div class="flex items-center gap-4 z-10">
-          <div v-for="(val, unit) in countdown" :key="unit" class="flex flex-col items-center">
-            <div class="w-12 h-12 bg-brand-surface rounded-xl flex items-center justify-center text-xl font-serif font-black text-brand-primary border border-brand-primary/10">
-              {{ String(val).padStart(2, '0') }}
+      <section class="mb-6 overflow-hidden rounded-[28px] bg-white shadow-sm">
+        <div class="relative h-[320px] overflow-hidden sm:h-[380px] lg:h-[420px]">
+          <img
+            :src="currentItem.image"
+            :alt="currentItem.label"
+            class="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/15"></div>
+          <div class="absolute inset-0 flex items-end p-6 sm:p-8 lg:p-12">
+            <div class="max-w-2xl text-white">
+              <p class="inline-flex rounded-none bg-brand-primary px-4 py-1 text-sm font-bold tracking-[0.2em] text-white uppercase">
+                活動主題
+              </p>
+              <h1 class="mt-5 text-[clamp(2.5rem,5vw,4.8rem)] font-black leading-[0.95] tracking-[-0.02em] text-white">
+                {{ activeItem ? activeItem.label : activeGroup.title }}
+              </h1>
+              <p class="mt-5 max-w-3xl text-lg font-semibold leading-8 text-white/92 sm:text-2xl sm:leading-9">
+                {{ activeItem ? activeItem.shortText : activeGroup.description }}
+              </p>
+              <p class="mt-4 max-w-3xl text-base font-semibold leading-7 text-white/88 sm:text-lg">
+                {{ activeItem ? activeItem.bannerText : currentItem.bannerText }}
+              </p>
             </div>
-            <span class="text-[9px] font-sans font-black text-gray-400 mt-2 uppercase tracking-widest">{{ unit }}</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- 商品列表 (統一 3欄/2欄) -->
-      <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <product-card 
-          v-for="product in filteredProducts" 
-          :key="product.id"
-          :product="product"
-        />
-      </div>
+      <section v-if="!activeItem" class="mb-6 overflow-hidden rounded-3xl bg-white shadow-sm">
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <router-link
+            v-for="item in activeGroup.items"
+            :key="item.id"
+            :to="campaignItemRoute(item.id)"
+            class="group overflow-hidden rounded-3xl border border-brand-primary/20 border-l-4 border-l-brand-primary bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-1 hover:border-brand-primary/45 hover:shadow-md"
+            :class="currentItem.id === item.id ? 'bg-brand-surface/35' : ''"
+          >
+            <div class="flex items-center gap-4">
+              <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-2xl bg-brand-surface ring-1 ring-brand-primary/15">
+                <img :src="item.image" :alt="item.label" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              </div>
+              <div class="min-w-0">
+                <h3 class="truncate text-lg font-black text-brand-dark group-hover:text-brand-primary">{{ item.label }}</h3>
+              </div>
+            </div>
+          </router-link>
+        </div>
+      </section>
+
+      <section class="mb-6 flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="type-page-title tracking-tight text-brand-dark">
+            {{ activeItem ? activeItem.label : activeGroup.title }}
+          </h2>
+          <button
+            class="inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 bg-white px-4 py-2.5 text-sm font-bold text-brand-primary transition-all hover:bg-brand-surface"
+            @click="backToGroup"
+          >
+            <span>進階篩選</span>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-bold text-gray-400 tracking-tighter">排序方式</label>
+            <select
+              v-model="sortBy"
+              class="text-sm border-0 bg-transparent font-bold text-brand-primary focus:ring-0 cursor-pointer"
+            >
+              <option v-for="opt in sortOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+            </select>
+          </div>
+          <div class="flex items-center bg-gray-100 p-1 rounded-md shadow-inner">
+            <button
+              @click="viewMode = 'grid'"
+              class="p-1.5 rounded transition-all"
+              :class="viewMode === 'grid' ? 'bg-white shadow-sm text-brand-primary' : 'text-gray-400 hover:text-gray-600'"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z" />
+              </svg>
+            </button>
+            <button
+              @click="viewMode = 'list'"
+              class="p-1.5 rounded transition-all"
+              :class="viewMode === 'list' ? 'bg-white shadow-sm text-brand-primary' : 'text-gray-400 hover:text-gray-600'"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div v-if="isBundleItemPage" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <router-link
+            v-for="bundle in bundleProducts"
+            :key="bundle.name"
+            :to="bundle.path"
+            class="group overflow-hidden rounded-3xl border border-brand-primary/20 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-brand-primary/40 hover:shadow-md"
+          >
+            <div class="aspect-[4/3] overflow-hidden bg-brand-surface/40">
+              <img :src="bundle.image" :alt="bundle.name" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            </div>
+            <div class="p-5">
+              <div class="mb-3 flex flex-wrap gap-2">
+                <span
+                  v-for="tag in bundle.tags"
+                  :key="tag"
+                  class="rounded-full px-3 py-1 text-xs font-black"
+                  :class="tag === '贈品已含' ? 'bg-brand-surface text-brand-primary' : 'bg-brand-primary text-white'"
+                >
+                  {{ tag }}
+                </span>
+              </div>
+              <h3 class="line-clamp-2 text-xl font-black leading-tight text-brand-dark group-hover:text-brand-primary">{{ bundle.name }}</h3>
+              <p class="mt-3 text-sm font-semibold leading-6 text-gray-500">{{ bundle.description }}</p>
+              <div
+                v-if="bundle.ruleTitle"
+                class="mt-4 border-l-4 border-brand-primary bg-brand-bg px-4 py-3"
+              >
+                <p class="text-[11px] font-black tracking-[0.16em] text-brand-primary">{{ bundle.ruleTitle }}</p>
+                <p class="mt-2 text-sm font-black leading-6 text-brand-dark">{{ bundle.ruleText }}</p>
+                <div class="mt-3 grid gap-2 text-xs font-semibold leading-5 text-gray-500">
+                  <p>
+                    <span class="font-black text-gray-700">適用商品：</span>{{ bundle.selectionText }}
+                  </p>
+                  <p>
+                    <span class="font-black text-gray-700">優惠折抵：</span><span class="text-brand-primary">{{ bundle.discountText }}</span>
+                  </p>
+                </div>
+              </div>
+              <div
+                v-if="bundle.giftName"
+                class="mt-4 rounded-2xl border border-brand-primary/10 bg-brand-surface/40 p-3"
+              >
+                <p class="text-[11px] font-black tracking-[0.16em] text-brand-primary">搭贈內容</p>
+                <div class="mt-2 flex items-center gap-3">
+                  <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
+                    <img
+                      v-if="bundle.giftImage"
+                      :src="bundle.giftImage"
+                      :alt="bundle.giftName"
+                      class="h-full w-full object-cover"
+                    />
+                    <span v-else class="text-lg font-black text-brand-primary">贈</span>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="line-clamp-1 text-sm font-black text-brand-dark">{{ bundle.giftName }} x{{ bundle.giftQuantity }}</p>
+                    <p class="mt-0.5 text-xs font-semibold text-gray-500">{{ bundle.giftUnit }}</p>
+                  </div>
+                  <span class="ml-auto flex-shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-brand-primary">$0</span>
+                </div>
+              </div>
+              <div class="mt-5 flex items-end justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold text-gray-400 line-through">原價 ${{ bundle.originalPrice.toLocaleString() }}</p>
+                  <p class="mt-1 text-2xl font-black text-brand-primary">
+                    <span class="text-sm">{{ bundle.ruleTitle ? '活動價' : '售價' }} $</span>{{ bundle.price.toLocaleString() }}
+                  </p>
+                </div>
+                <span class="rounded-2xl bg-brand-primary px-5 py-3 text-sm font-black text-white">選購組合</span>
+              </div>
+            </div>
+          </router-link>
+        </div>
+        <div v-else-if="sortedProducts.length" :class="viewMode === 'grid' ? 'grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'flex flex-col gap-4'">
+          <ProductCard
+            v-for="product in sortedProducts"
+            :key="product.id"
+            :product="product"
+            :layout="viewMode"
+            :full-width="viewMode === 'list'"
+            :action-label="productCardActionLabel"
+            :confirm-action-label="productCardConfirmActionLabel"
+            :bundle-rule-text="bundleRuleText"
+            :bundle-selected-count="1"
+            :bundle-required-count="2"
+            :bundle-price="390"
+          />
+        </div>
+        <div v-else class="rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-16 text-center shadow-sm">
+          <h3 class="type-section-title mb-2">目前沒有商品資料</h3>
+          <p class="text-sm text-gray-400">請稍後再試。</p>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -106,111 +224,460 @@
 <script lang="ts">
 import Vue from 'vue'
 import ProductCard from '@/components/product/ProductCard.vue'
+import { mockProducts } from '@/mock/data'
 import { Product } from '@/types'
+
+type CampaignItem = {
+  id: string
+  label: string
+  shortText: string
+  description: string
+  bannerText: string
+  image: string
+  productTags: string[]
+}
+
+type CampaignGroup = {
+  id: string
+  title: string
+  description: string
+  items: CampaignItem[]
+}
+
+const assetUrl = (filename: string): string => `${process.env.BASE_URL || '/'}site-assets/${filename}`
 
 export default Vue.extend({
   name: 'EventView',
   components: { ProductCard },
   data() {
     return {
-      banners: [
+      activeGroupId: 'flash',
+      activeItemId: '',
+      sortBy: 'latest',
+      viewMode: 'grid',
+      sortOptions: [
+        { value: 'latest', label: '最新上架' },
+        { value: 'price_asc', label: '價格：低到高' },
+        { value: 'price_desc', label: '價格：高到低' },
+        { value: 'sales', label: '熱銷排行' },
+      ],
+      campaignGroups: [
         {
-          id: 'banner-1',
-          tag: 'Organic Life Special Event',
-          title: '當季旬味。獨家鉅獻',
-          subtitle: '綁定 OPENPOINT 享專屬統一生機會員點數回饋',
-          bg: 'linear-gradient(135deg, #F2F7ED 0%, #ECF6E4 100%)',
+          id: 'flash',
+          title: '快閃與特惠',
+          description: '限時優惠與高回購主題集中瀏覽，先選主題再快速下探商品內容。',
+          items: [
+            {
+              id: 'flash-limited',
+              label: '限時優惠快閃區',
+              shortText: '當週熱銷與限時價格',
+              description: '精選商品限時上架，適合快速補貨與比價。',
+              bannerText: '把握本週快閃，先選主題再快速查看商品。',
+              image: assetUrl('broccoli.png'),
+              productTags: ['flash'],
+            },
+            {
+              id: 'flash-bundle',
+              label: '任選多件組',
+              shortText: '多件組合更划算',
+              description: '早餐、常備與家庭補貨組合一次看齊。',
+              bannerText: '同主題組合優惠，適合一次備齊。',
+              image: assetUrl('breakfast.png'),
+              productTags: ['optional'],
+            },
+            {
+              id: 'flash-member',
+              label: '會員日優惠',
+              shortText: '會員專屬加碼',
+              description: '會員限定價格與點數回饋內容。',
+              bannerText: '會員日檔期內容集中展示。',
+              image: assetUrl('salmon.png'),
+              productTags: ['member'],
+            },
+            {
+              id: 'flash-oneplusone',
+              label: '買1送1必買區',
+              shortText: '人氣商品高曝光',
+              description: '適合搭配日常採買，一次抓住重點優惠。',
+              bannerText: '高回購商品以大 banner 呈現。',
+              image: assetUrl('nuts.png'),
+              productTags: ['flash'],
+            },
+            {
+              id: 'flash-multi',
+              label: '多件組優惠',
+              shortText: '組合價快速比較',
+              description: '用同一頁快速查看多件組內容與價格。',
+              bannerText: '一次看懂多件組優惠內容。',
+              image: assetUrl('whitefungus.png'),
+              productTags: ['optional'],
+            },
+            {
+              id: 'flash-surplus',
+              label: '惜福區',
+              shortText: '惜福商品限量出清',
+              description: '臨近效期或少量庫存商品集中瀏覽。',
+              bannerText: '惜福內容也以 banner 呈現。',
+              image: assetUrl('salmon.png'),
+              productTags: ['flash'],
+            },
+          ] as CampaignItem[],
         },
         {
-          id: 'banner-2',
-          tag: 'Flash Deal',
-          title: '限時快閃。今晚截止',
-          subtitle: '精選商品與組合優惠，錯過就要等下次',
-          bg: 'linear-gradient(135deg, #FFF9F1 0%, #F4EFE5 100%)',
+          id: 'theme',
+          title: '主題企劃',
+          description: '以飲食主題整理出活動內容，先看主題再往下找到對應商品。',
+          items: [
+            {
+              id: 'theme-mediterranean',
+              label: '地中海飲食推薦',
+              shortText: '主題式選品入口',
+              description: '以健康飲食主題整理相關商品與方案。',
+              bannerText: '地中海飲食主題以 banner 呈現。',
+              image: assetUrl('broccoli.png'),
+              productTags: ['flash'],
+            },
+            {
+              id: 'theme-oats',
+              label: '隔夜燕麥片專區',
+              shortText: '早餐主題精選',
+              description: '以早餐與便利備餐為主的商品集合。',
+              bannerText: '早餐主題區以大圖帶出視覺重點。',
+              image: assetUrl('breakfast.png'),
+              productTags: ['optional'],
+            },
+            {
+              id: 'theme-gift',
+              label: '健康伴手禮',
+              shortText: '送禮與節慶主題',
+              description: '禮盒與送禮內容集中整理。',
+              bannerText: '送禮主題頁同樣使用 banner 呈現。',
+              image: assetUrl('nuts.png'),
+              productTags: ['member'],
+            },
+          ] as CampaignItem[],
         },
         {
-          id: 'banner-3',
-          tag: 'Member Exclusive',
-          title: '會員專屬。加碼回饋',
-          subtitle: '登入會員再享專屬折扣與點數累積',
-          bg: 'linear-gradient(135deg, #EEF7F7 0%, #F6FCFB 100%)',
+          id: 'elder',
+          title: '銀髮專區',
+          description: '保留和原本分類頁相同的瀏覽方式，活動專區只在中分類層級使用大 banner。',
+          items: [
+            {
+              id: 'elder-breakfast',
+              label: '方便早餐',
+              shortText: '輕鬆補充早晨能量',
+              description: '適合忙碌與長輩日常的早餐選項。',
+              bannerText: '方便早餐主題頁使用同樣的大 banner。',
+              image: assetUrl('breakfast.png'),
+              productTags: ['member'],
+            },
+            {
+              id: 'elder-dinner',
+              label: '晚餐食材',
+              shortText: '晚間備餐更省事',
+              description: '晚餐所需食材與簡易料理主題。',
+              bannerText: '晚餐食材主題頁以 banner 帶入。',
+              image: assetUrl('salmon.png'),
+              productTags: ['flash'],
+            },
+            {
+              id: 'elder-soup',
+              label: '滋補湯品',
+              shortText: '溫補與日常保養',
+              description: '適合照護與家庭常備的湯品主題。',
+              bannerText: '滋補湯品也採大圖 banner 呈現。',
+              image: assetUrl('whitefungus.png'),
+              productTags: ['flash'],
+            },
+            {
+              id: 'elder-snack',
+              label: '休閒點心',
+              shortText: '日常點心與零嘴',
+              description: '適合午後點心與輕鬆補充。',
+              bannerText: '休閒點心主題頁保留 banner。',
+              image: assetUrl('nuts.png'),
+              productTags: ['optional'],
+            },
+            {
+              id: 'elder-drink',
+              label: '喝的保養',
+              shortText: '飲品型保養選品',
+              description: '可快速補充與日常飲用的主題商品。',
+              bannerText: '喝的保養主題頁同樣以 banner 呈現。',
+              image: assetUrl('salmon.png'),
+              productTags: ['member'],
+            },
+            {
+              id: 'elder-supplement',
+              label: '保健食品',
+              shortText: '保健與補充主題',
+              description: '保健食品與機能選品集中瀏覽。',
+              bannerText: '保健食品主題頁以大 banner 顯示。',
+              image: assetUrl('nuts.png'),
+              productTags: ['member'],
+            },
+          ] as CampaignItem[],
+        },
+      ] as CampaignGroup[],
+      products: mockProducts as Product[],
+      bundleProducts: [
+        {
+          name: '有機亞麻仁堅果粉與葡萄糖胺黑穀芝麻粉任2件組',
+          description: 'A 區商品 1 件 + B 區商品 1 件，組合價 $990，贈精美提袋 x1。',
+          image: assetUrl('nuts.png'),
+          price: 990,
+          originalPrice: 1180,
+          tags: ['A+B 分區任選', '贈品已含'],
+          path: '/event/SUMMER2026/bundles/flax-sesame-990',
+        },
+        {
+          name: '同區營養穀粉任選滿6件組',
+          description: '同一區商品數量選滿 6 件，即可用組合價加入購物車。',
+          image: assetUrl('breakfast.png'),
+          price: 1680,
+          originalPrice: 1980,
+          tags: ['同區任選', '滿 6 件'],
+          path: '/event/SUMMER2026/bundles/same-zone-six',
+        },
+        {
+          name: '堅果果乾任選3件固定$999',
+          description: '指定堅果與果乾任選 3 件，原價合計 $1,260，組合固定價 $999。',
+          image: assetUrl('nuts.png'),
+          price: 999,
+          originalPrice: 1260,
+          tags: ['任選固定金額', '滿 3 件'],
+          ruleTitle: '任選固定金額',
+          ruleText: '堅果果乾區任選 3 件，整組固定 $999。',
+          selectionText: '原味綜合堅果、杏桃乾、有機燕麥堅果穀粉',
+          discountText: '原價 $1,260，折抵 $261，活動價 $999',
+          path: '/event/SUMMER2026/bundles/optional-fixed-999',
+        },
+        {
+          name: 'A+B+C 日常保養組合$1,290',
+          description: 'A 區早餐穀粉、B 區飲品、C 區點心各選 1 件，組成一套保養補貨組。',
+          image: assetUrl('breakfast.png'),
+          price: 1290,
+          originalPrice: 1580,
+          tags: ['A+B+C 組合', '各 1 件'],
+          ruleTitle: 'A+B+C 組合',
+          ruleText: 'A、B、C 三區各選 1 件，組合價 $1,290。',
+          selectionText: '早餐穀粉區、喝的保養區、堅果點心區',
+          discountText: '原價 $1,580，折抵 $290，活動價 $1,290',
+          path: '/event/SUMMER2026/bundles/abc-daily-1290',
+        },
+        {
+          name: '指定商品任選3件固定$390',
+          description: '指定飲品與點心任選 3 件，符合件數後以固定組合價加入購物車。',
+          image: assetUrl('whitefungus.png'),
+          price: 390,
+          originalPrice: 520,
+          tags: ['指定件數固定價', '任選 3 件'],
+          ruleTitle: '指定件數固定價',
+          ruleText: '指定商品任選 3 件，固定組合價 $390。',
+          selectionText: '菊花枸杞銀耳露、杏桃乾、原味綜合堅果',
+          discountText: '原價 $520，折抵 $130，活動價 $390',
+          path: '/event/SUMMER2026/bundles/fixed-three-390',
+        },
+        {
+          name: '原味綜合堅果隨手包指定價格搭贈組',
+          description: '指定商品售價 $315，加入購物車即搭贈同品項 1 組，適合補貨與分享。',
+          image: assetUrl('nuts.png'),
+          price: 315,
+          originalPrice: 630,
+          tags: ['指定價格', '買 1 送 1'],
+          giftName: '原味綜合堅果隨手包',
+          giftQuantity: 1,
+          giftUnit: '25g x 10包/袋',
+          giftImage: assetUrl('nuts.png'),
+          path: '/event/SUMMER2026/bundles/flax-sesame-990',
+        },
+        {
+          name: '杏桃乾買2送1補貨組',
+          description: '杏桃乾任選同品項 2 包，符合條件即贈同品項 1 包，贈品於購物車以 $0 顯示。',
+          image: assetUrl('nuts.png'),
+          price: 396,
+          originalPrice: 594,
+          tags: ['買 2 送 1', '贈品 $0'],
+          ruleTitle: '買2送1',
+          ruleText: '杏桃乾購買 2 包，即贈杏桃乾 1 包。',
+          selectionText: '杏桃乾',
+          discountText: '贈品杏桃乾 x1，贈品小計 $0',
+          giftName: '杏桃乾',
+          giftQuantity: 1,
+          giftUnit: '200g/包',
+          giftImage: assetUrl('nuts.png'),
+          path: '/products/p106',
+        },
+        {
+          name: '有機枸杞原汁買2送2組',
+          description: '有機枸杞原汁 2 罐成組補貨，符合條件即贈同品項 2 罐。',
+          image: assetUrl('salmon.png'),
+          price: 1180,
+          originalPrice: 2360,
+          tags: ['買 2 送 2', '贈品 $0'],
+          ruleTitle: '買2送2',
+          ruleText: '有機枸杞原汁購買 2 罐，即贈有機枸杞原汁 2 罐。',
+          selectionText: '有機枸杞原汁',
+          discountText: '贈品有機枸杞原汁 x2，贈品小計 $0',
+          giftName: '有機枸杞原汁',
+          giftQuantity: 2,
+          giftUnit: '500ml/瓶',
+          giftImage: assetUrl('salmon.png'),
+          path: '/products/op201',
+        },
+        {
+          name: '菊花枸杞銀耳露買A送B組',
+          description: '購買菊花枸杞銀耳露，搭贈原味綜合堅果隨手包，飲品與點心一次備齊。',
+          image: assetUrl('whitefungus.png'),
+          price: 58,
+          originalPrice: 373,
+          tags: ['買 A 送 B', '贈品 $0'],
+          ruleTitle: '買A送B',
+          ruleText: '菊花枸杞銀耳露每購買 1 瓶，即贈原味綜合堅果隨手包 1 組。',
+          selectionText: '菊花枸杞銀耳露',
+          discountText: '贈品原味綜合堅果隨手包 x1，贈品小計 $0',
+          giftName: '原味綜合堅果隨手包',
+          giftQuantity: 1,
+          giftUnit: '25g x 10包/袋',
+          giftImage: assetUrl('nuts.png'),
+          path: '/products/p102',
+        },
+        {
+          name: '堅果果乾任選3件85折',
+          description: '原味堅果、杏桃乾與腰果隨手包可混搭，選滿指定件數即可享折扣。',
+          image: assetUrl('nuts.png'),
+          price: 893,
+          originalPrice: 1050,
+          tags: ['任選享折數', '滿 3 件'],
+          ruleTitle: '任選享折數',
+          ruleText: '指定堅果果乾任選 3 件，整組享 85 折。',
+          selectionText: '原味綜合堅果、杏桃乾、原味腰果隨手包',
+          discountText: '原價 $1,050，折抵 $157，活動價 $893',
+          path: '/event/SUMMER2026/bundles/same-zone-six',
+        },
+        {
+          name: '早餐穀粉任選4件折$120',
+          description: '沖泡穀粉系列可自由搭配，達指定件數後直接折抵固定金額。',
+          image: assetUrl('breakfast.png'),
+          price: 1560,
+          originalPrice: 1680,
+          tags: ['任選折固定金額', '折 $120'],
+          ruleTitle: '任選折固定金額',
+          ruleText: '指定早餐穀粉任選 4 件，整筆折 $120。',
+          selectionText: '黑穀芝麻粉、亞麻仁堅果粉、奇亞籽穀物粉、燕麥堅果穀粉',
+          discountText: '原價 $1,680，折抵 $120，活動價 $1,560',
+          path: '/event/SUMMER2026/bundles/same-zone-six',
+        },
+        {
+          name: '銀髮飲品任選6件每件折$10',
+          description: '日常飲品可依喜好混搭，選滿後每件商品各自折抵固定金額。',
+          image: assetUrl('whitefungus.png'),
+          price: 330,
+          originalPrice: 390,
+          tags: ['每件折固定金額', '滿 6 件'],
+          ruleTitle: '任選每件折固定金額',
+          ruleText: '指定飲品任選 6 件，每件折 $10。',
+          selectionText: '菊花枸杞銀耳露、有機枸杞原汁、即飲保養飲',
+          discountText: '原價 $390，折抵 $60，活動價 $330',
+          path: '/event/SUMMER2026/bundles/same-zone-six',
         },
       ],
-      currentBannerIndex: 0,
-      bannerTimer: null as any,
-      activeTab: 'flash',
-      eventTabs: [
-        { id: 'flash',    label: '限時快閃' },
-        { id: 'member',   label: '會員尊享' },
-        { id: 'buyN',     label: '量販精選' },
-        { id: 'optional', label: '任選組合' },
-      ],
-      countdown: { hr: 12, min: 45, sec: 30 },
-      timer: null as any,
-      products: [
-        { id: 'P01', name: '有機鮮採花椰菜', price: 59, originalPrice: 120, image: '🥦', origin: '桃園', unit: '250g', inStock: true, isOrganic: true, tempZone: 'fresh', categoryId: 'c1', tags: ['flash'], memberPrice: 49 },
-        { id: 'P02', name: '紐西蘭奇異果', price: 99, originalPrice: 150, image: '🥝', origin: '紐西蘭', unit: '6入', inStock: true, isOrganic: false, tempZone: 'chilled', categoryId: 'c2', tags: ['flash'], memberPrice: 89 },
-        { id: 'P03', name: '放牧土雞蛋', price: 158, originalPrice: 199, image: '🥚', origin: '屏東', unit: '10入', inStock: true, isOrganic: false, tempZone: 'ambient', categoryId: 'c3', tags: ['member'], memberPrice: 139 },
-        { id: 'P04', name: '智利鮭魚切片', price: 299, originalPrice: 380, image: '🐟', origin: '智利', unit: '300g', inStock: true, isOrganic: false, tempZone: 'frozen', categoryId: 'c4', tags: ['buyN'] },
-        { id: 'P05', name: '有機帶殼玉米筍', price: 65, originalPrice: 85, image: '🌽', origin: '雲林', unit: '200g', inStock: true, isOrganic: true, tempZone: 'fresh', categoryId: 'c1', tags: ['optional'] },
-        { id: 'P06', name: '統一生機有機豆乳', price: 35, originalPrice: 45, image: '🥛', origin: '產地', unit: '300g', inStock: true, isOrganic: true, tempZone: 'chilled', categoryId: 'c5', tags: ['flash'], memberPrice: 29 },
-        { id: 'P07', name: '澳洲特選和牛', price: 588, originalPrice: 750, image: '🥩', origin: '澳洲', unit: '250g', inStock: true, isOrganic: false, tempZone: 'frozen', categoryId: 'c4', tags: ['member'], memberPrice: 499 },
-        { id: 'P08', name: '有機大白菜', price: 85, originalPrice: 110, image: '🥬', origin: '彰化', unit: '800g', inStock: false, isOrganic: true, tempZone: 'fresh', categoryId: 'c1', tags: ['flash'] },
-      ] as Product[],
     }
   },
   computed: {
-    filteredProducts(): Product[] { return this.products.filter(p => p.tags.includes(this.activeTab)) },
-    currentBanner(): any {
-      const state = this as any
-      return state.banners[state.currentBannerIndex]
-    }
+    activeGroup(): CampaignGroup {
+      return this.campaignGroups.find((group: CampaignGroup) => group.id === this.activeGroupId) || this.campaignGroups[0]
+    },
+    currentItem(): CampaignItem {
+      return this.activeItem || this.activeGroup.items[0]
+    },
+    activeItem(): CampaignItem | null {
+      if (!this.activeItemId) return null
+      return this.activeGroup.items.find((item: CampaignItem) => item.id === this.activeItemId) || null
+    },
+    sortedProducts(): Product[] {
+      const base = this.products
+      switch (this.sortBy) {
+        case 'price_asc':
+          return [...base].sort((a, b) => (a.memberPrice ?? a.price) - (b.memberPrice ?? b.price))
+        case 'price_desc':
+          return [...base].sort((a, b) => (b.memberPrice ?? b.price) - (a.memberPrice ?? a.price))
+        case 'sales':
+          return [...base]
+        default:
+          return base
+      }
+    },
+    isBundleItemPage(): boolean {
+      return this.activeGroupId === 'flash' && this.activeItemId === 'flash-bundle'
+    },
+    productCardActionLabel(): string {
+      return this.activeGroupId === 'flash' && this.activeItemId === 'flash-bundle' ? '加入組合購' : '加入購物車'
+    },
+    productCardConfirmActionLabel(): string {
+      return this.activeGroupId === 'flash' && this.activeItemId === 'flash-bundle' ? '加入組合購' : '確認加入'
+    },
+    bundleRuleText(): string {
+      return this.activeGroupId === 'flash' && this.activeItemId === 'flash-bundle'
+        ? '有機紅藜麥、有機三色藜麥、有機奇亞籽任選第 2 件 5 折，可選 2 件，組合價 $390。'
+        : ''
+    },
   },
-  mounted() {
-    this.startCountdown()
-    this.startBannerTimer()
+  watch: {
+    '$route.query': {
+      handler() {
+        this.syncSelectionFromRoute()
+      },
+      immediate: true,
+    },
   },
-  beforeDestroy() {
-    if (this.timer) clearInterval(this.timer)
-    const state = this as any
-    if (state.bannerTimer) clearInterval(state.bannerTimer)
+  created() {
+    this.syncSelectionFromRoute()
   },
   methods: {
-    startCountdown() {
-      this.timer = setInterval(() => {
-        if (this.countdown.sec > 0) this.countdown.sec--
-        else { this.countdown.min > 0 ? (this.countdown.min--, this.countdown.sec = 59) : (this.countdown.hr > 0 ? (this.countdown.hr--, this.countdown.min = 59, this.countdown.sec = 59) : clearInterval(this.timer)) }
-      }, 1000)
+    syncSelectionFromRoute() {
+      const groupId = Array.isArray(this.$route.query.group) ? this.$route.query.group[0] : this.$route.query.group
+      const itemId = Array.isArray(this.$route.query.item) ? this.$route.query.item[0] : this.$route.query.item
+
+      if (typeof groupId === 'string' && this.campaignGroups.some((group: CampaignGroup) => group.id === groupId)) {
+        this.activeGroupId = groupId
+      }
+
+      const group = this.activeGroup
+      if (typeof itemId === 'string' && group.items.some((item: CampaignItem) => item.id === itemId)) {
+        this.activeItemId = itemId
+      } else {
+        this.activeItemId = ''
+      }
     },
-    startBannerTimer() {
-      const state = this as any
-      if (state.bannerTimer) clearInterval(state.bannerTimer)
-      state.bannerTimer = setInterval(() => {
-        this.nextBanner()
-      }, 5000)
+    selectGroup(groupId: string) {
+      this.activeGroupId = groupId
+      this.activeItemId = ''
+      this.$router.replace({
+        path: this.$route.path,
+        query: { ...this.$route.query, group: groupId, item: undefined },
+      }).catch(() => {})
     },
-    nextBanner() {
-      const state = this as any
-      state.currentBannerIndex = (state.currentBannerIndex + 1) % state.banners.length
-      this.startBannerTimer()
+    selectItem(itemId: string) {
+      this.activeItemId = itemId
+      this.$router.replace({
+        path: this.$route.path,
+        query: { ...this.$route.query, group: this.activeGroupId, item: itemId },
+      }).catch(() => {})
     },
-    prevBanner() {
-      const state = this as any
-      state.currentBannerIndex = (state.currentBannerIndex - 1 + state.banners.length) % state.banners.length
-      this.startBannerTimer()
+    backToGroup() {
+      this.activeItemId = ''
+      this.$router.replace({
+        path: this.$route.path,
+        query: { ...this.$route.query, group: this.activeGroupId, item: undefined },
+      }).catch(() => {})
     },
-    goToBanner(index: number) {
-      const state = this as any
-      state.currentBannerIndex = index
-      this.startBannerTimer()
-    }
-  }
+    campaignItemRoute(itemId: string) {
+      return {
+        path: this.$route.path,
+        query: { group: this.activeGroupId, item: itemId },
+      }
+    },
+  },
 })
 </script>
-
-<style scoped>
-.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-.banner-fade-enter-active, .banner-fade-leave-active { transition: opacity 0.45s ease, transform 0.45s ease; }
-.banner-fade-enter, .banner-fade-leave-to { opacity: 0; transform: scale(0.99); }
-</style>

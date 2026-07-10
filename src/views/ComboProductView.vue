@@ -3,7 +3,7 @@
     <!-- ══ 行動端頂部導航 ══ -->
     <div class="bg-white border-b border-gray-100 sticky top-0 z-30 lg:hidden">
       <div class="px-4 py-3 flex items-center justify-between">
-        <button @click="$router.back()" class="text-gray-400 p-1">
+        <button @click="goBackToProducts" class="text-gray-400 p-1">
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
@@ -19,7 +19,7 @@
         <!-- ── 左側：商品圖片與品項清單 ── -->
         <div class="flex-1 space-y-6">
           <!-- 組合大圖 -->
-          <div class="bg-white rounded-3xl shadow-sm overflow-hidden aspect-video lg:aspect-auto lg:h-[400px] flex items-center justify-center text-[120px] select-none relative border border-gray-50">
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden aspect-video lg:aspect-auto lg:h-[400px] flex items-center justify-center text-[120px] select-none relative border border-gray-100">
             {{ combo.image }}
             <div class="absolute top-4 left-4 flex flex-col gap-2">
               <span class="bg-brand-primary text-white text-xs px-3 py-1 rounded-full font-bold shadow-sm">
@@ -32,7 +32,7 @@
           </div>
 
           <!-- 品項清單 -->
-          <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-50">
+          <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
             <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
               <span class="w-1.5 h-6 bg-brand-primary rounded-full"></span>
               組合內含品項
@@ -88,13 +88,13 @@
             <!-- 組合小計提示 -->
             <div class="mt-8 p-4 bg-brand-surface rounded-2xl border border-brand-primary/10">
               <p class="text-xs text-brand-primary font-medium leading-relaxed">
-                💡 提示：本組合支援部分品項數量調整，您可以根據需求增加最愛的品項。調整後總金額將會即時試算，整組購買更划算！
+                本組合支援部分品項數量調整，您可以根據需求增加最愛的品項。調整後總金額將會即時試算，整組購買更划算。
               </p>
             </div>
           </div>
 
           <!-- 詳細資訊 Tab -->
-          <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-50">
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
             <div class="flex border-b border-gray-50">
               <button 
                 v-for="tab in tabs" 
@@ -115,7 +115,11 @@
                 <p class="text-sm text-gray-600 leading-relaxed">{{ combo.description }}</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                   <div v-for="(feat, i) in combo.features" :key="i" class="flex gap-3">
-                    <span class="text-brand-primary text-lg">✅</span>
+                    <span class="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brand-surface text-brand-primary">
+                      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
                     <p class="text-sm text-gray-600">{{ feat }}</p>
                   </div>
                 </div>
@@ -132,7 +136,7 @@
 
         <!-- ── 右側：結帳資訊（桌機懸浮） ── -->
         <aside class="w-full lg:w-96 space-y-6">
-          <div class="bg-white rounded-3xl shadow-lg p-8 border border-gray-50 lg:sticky lg:top-24">
+          <div class="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 lg:sticky lg:top-24">
             <div class="mb-6">
               <p class="text-xs text-brand-accent font-bold mb-1">BEST SELLER</p>
               <h1 class="text-2xl font-black text-gray-800 leading-tight mb-2">{{ combo.name }}</h1>
@@ -164,29 +168,33 @@
             <div class="space-y-3">
               <button 
                 @click="addToCart"
-                class="w-full bg-brand-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-brand-dark transition-all active:scale-[0.98] shadow-xl shadow-brand-primary/20 flex items-center justify-center gap-2"
+                class="w-full bg-brand-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-brand-dark transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
               >
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 整組加入購物車
               </button>
-              <button class="w-full py-4 rounded-2xl font-bold text-gray-500 hover:bg-gray-50 transition-colors">
+              <button class="w-full py-4 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors">
                 收藏組合
               </button>
-              <p v-if="addedNotice" class="rounded-2xl border border-brand-primary/15 bg-brand-surface px-4 py-3 text-sm font-medium text-brand-primary">
+              <p v-if="addedNotice" class="rounded-xl border border-brand-primary/15 bg-brand-surface px-4 py-3 text-sm font-medium text-brand-primary">
                 已將「{{ combo.name }}」加入購物車
               </p>
             </div>
 
             <!-- 安心保證 -->
             <div class="mt-8 grid grid-cols-2 gap-4">
-              <div class="flex flex-col items-center text-center p-3 bg-gray-50 rounded-2xl">
-                <span class="text-xl mb-1">🛡️</span>
+              <div class="flex flex-col items-center text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                <svg class="mb-1 h-5 w-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
+                </svg>
                 <p class="text-[10px] font-bold text-gray-500">嚴格檢驗</p>
               </div>
-              <div class="flex flex-col items-center text-center p-3 bg-gray-50 rounded-2xl">
-                <span class="text-xl mb-1">🚚</span>
+              <div class="flex flex-col items-center text-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                <svg class="mb-1 h-5 w-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h11v8H3V7zm11 3h4l3 3v2h-7v-5zM7 19a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
+                </svg>
                 <p class="text-[10px] font-bold text-gray-500">低溫快遞</p>
               </div>
             </div>
@@ -336,6 +344,10 @@ export default Vue.extend({
   },
 
   methods: {
+    goBackToProducts() {
+      this.$router.push('/products').catch(() => {})
+    },
+
     updateQty(index: number, delta: number) {
       const item = this.comboItems[index]
       const newQty = item.qty + delta

@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white rounded-2xl shadow-sm px-5 py-5 sm:px-6">
+  <section class="rounded-2xl border border-gray-100 bg-white px-5 py-5 shadow-sm sm:px-6">
     <div class="flex items-start justify-between gap-4">
       <div class="min-w-0 flex items-start gap-3">
         <router-link
@@ -12,21 +12,24 @@
           </svg>
         </router-link>
         <div class="min-w-0">
-          <p v-if="eyebrow" class="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-2">
+          <p v-if="eyebrow" class="type-eyebrow text-brand-primary mb-2">
             {{ eyebrow }}
           </p>
-          <h1 class="text-2xl sm:text-3xl font-black text-gray-800 leading-tight">
+          <h1 class="type-page-title">
             {{ title }}
           </h1>
-          <p v-if="subtitle" class="mt-2 text-sm text-gray-400 leading-relaxed">
+          <p v-if="subtitle" class="mt-2 type-muted text-gray-400">
             {{ subtitle }}
+          </p>
+          <p v-if="notice" class="mt-3 max-w-3xl text-xs font-medium leading-6 text-gray-500">
+            {{ notice }}
           </p>
         </div>
       </div>
       <router-link
         v-if="actionText && actionTo"
         :to="actionTo"
-        class="hidden lg:inline-flex items-center rounded-xl border border-brand-primary/20 px-4 py-2 text-xs font-bold text-brand-primary hover:bg-brand-surface transition-colors"
+        class="inline-flex flex-shrink-0 items-center rounded-xl border border-brand-primary/20 px-4 py-2 text-xs font-bold text-brand-primary transition-colors hover:bg-brand-surface"
       >
         {{ actionText }}
       </router-link>
@@ -42,6 +45,7 @@ export default Vue.extend({
   props: {
     title: { type: String, required: true },
     subtitle: { type: String, default: '' },
+    notice: { type: String, default: '' },
     eyebrow: { type: String, default: '' },
     backTo: { type: String, default: '/account' },
     actionText: { type: String, default: '' },

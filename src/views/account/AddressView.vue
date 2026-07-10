@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-brand-bg pb-16">
+  <div class="min-h-screen bg-gray-50 pb-16">
     <!-- ══ 主內容：側邊選單 + 內容 ══ -->
-    <div class="max-w-7xl mx-auto px-4 pt-6 flex gap-6 items-start">
+    <div class="max-w-7xl mx-auto px-4 pt-6 flex flex-col gap-4 lg:flex-row lg:gap-6 lg:items-start">
 
       <AccountSidebar active-key="addresses" subtitle="會員" />
 
@@ -9,9 +9,9 @@
       <div class="flex-1 min-w-0 space-y-4">
         <AccountContentHeader
           title="常用地址"
-          subtitle="管理常用收件地址，讓結帳更快速。"
-          eyebrow="常用地址"
+          subtitle="您可在此設定常用收件地址，購物結帳時會直接代入。"
         />
+
         <!-- 新增地址按鈕 -->
         <button
           class="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-6 flex items-center justify-center gap-2 text-gray-500 hover:border-brand-primary hover:text-brand-primary transition-all group shadow-sm"
@@ -30,7 +30,7 @@
           <div
             v-for="address in addresses"
             :key="address.id"
-            class="bg-white rounded-2xl shadow-sm p-5 relative overflow-hidden transition-shadow hover:shadow-md"
+            class="relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
           >
             <!-- 預設標籤 -->
             <div
@@ -53,7 +53,7 @@
             </div>
 
             <!-- 功能按鈕 -->
-            <div class="flex items-center justify-end gap-4 mt-4 pt-4 border-t border-gray-50">
+            <div class="flex items-center justify-end gap-4 mt-4 pt-4 border-t border-[#E6EFE0]">
               <button
                 v-if="!address.isDefault"
                 class="text-sm text-brand-primary hover:text-brand-dark flex items-center gap-1.5 transition-colors mr-auto font-medium"
@@ -87,9 +87,9 @@
         </div>
 
         <!-- 空狀態 -->
-        <div v-else class="flex flex-col items-center justify-center py-24 text-center bg-white rounded-2xl shadow-sm">
+        <div v-else class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-24 text-center shadow-sm">
           <div class="text-6xl mb-5 select-none grayscale opacity-20">📍</div>
-          <h2 class="font-bold text-gray-700 text-lg mb-2">目前還沒有儲存的地址</h2>
+          <h2 class="font-bold text-gray-700 text-lg mb-2">尚未儲存常用地址</h2>
           <p class="text-sm text-gray-400 mb-7">新增常用地址，結帳更快速！</p>
           <button @click="openAddModal" class="btn-primary px-8 py-3">
             新增地址
@@ -108,7 +108,7 @@
         <transition name="slide-up">
           <div
             v-if="showModal"
-            class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl overflow-hidden shadow-2xl"
+            class="w-full max-w-lg overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl"
           >
             <!-- Modal Header -->
             <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
@@ -277,6 +277,7 @@ export default Vue.extend({
     districtOptions(): string[] {
       return this.form.city ? MOCK_CITIES[this.form.city] || [] : []
     },
+
   },
 
   methods: {

@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-brand-bg pb-16">
+  <div class="min-h-screen bg-gray-50 pb-16">
     <!-- ══ 主內容：側邊選單 + 內容 ══ -->
-    <div class="max-w-7xl mx-auto px-4 pt-6 flex gap-6 items-start">
+    <div class="max-w-7xl mx-auto px-4 pt-6 flex flex-col gap-4 lg:flex-row lg:gap-6 lg:items-start">
 
       <AccountSidebar active-key="wishlist" />
 
@@ -10,9 +10,8 @@
         <AccountContentHeader
           title="收藏清單"
           subtitle="收藏喜歡的商品，隨時回來查看。"
-          eyebrow="收藏清單"
         />
-        
+
         <!-- 商品格狀排列：統一使用 ProductCard 網格 RWD 3欄/2欄 -->
         <div v-if="wishlist.length > 0" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 xl:gap-6 justify-items-center animate-fade-in">
           <div
@@ -47,11 +46,10 @@
         </div>
 
         <!-- 空狀態 -->
-        <div v-else class="flex flex-col items-center justify-center py-24 text-center bg-white rounded-2xl shadow-sm">
-          <div class="text-6xl mb-5 select-none grayscale opacity-20">❤️</div>
-          <h2 class="font-bold text-gray-700 text-lg mb-2">目前沒有收藏商品</h2>
+        <div v-else class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-24 text-center shadow-sm">
+          <h2 class="font-bold text-gray-700 text-lg mb-2">收藏清單是空的</h2>
           <p class="text-sm text-gray-400 mb-7">看到心儀的商品，點擊愛心收藏起來吧！</p>
-          <router-link to="/products" class="bg-brand-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-dark transition-all">
+          <router-link to="/products" class="btn-primary px-8 py-3">
             去逛逛商品
           </router-link>
         </div>
@@ -81,6 +79,8 @@ export default Vue.extend({
       wishlist: [] as Product[],
     }
   },
+  computed: {
+  },
   methods: {
     syncWishlist() {
       this.wishlist = getWishlist()
@@ -95,4 +95,7 @@ export default Vue.extend({
 <style scoped>
 .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.btn-primary {
+  @apply bg-brand-primary text-white rounded-xl hover:bg-brand-dark transition-colors shadow-sm active:scale-[0.98] font-bold;
+}
 </style>

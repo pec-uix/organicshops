@@ -9,7 +9,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-brand-dark mb-2">訂單已送出！</h1>
+        <h1 class="text-2xl font-bold text-brand-dark mb-2">訂單已送出</h1>
         <p class="text-gray-500 text-sm leading-relaxed">
           感謝您的訂購，我們已收到您的訂單，將盡快為您處理。<br />
           確認信已寄送至您的 Email，請注意查收。
@@ -17,7 +17,7 @@
       </div>
 
       <!-- ══ 訂單資訊 ══ -->
-      <div class="bg-white rounded-2xl shadow-sm p-6">
+      <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <h2 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
           <span class="text-xl">🧾</span>訂單資訊
         </h2>
@@ -35,7 +35,7 @@
             <dd class="text-sm font-medium text-gray-800">{{ paymentLabel }}</dd>
           </div>
           <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-            <dt class="font-semibold text-gray-800">訂單總金額</dt>
+            <dt class="font-semibold text-gray-800">實際付款金額</dt>
             <dd class="text-2xl font-bold text-brand-primary">${{ formattedTotal }}</dd>
           </div>
         </dl>
@@ -43,7 +43,7 @@
 
       <!-- ══ 30 分鐘取消倒數 ══ -->
       <transition name="slide-down">
-        <div v-if="!cancelled" class="bg-white rounded-2xl shadow-sm p-6">
+        <div v-if="!cancelled" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 class="font-bold text-gray-800 mb-1">取消訂單</h2>
@@ -52,7 +52,7 @@
             </div>
 
             <!-- 倒數 + 按鈕 -->
-            <div v-if="secondsLeft > 0" class="flex items-center gap-3">
+            <div v-if="secondsLeft > 0" class="flex items-center gap-3 ml-auto">
               <div class="text-center">
                 <div
                   class="font-mono text-lg font-bold px-4 py-2 rounded-xl border transition-colors"
@@ -73,7 +73,7 @@
             </div>
 
             <!-- 時限已過 -->
-            <div v-else class="flex items-center gap-2 text-gray-400 text-sm">
+            <div v-else class="flex items-center gap-2 text-gray-400 text-sm ml-auto">
               <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -107,7 +107,7 @@
       </transition>
 
       <!-- ══ 配送資訊摘要 ══ -->
-      <div class="bg-white rounded-2xl shadow-sm p-6">
+      <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <h2 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
           <span class="text-xl">📦</span>配送資訊
         </h2>
@@ -171,11 +171,11 @@
 
       <!-- ══ 操作按鈕 ══ -->
       <div class="flex flex-col sm:flex-row gap-3">
-        <router-link to="/products" class="btn-primary py-3.5 flex-1 text-center text-sm font-semibold">
-          繼續購物
-        </router-link>
-        <router-link to="/account/orders" class="btn-outline py-3.5 flex-1 text-center text-sm font-semibold">
+        <router-link to="/account/orders" class="btn-primary py-3.5 flex-1 text-center text-sm font-semibold">
           前往會員中心查看訂單
+        </router-link>
+        <router-link to="/products" class="btn-outline py-3.5 flex-1 text-center text-sm font-semibold">
+          繼續購物
         </router-link>
       </div>
 
@@ -224,15 +224,12 @@
 import Vue from 'vue'
 
 const DELIVERY_LABELS: Record<string, string> = {
+  'home': '宅配',
   'home-hct': '黑貓宅急便',
   'home-bf':  '新竹貨運',
   'cvs-711':  '7-ELEVEN 超商取貨',
-}
-
-const DELIVERY_ETA: Record<string, string> = {
-  'home-hct': '2–3 個工作天',
-  'home-bf':  '3–5 個工作天',
-  'cvs-711':  '3–5 個工作天',
+  'cvs-pickup': '7-ELEVEN 超商取貨',
+  'cvs-cod': '7-ELEVEN 取貨付款',
 }
 
 const PAYMENT_LABELS: Record<string, string> = {
@@ -242,6 +239,7 @@ const PAYMENT_LABELS: Record<string, string> = {
   'icash':              'icash Pay',
   'cod':                '貨到付款',
   'cvs-cod':            '超商貨到付款',
+  'no-payment':         '本筆訂單無需付款',
 }
 
 const CANCEL_SECONDS = 30 * 60  // 30 分鐘
@@ -256,7 +254,7 @@ export default Vue.extend({
       cancelled:         false,
       showCancelConfirm: false,
 
-      deliveryStages:  ['訂單確認', '備貨中', '已出貨', '配送中', '已送達'],
+      deliveryStages:  ['訂單確認', '備貨中', '已送達'],
       currentStageIdx: 1,  // 模擬目前在「備貨中」
     }
   },
@@ -291,7 +289,8 @@ export default Vue.extend({
     },
 
     estimatedDelivery(): string {
-      return DELIVERY_ETA[this.deliveryMethod] || '3–5 個工作天'
+      const raw = (this.$route.query.desiredDeliveryDate as string) || ''
+      return raw ? raw.replace(/-/g, '/') : ''
     },
 
     receiverName(): string {

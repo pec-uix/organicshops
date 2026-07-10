@@ -20,6 +20,22 @@ export interface PromotionGiftSummary {
 
 const GIFT_PROMOTIONS: GiftPromotionConfig[] = [
   {
+    productId: 'p101',
+    triggerQty: 1,
+    giftQty: 1,
+    giftProductId: 'p101',
+    giftName: '原味綜合堅果隨手包',
+    label: '堅果買一送一',
+  },
+  {
+    productId: 'op202',
+    triggerQty: 4,
+    giftQty: 1,
+    giftProductId: 'op202',
+    giftName: '智利鮭魚輪切',
+    label: '鮭魚買四送一',
+  },
+  {
     productId: 'p105',
     triggerQty: 4,
     giftQty: 1,
@@ -27,10 +43,38 @@ const GIFT_PROMOTIONS: GiftPromotionConfig[] = [
     giftName: '有機鮮採花椰菜',
     label: '花椰菜買四送一',
   },
+  {
+    productId: 'p106',
+    triggerQty: 2,
+    giftQty: 1,
+    giftProductId: 'p106',
+    giftName: '杏桃乾',
+    label: '杏桃乾買二送一',
+  },
+  {
+    productId: 'op201',
+    triggerQty: 2,
+    giftQty: 2,
+    giftProductId: 'op201',
+    giftName: '有機枸杞原汁',
+    label: '枸杞原汁買二送二',
+  },
+  {
+    productId: 'p102',
+    triggerQty: 1,
+    giftQty: 1,
+    giftProductId: 'p101',
+    giftName: '原味綜合堅果隨手包',
+    label: '銀耳露買 A 送 B',
+  },
 ]
 
 export function getGiftPromotion(productId: string): GiftPromotionConfig | null {
-  return GIFT_PROMOTIONS.find((promotion) => promotion.productId === productId) || null
+  const directMatch = GIFT_PROMOTIONS.find((promotion) => promotion.productId === productId)
+  if (directMatch) return directMatch
+
+  const baseProductId = productId.split('-')[0]
+  return GIFT_PROMOTIONS.find((promotion) => promotion.productId === baseProductId) || null
 }
 
 export function getGiftQuantity(productId: string, quantity: number): number {

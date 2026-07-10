@@ -1,118 +1,113 @@
 <template>
   <div class="min-h-screen bg-brand-bg pb-20">
-    <div class="bg-white border-b border-gray-100 py-12 text-center">
-      <h1 class="text-3xl font-black text-gray-800 mb-2 tracking-[0.16em]">最新消息</h1>
-      <p class="text-gray-400">掌握公告、活動、上架資訊與品牌動態</p>
-    </div>
-
-    <div class="max-w-6xl mx-auto px-4 mt-10">
-      <div class="mb-6 flex flex-wrap gap-3">
-        <button
-          v-for="category in categories"
-          :key="category"
-          type="button"
-          class="rounded-full border px-4 py-2 text-sm font-bold transition-all"
-          :class="activeCategory === category ? 'border-brand-primary bg-brand-primary text-white shadow-sm' : 'border-gray-200 bg-white text-gray-500 hover:border-brand-primary/30 hover:text-brand-primary'"
-          @click="activeCategory = category"
-        >
-          {{ category }}
-        </button>
+    <section class="relative overflow-hidden bg-[#F0F4F1]">
+      <img
+        :src="newsBannerImage"
+        alt="有機生活與安心食材"
+        class="absolute inset-0 h-full w-full object-cover opacity-90"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-white/15 to-transparent"></div>
+      <div class="relative z-10 mx-auto max-w-7xl px-4 py-14 lg:px-8 lg:py-20">
+        <h1 class="text-3xl font-black leading-tight tracking-[0.16em] text-brand-dark lg:text-5xl">最新消息</h1>
+        <p class="mt-5 max-w-2xl text-sm font-bold leading-[1.6] text-[#374151] lg:text-base">
+          公告、活動、上架資訊與品牌動態
+        </p>
       </div>
+    </section>
 
-      <div class="rounded-[2rem] bg-white p-6 shadow-sm border border-gray-100 lg:p-8">
-        <div class="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
-          <router-link
-            v-if="featuredNews"
-            :to="`/news/${featuredNews.id}`"
-            class="group overflow-hidden rounded-[1.75rem] bg-[#F5F1E8] border border-[#ECE5D8]"
-          >
-            <div class="aspect-[16/9] overflow-hidden bg-brand-surface">
-              <img :src="featuredNews.cover" :alt="featuredNews.title" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            </div>
-            <div class="p-6">
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="rounded-full bg-white px-3 py-1 text-xs font-black text-brand-primary">{{ featuredNews.tag }}</span>
-                <span class="text-xs text-gray-400">{{ formatDate(featuredNews.date) }}</span>
-              </div>
-              <h2 class="mt-4 text-2xl font-black leading-tight text-gray-800 group-hover:text-brand-primary transition-colors">
-                {{ featuredNews.title }}
-              </h2>
-              <p class="mt-4 text-sm leading-7 text-gray-500">
-                {{ featuredNews.summary }}
-              </p>
-              <div class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-primary">
-                閱讀完整消息
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </router-link>
+    <main class="mx-auto max-w-7xl px-4 pt-8 lg:px-8">
+      <nav class="mb-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 border-b border-gray-100 pb-8 text-sm text-gray-500">
+        <router-link to="/" class="inline-flex items-center gap-1 whitespace-nowrap transition-colors hover:text-brand-primary" aria-label="返回首頁">
+          <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11.5L12 4l9 7.5M5.5 10.5V20h13v-9.5M9.5 20v-5.5h5V20" />
+          </svg>
+          <span>首頁</span>
+        </router-link>
+        <span class="inline-flex items-center gap-1.5 whitespace-nowrap text-gray-800">
+          <span>›</span>
+          最新消息
+        </span>
+      </nav>
 
-          <div class="rounded-[1.75rem] bg-gray-50 p-5">
-            <p class="text-xs font-black tracking-[0.28em] text-gray-400">最新更新</p>
-            <div class="mt-4 space-y-4">
-              <router-link
-                v-for="news in latestNews"
-                :key="news.id"
-                :to="`/news/${news.id}`"
-                class="block rounded-2xl border border-transparent bg-white px-4 py-4 transition-all hover:border-brand-primary/20 hover:shadow-sm"
-              >
-                <div class="flex items-start gap-3">
-                  <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-brand-surface text-2xl">
-                    {{ news.icon }}
-                  </div>
-                  <div class="min-w-0">
-                    <div class="flex flex-wrap items-center gap-2 text-[11px]">
-                      <span class="font-black text-brand-primary">{{ news.tag }}</span>
-                      <span class="text-gray-300">{{ formatDate(news.date) }}</span>
-                    </div>
-                    <h3 class="mt-1 line-clamp-2 text-sm font-black leading-6 text-gray-800">{{ news.title }}</h3>
-                  </div>
-                </div>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <section class="mx-auto max-w-6xl">
         <router-link
-          v-for="news in filteredNewsList"
+          v-for="news in paginatedNewsList"
           :key="news.id"
           :to="'/news/' + news.id"
-          class="group overflow-hidden rounded-[1.75rem] border border-gray-100 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+          class="group mb-3 grid cursor-pointer grid-cols-[72px_minmax(0,1fr)_2.25rem] items-center gap-4 rounded-md border border-gray-200 bg-white px-6 py-4 transition-all hover:border-brand-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
         >
-          <div class="aspect-[4/3] overflow-hidden bg-brand-surface">
-            <img :src="news.cover" :alt="news.title" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div class="flex h-[72px] w-[72px] flex-shrink-0 flex-col items-center justify-center rounded-full bg-brand-primary">
+            <span class="text-[10px] font-bold tracking-[0.08em] text-white/80">
+              {{ formatDateYearMonth(news.date) }}
+            </span>
+            <span class="mt-0.5 text-2xl font-black leading-none text-white">
+              {{ formatDateDay(news.date) }}
+            </span>
           </div>
-          <div class="p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <span class="rounded-full bg-brand-surface px-3 py-1 text-[11px] font-black text-brand-primary">{{ news.tag }}</span>
-              <span class="text-[11px] text-gray-300">{{ formatDate(news.date) }}</span>
-            </div>
-            <h2 class="text-lg font-black text-gray-800 group-hover:text-brand-primary transition-colors line-clamp-2 leading-tight">
+
+          <div class="min-w-0">
+            <h3 class="text-base font-bold leading-snug text-gray-800 transition-colors group-hover:text-brand-primary lg:text-lg">
               {{ news.title }}
-            </h2>
-            <p class="text-sm text-gray-500 mt-4 line-clamp-3 leading-7">
+            </h3>
+            <p class="mt-2 truncate text-sm font-medium leading-6 text-gray-500">
               {{ news.summary }}
             </p>
-            <div class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-primary">
-              查看內容
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
           </div>
-        </router-link>
-      </div>
 
-      <div v-if="filteredNewsList.length === 0" class="mt-8 rounded-[1.75rem] border border-dashed border-gray-200 bg-white px-6 py-16 text-center text-gray-500">
-        <div class="text-4xl">🗂️</div>
-        <p class="mt-4 text-lg font-bold text-gray-700">目前此分類尚無消息</p>
-        <p class="mt-2 text-sm">你可以先切回「全部」，或之後再補這個分類的內容。</p>
+          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-bg text-brand-primary transition-colors group-hover:bg-brand-primary group-hover:text-white">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </span>
+        </router-link>
+
+        <nav
+          v-if="totalPages > 1"
+          class="mt-6 flex justify-center border-t border-gray-100 pt-6"
+          aria-label="最新消息分頁"
+        >
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-bold text-gray-500 transition-colors hover:border-brand-primary hover:text-brand-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-500"
+              :disabled="currentPage === 1"
+              @click="goToPage(currentPage - 1)"
+            >
+              上一頁
+            </button>
+            <button
+              v-for="page in totalPages"
+              :key="page"
+              type="button"
+              class="h-9 w-9 rounded-md border text-sm font-black transition-colors"
+              :class="page === currentPage ? 'border-brand-primary bg-brand-primary text-white' : 'border-gray-200 bg-white text-gray-500 hover:border-brand-primary hover:text-brand-primary'"
+              :aria-current="page === currentPage ? 'page' : undefined"
+              @click="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+            <button
+              type="button"
+              class="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-bold text-gray-500 transition-colors hover:border-brand-primary hover:text-brand-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 disabled:hover:text-gray-500"
+              :disabled="currentPage === totalPages"
+              @click="goToPage(currentPage + 1)"
+            >
+              下一頁
+            </button>
+          </div>
+        </nav>
+      </section>
+
+      <div v-if="newsList.length === 0" class="mt-8 rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-16 text-center text-gray-500 shadow-sm">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-surface text-brand-primary">
+          <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <p class="mt-4 text-lg font-bold text-gray-700">這個分類暫無消息</p>
+        <p class="mt-2 text-sm">你可以先切回「全部」，瀏覽更多品牌動態。</p>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -135,29 +130,34 @@ export default Vue.extend({
   name: 'NewsListView',
   data() {
     return {
-      activeCategory: '全部',
+      currentPage: 1,
+      pageSize: 12,
+      newsBannerImage: require('../../images/背景圖.png'),
       newsList: mockNewsArticles as NewsArticle[],
     }
   },
   computed: {
-    categories(): string[] {
-      const tags = this.newsList.map((item) => item.tag)
-      return ['全部', ...Array.from(new Set(tags))]
+    totalPages(): number {
+      return Math.max(1, Math.ceil(this.newsList.length / this.pageSize))
     },
-    filteredNewsList(): NewsArticle[] {
-      if (this.activeCategory === '全部') return this.newsList
-      return this.newsList.filter((item) => item.tag === this.activeCategory)
+    pageStartIndex(): number {
+      return (this.currentPage - 1) * this.pageSize
     },
-    featuredNews(): NewsArticle | null {
-      return this.filteredNewsList[0] || null
-    },
-    latestNews(): NewsArticle[] {
-      return this.filteredNewsList.slice(1, 4)
+    paginatedNewsList(): NewsArticle[] {
+      return this.newsList.slice(this.pageStartIndex, this.pageStartIndex + this.pageSize)
     },
   },
   methods: {
-    formatDate(date: string): string {
-      return date.replace(/-/g, '.')
+    formatDateYearMonth(date: string): string {
+      const [year, month] = date.split('-')
+      return `${year}.${month}`
+    },
+    formatDateDay(date: string): string {
+      const [, , day] = date.split('-')
+      return day || ''
+    },
+    goToPage(page: number): void {
+      this.currentPage = Math.min(Math.max(page, 1), this.totalPages)
     },
   }
 })

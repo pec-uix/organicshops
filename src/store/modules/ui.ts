@@ -3,6 +3,8 @@ import { Module } from 'vuex'
 interface UiState {
   cartDrawerOpen: boolean
   mobileMenuOpen: boolean
+  pdfViewerUrl: string | null
+  pdfViewerTitle: string
 }
 
 const uiModule: Module<UiState, any> = {
@@ -11,6 +13,8 @@ const uiModule: Module<UiState, any> = {
   state: (): UiState => ({
     cartDrawerOpen: false,
     mobileMenuOpen: false,
+    pdfViewerUrl: null,
+    pdfViewerTitle: '',
   }),
 
   mutations: {
@@ -19,6 +23,10 @@ const uiModule: Module<UiState, any> = {
     },
     SET_MOBILE_MENU(state: UiState, open: boolean) {
       state.mobileMenuOpen = open
+    },
+    SET_PDF_VIEWER(state: UiState, payload: { url: string | null; title: string }) {
+      state.pdfViewerUrl = payload.url
+      state.pdfViewerTitle = payload.title
     },
   },
 
@@ -38,11 +46,21 @@ const uiModule: Module<UiState, any> = {
     toggleMobileMenu({ commit, state }) {
       commit('SET_MOBILE_MENU', !state.mobileMenuOpen)
     },
+    openPdfViewer({ commit }, payload: { url: string; title: string }) {
+      commit('SET_PDF_VIEWER', payload)
+      document.body.style.overflow = 'hidden'
+    },
+    closePdfViewer({ commit }) {
+      commit('SET_PDF_VIEWER', { url: null, title: '' })
+      document.body.style.overflow = ''
+    },
   },
 
   getters: {
     cartDrawerOpen: (state) => state.cartDrawerOpen,
     mobileMenuOpen: (state) => state.mobileMenuOpen,
+    pdfViewerUrl: (state) => state.pdfViewerUrl,
+    pdfViewerTitle: (state) => state.pdfViewerTitle,
   },
 }
 

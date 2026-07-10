@@ -12,6 +12,33 @@
 }
 
 @layer components {
+  .type-hero-title {
+    @apply text-4xl lg:text-5xl font-black leading-tight text-gray-800;
+  }
+  .type-page-title {
+    @apply text-2xl lg:text-3xl font-black leading-tight text-gray-800;
+  }
+  .type-section-title {
+    @apply text-xl lg:text-2xl font-black leading-tight text-gray-800;
+  }
+  .type-card-title {
+    @apply text-base lg:text-lg font-bold leading-snug text-gray-800;
+  }
+  .type-nav {
+    @apply text-[15px] font-bold text-gray-800;
+  }
+  .type-action {
+    @apply text-sm font-bold;
+  }
+  .type-body {
+    @apply text-sm font-medium leading-7 text-gray-600;
+  }
+  .type-muted {
+    @apply text-xs font-medium leading-6 text-gray-400;
+  }
+  .type-eyebrow {
+    @apply text-[10px] font-black uppercase tracking-[0.25em];
+  }
   .btn-primary {
     @apply bg-brand-primary text-white px-4 py-2 rounded-lg hover:bg-brand-dark transition-colors font-medium;
   }

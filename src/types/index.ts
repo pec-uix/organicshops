@@ -13,6 +13,11 @@ export interface Category {
   id: string
   name: string
   icon: string
+  slug?: string
+  parentId?: string | null
+  description?: string
+  sortOrder?: number
+  isVisible?: boolean
 }
 
 // ─── Product ─────────────────────────────────────────────────────────────────
@@ -39,9 +44,60 @@ export interface Product {
   stockStatus?: 'in-stock' | 'sold-out' | 'restocking' | 'preorder'
   promotionLabel?: string     // 限時標籤，如「限時優惠至 05/31」
   promotionMessage?: string   // 促銷說明，如「購買第 2 件 10 元」
+  comboItems?: string[]        // prototype 組合商品明細
+  variants?: ProductVariant[] // 商品規格選項
   features?: string[]         // 產品特色（Tab）
   introduction?: string       // 產品介紹（Tab）
   specs?: string              // 成分規格（Tab，純文字多行）
+}
+
+export interface ProductVariant {
+  id: string
+  label: string
+  unit: string
+  price: number
+  originalPrice?: number
+  memberPrice?: number
+  requiredOpPoints?: number
+}
+
+// ─── PDF Content（健康誌 / 禮盒型錄 / 檢驗報告）──────────────────────────────
+export interface HealthJournal {
+  id: string
+  title: string
+  subtitle?: string
+  description: string
+  coverImage: string
+  pdfUrl: string
+  publishDate: string
+  issueLabel: string
+  isActive: boolean
+}
+
+export interface GiftCatalog {
+  id: string
+  title: string
+  description: string
+  coverImage: string
+  pdfUrl: string
+  publishDate: string
+  seasonLabel?: string
+  isActive: boolean
+}
+
+export interface InspectionReport {
+  id: string
+  productId?: string
+  productName: string
+  category: string
+  reportTitle: string
+  reportDate: string
+  labName?: string
+  batchNo?: string
+  resultLabel: string
+  pdfUrl: string
+  tags: string[]
+  isActive: boolean
 }
 
 // ─── Add-on Purchase（加價購）────────────────────────────────────────────────
@@ -90,6 +146,11 @@ export interface User {
   name: string
   email: string
   avatarUrl?: string
+  memberRoleLabel?: string
+  memberTierLabel?: string
+  memberStatusLabel?: string
+  memberLevel?: 'normal' | 'vip'
+  memberBadges?: string[]
 }
 
 export interface AuthState {

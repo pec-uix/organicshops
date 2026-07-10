@@ -4,7 +4,9 @@
 
       <!-- ══ 頂部進度 ══ -->
       <div class="text-center mb-8">
-        <span class="text-3xl select-none">🌿</span>
+        <span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
+          <img src="/logo.gif" alt="統一生機" class="h-full w-full object-contain" />
+        </span>
         <h1 class="text-lg font-bold text-brand-dark mt-3 mb-1">補充個人資料</h1>
         <p class="text-sm text-gray-500">幫助我們提供更適合您的有機好物推薦（可跳過）</p>
 
@@ -156,7 +158,7 @@
             class="btn-outline py-3 flex-1 text-sm"
             @click="skip"
           >
-            跳過，直接進入首頁
+            {{ redirectPath ? '跳過，返回結帳' : '跳過，直接進入首頁' }}
           </button>
           <button
             class="btn-primary py-3 flex-1 text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-60"
@@ -236,9 +238,22 @@ export default Vue.extend({
     today(): string {
       return new Date().toISOString().split('T')[0]
     },
+
+    redirectPath(): string {
+      return this.safeRedirect(this.$route.query.redirect)
+    },
   },
 
   methods: {
+    safeRedirect(value: unknown): string {
+      const redirect = Array.isArray(value) ? value[0] : value
+      if (typeof redirect !== 'string') return ''
+      if (!redirect.startsWith('/') || redirect.startsWith('//')) return ''
+      if (redirect === '/login' || redirect.startsWith('/login?')) return ''
+      if (redirect === '/register' || redirect.startsWith('/register?')) return ''
+      return redirect
+    },
+
     toggleCategory(id: string) {
       const idx = this.form.preferredCategories.indexOf(id)
       if (idx >= 0) {
@@ -249,7 +264,7 @@ export default Vue.extend({
     },
 
     skip() {
-      this.$router.push('/')
+      this.$router.push(this.redirectPath || '/')
     },
 
     async save() {
@@ -257,7 +272,7 @@ export default Vue.extend({
       // 模擬儲存資料
       await new Promise(resolve => setTimeout(resolve, 700))
       this.isLoading = false
-      this.$router.push('/')
+      this.$router.push({ name: 'register-success' })
     },
   },
 })
