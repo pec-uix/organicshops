@@ -1,0 +1,52 @@
+[
+  { "id": "fresh", "name": "生鮮直送", "slug": "fresh", "parentId": null, "sortOrder": 10, "bannerImage": "/category-banners/fresh/banner-01.jpg", "bannerImages": ["/category-banners/fresh/banner-01.jpg", "/category-banners/fresh/banner-02.jpg"] },
+  { "id": "fresh-fruits", "name": "新鮮水果", "slug": "fruits", "parentId": "fresh", "sortOrder": 11, "thumbnailImage": "/category-banners/fresh-fruits/thumb.jpg" },
+  { "id": "fresh-produce-box", "name": "蛋品/根莖/蔬果套餐", "slug": "produce-box", "parentId": "fresh", "sortOrder": 12, "thumbnailImage": "/category-banners/fresh-produce-box/thumb.jpg" },
+  { "id": "fresh-cake", "name": "優選蛋糕", "slug": "cake", "parentId": "fresh", "sortOrder": 13 },
+
+  { "id": "frozen", "name": "冷凍食材", "slug": "frozen", "parentId": null, "sortOrder": 20, "bannerImage": "/category-banners/frozen/banner-01.jpg", "bannerImages": ["/category-banners/frozen/banner-01.jpg", "/category-banners/frozen/banner-02.jpg"] },
+  { "id": "frozen-bundle", "name": "任選多件組", "slug": "bundle", "parentId": "frozen", "sortOrder": 21 },
+  { "id": "frozen-flash", "name": "冷凍限時快閃", "slug": "flash", "parentId": "frozen", "sortOrder": 22, "thumbnailImage": "/category-banners/frozen-flash/thumb.jpg" },
+  { "id": "frozen-meat", "name": "安心肉品", "slug": "meat", "parentId": "frozen", "sortOrder": 23, "thumbnailImage": "/category-banners/frozen-meat/thumb.jpg", "bannerImage": "/category-banners/frozen-meat/banner-01.jpg", "bannerImages": ["/category-banners/frozen-meat/banner-01.jpg", "/category-banners/frozen-meat/banner-02.jpg"] },
+  { "id": "frozen-seafood", "name": "安心水產", "slug": "seafood", "parentId": "frozen", "sortOrder": 24, "thumbnailImage": "/category-banners/frozen-seafood/thumb.jpg", "bannerImage": "/category-banners/frozen-seafood/banner-01.jpg", "bannerImages": ["/category-banners/frozen-seafood/banner-01.jpg", "/category-banners/frozen-seafood/banner-02.jpg"] },
+  { "id": "frozen-ready", "name": "即食調理", "slug": "ready-meals", "parentId": "frozen", "sortOrder": 25, "thumbnailImage": "/category-banners/frozen-ready/thumb.jpg", "bannerImage": "/category-banners/frozen-ready/banner-01.jpg", "bannerImages": ["/category-banners/frozen-ready/banner-01.jpg"] },
+  { "id": "frozen-quick-cook", "name": "快速料理", "slug": "quick-cook", "parentId": "frozen", "sortOrder": 26, "thumbnailImage": "/category-banners/frozen-quick-cook/thumb.jpg", "bannerImage": "/category-banners/frozen-quick-cook/banner-01.jpg", "bannerImages": ["/category-banners/frozen-quick-cook/banner-01.jpg", "/category-banners/frozen-quick-cook/banner-02.jpg"] },
+  { "id": "frozen-vegetarian", "name": "蔬食", "slug": "vegetarian", "parentId": "frozen", "sortOrder": 27, "thumbnailImage": "/category-banners/frozen-vegetarian/thumb.jpg", "bannerImage": "/category-banners/frozen-vegetarian/banner-01.jpg", "bannerImages": ["/category-banners/frozen-vegetarian/banner-01.jpg"] },
+  { "id": "frozen-breakfast", "name": "營養早餐", "slug": "breakfast", "parentId": "frozen", "sortOrder": 28, "thumbnailImage": "/category-banners/frozen-breakfast/thumb.jpg", "bannerImage": "/category-banners/frozen-breakfast/banner-01.jpg", "bannerImages": ["/category-banners/frozen-breakfast/banner-01.jpg"] },
+
+  { "id": "nuts", "name": "堅果/果乾", "slug": "nuts-dried-fruits", "parentId": null, "sortOrder": 30, "bannerImage": "/category-banners/nuts/banner-01.jpg", "bannerImages": ["/category-banners/nuts/banner-01.jpg"] },
+  { "id": "nuts-mixed", "name": "堅果", "slug": "nuts", "parentId": "nuts", "sortOrder": 31, "thumbnailImage": "/category-banners/nuts-mixed/thumb.jpg", "bannerImage": "/category-banners/nuts-mixed/banner-01.jpg", "bannerImages": ["/category-banners/nuts-mixed/banner-01.jpg"] },
+  { "id": "nuts-dried-fruits", "name": "果乾", "slug": "dried-fruits", "parentId": "nuts", "sortOrder": 32, "thumbnailImage": "/category-banners/nuts-dried-fruits/thumb.jpg" },
+
+  { "id": "snacks", "name": "樂活零嘴", "slug": "snacks", "parentId": null, "sortOrder": 35, "bannerImage": "/category-banners/snacks/banner-01.jpg", "bannerImages": ["/category-banners/snacks/banner-01.jpg", "/category-banners/snacks/banner-02.jpg"] },
+
+  { "id": "grains", "name": "主食雜糧", "slug": "grains", "parentId": null, "sortOrder": 40, "bannerImage": "/category-banners/grains/banner-01.jpg", "bannerImages": ["/category-banners/grains/banner-01.jpg"] },
+  { "id": "grains-rice", "name": "米", "slug": "rice", "parentId": "grains", "sortOrder": 41, "thumbnailImage": "/category-banners/grains-rice/thumb.jpg" },
+  { "id": "grains-cereal", "name": "雜糧", "slug": "cereal", "parentId": "grains", "sortOrder": 42, "thumbnailImage": "/category-banners/grains-cereal/thumb.jpg", "bannerImage": "/category-banners/grains-cereal/banner-01.jpg", "bannerImages": ["/category-banners/grains-cereal/banner-01.jpg"] },
+  { "id": "grains-noodles", "name": "麵條", "slug": "noodles", "parentId": "grains", "sortOrder": 43, "thumbnailImage": "/category-banners/grains-noodles/thumb.jpg" },
+  { "id": "grains-beans", "name": "豆類", "slug": "beans", "parentId": "grains", "sortOrder": 44 },
+
+  { "id": "beverage", "name": "即飲/沖泡", "slug": "beverage", "parentId": null, "sortOrder": 50, "bannerImage": "/category-banners/beverage/banner-01.jpg", "bannerImages": ["/category-banners/beverage/banner-01.jpg", "/category-banners/beverage/banner-02.jpg"] },
+  { "id": "beverage-ready", "name": "即飲", "slug": "ready-drinks", "parentId": "beverage", "sortOrder": 51, "thumbnailImage": "/category-banners/beverage-ready/thumb.jpg" },
+  { "id": "beverage-brew", "name": "沖泡", "slug": "brew", "parentId": "beverage", "sortOrder": 52, "thumbnailImage": "/category-banners/beverage-brew/thumb.jpg", "bannerImage": "/category-banners/beverage-brew/banner-01.jpg", "bannerImages": ["/category-banners/beverage-brew/banner-01.jpg", "/category-banners/beverage-brew/banner-02.jpg"] },
+
+  { "id": "pantry", "name": "廚房料理品", "slug": "pantry", "parentId": null, "sortOrder": 60, "bannerImage": "/category-banners/pantry/banner-01.jpg", "bannerImages": ["/category-banners/pantry/banner-01.jpg", "/category-banners/pantry/banner-02.jpg"] },
+  { "id": "pantry-oil", "name": "油品", "slug": "oil", "parentId": "pantry", "sortOrder": 61, "thumbnailImage": "/category-banners/pantry-oil/thumb.jpg", "bannerImage": "/category-banners/pantry-oil/banner-01.jpg", "bannerImages": ["/category-banners/pantry-oil/banner-01.jpg", "/category-banners/pantry-oil/banner-02.jpg"] },
+  { "id": "pantry-seasoning", "name": "調味品", "slug": "seasoning", "parentId": "pantry", "sortOrder": 62, "thumbnailImage": "/category-banners/pantry-seasoning/thumb.jpg", "bannerImage": "/category-banners/pantry-seasoning/banner-01.jpg", "bannerImages": ["/category-banners/pantry-seasoning/banner-01.jpg"] },
+  { "id": "pantry-dry-goods", "name": "乾貨", "slug": "dry-goods", "parentId": "pantry", "sortOrder": 63, "thumbnailImage": "/category-banners/pantry-dry-goods/thumb.jpg", "bannerImage": "/category-banners/pantry-dry-goods/banner-01.jpg", "bannerImages": ["/category-banners/pantry-dry-goods/banner-01.jpg", "/category-banners/pantry-dry-goods/banner-02.jpg"] },
+  { "id": "pantry-cookware", "name": "鍋具用品", "slug": "cookware", "parentId": "pantry", "sortOrder": 64, "thumbnailImage": "/category-banners/pantry-cookware/thumb.jpg" },
+
+  { "id": "supplements", "name": "保健食品", "slug": "supplements", "parentId": null, "sortOrder": 70, "thumbnailImage": "/category-banners/supplements/thumb.jpg" },
+
+  { "id": "daily", "name": "生活日用", "slug": "daily", "parentId": null, "sortOrder": 80, "bannerImage": "/category-banners/daily/banner-01.jpg", "bannerImages": ["/category-banners/daily/banner-01.jpg"] },
+  { "id": "daily-personal-care", "name": "個人清潔", "slug": "personal-care", "parentId": "daily", "sortOrder": 81, "thumbnailImage": "/category-banners/daily-personal-care/thumb.jpg" },
+  { "id": "daily-home", "name": "居家用品", "slug": "home-goods", "parentId": "daily", "sortOrder": 82, "thumbnailImage": "/category-banners/daily-home/thumb.jpg", "bannerImage": "/category-banners/daily-home/banner-01.jpg", "bannerImages": ["/category-banners/daily-home/banner-01.jpg"] },
+
+  { "id": "elderly", "name": "銀髮專區", "slug": "elderly", "parentId": null, "sortOrder": 90, "bannerImage": "/category-banners/elderly/banner-01.jpg", "bannerImages": ["/category-banners/elderly/banner-01.jpg"] },
+  { "id": "elderly-breakfast", "name": "方便早餐", "slug": "breakfast", "parentId": "elderly", "sortOrder": 91 },
+  { "id": "elderly-dinner", "name": "晚餐食材", "slug": "dinner", "parentId": "elderly", "sortOrder": 92 },
+  { "id": "elderly-soup", "name": "滋補湯品", "slug": "soup", "parentId": "elderly", "sortOrder": 93 },
+  { "id": "elderly-snacks", "name": "休閒點心", "slug": "snacks", "parentId": "elderly", "sortOrder": 94 },
+  { "id": "elderly-drinks", "name": "喝的保養", "slug": "drinks", "parentId": "elderly", "sortOrder": 95 },
+  { "id": "elderly-supplements", "name": "保健食品", "slug": "supplements", "parentId": "elderly", "sortOrder": 96 }
+]

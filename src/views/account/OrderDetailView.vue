@@ -305,9 +305,8 @@
                 </div>
               </div>
               <div v-if="creditRewardRows.length" class="rounded-xl bg-brand-surface/40 p-4">
-                <div class="mb-3 flex items-center justify-between gap-4">
+                <div class="mb-3">
                   <span class="text-sm font-black text-gray-800">購物金回饋</span>
-                  <span class="text-sm font-black text-brand-primary">+${{ creditRewardTotal.toLocaleString() }}</span>
                 </div>
                 <div
                   v-for="row in creditRewardRows"

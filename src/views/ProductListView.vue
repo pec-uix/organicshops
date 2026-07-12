@@ -105,7 +105,7 @@
           </button>
         </div>
 
-        <div v-if="pageVariant !== 'middle' && (totalCount > 0 || activeFilterCount > 0 || searchQuery)" class="flex flex-wrap items-center gap-4 sm:gap-6">
+        <div v-if="(pageVariant === 'all' || pageVariant === 'root' || searchQuery) && (totalCount > 0 || activeFilterCount > 0 || searchQuery)" class="flex flex-wrap items-center gap-4 sm:gap-6">
           <div class="flex items-center gap-2">
             <label class="text-sm font-bold text-gray-400 tracking-tighter">排序方式</label>
             <select
@@ -296,7 +296,7 @@
       <!-- ── Product Grid/List ── -->
       <div v-if="totalCount > 0">
         <div
-          :class="viewMode === 'grid' ? 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5 xl:gap-6 justify-items-center' : 'flex flex-col gap-4 w-full'"
+          :class="viewMode === 'grid' ? 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4' : 'flex flex-col gap-4 w-full'"
         >
           <ProductCard
             v-for="product in pagedProducts"
@@ -437,7 +437,6 @@
                   <select
                     v-model="filterMiddleCategoryId"
                     class="filter-select"
-                    :disabled="!filterRootCategoryId"
                   >
                     <option value="">請選擇中分類</option>
                     <option v-for="cat in middleCategoryOptions" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -451,7 +450,6 @@
                   <select
                     v-model="filterLeafCategoryId"
                     class="filter-select"
-                    :disabled="!filterMiddleCategoryId"
                   >
                     <option value="">請選擇小分類</option>
                     <option v-for="cat in leafCategoryOptions" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -555,7 +553,6 @@ import Vue from 'vue'
 import { Category, Product, TempZone } from '@/types'
 import { SortOption } from '@/store/modules/products'
 import ProductCard from '@/components/product/ProductCard.vue'
-import { mockProducts } from '@/mock/data'
 import {
   buildCategoryPathFromCategory,
   buildCategoryPathFromSegments,
@@ -585,7 +582,7 @@ export default Vue.extend({
       sortBy: 'latest' as SortOption,
       viewMode: 'grid' as 'grid' | 'list',
       currentPage: 1,
-      pageSize: 12,
+      pageSize: 20,
       localSearch: '',
       filtersOpen: false,
       filterRootCategoryId: '',
@@ -665,12 +662,21 @@ export default Vue.extend({
       return this.filterLeafCategoryId || this.filterMiddleCategoryId || this.filterRootCategoryId || ''
     },
     middleCategoryOptions(): Category[] {
-      if (!this.filterRootCategoryId) return []
-      return this.$store.getters['products/childrenByCategoryId'](this.filterRootCategoryId)
+      if (this.filterRootCategoryId) {
+        return this.$store.getters['products/childrenByCategoryId'](this.filterRootCategoryId)
+      }
+      const allCats: Category[] = this.$store.getters['products/allCategories']
+      const rootIds = new Set((this.$store.getters['products/rootCategories'] as Category[]).map((c: Category) => c.id))
+      return allCats.filter((c: Category) => c.parentId && rootIds.has(c.parentId) && c.isVisible !== false)
     },
     leafCategoryOptions(): Category[] {
-      if (!this.filterMiddleCategoryId) return []
-      return this.$store.getters['products/childrenByCategoryId'](this.filterMiddleCategoryId)
+      if (this.filterMiddleCategoryId) {
+        return this.$store.getters['products/childrenByCategoryId'](this.filterMiddleCategoryId)
+      }
+      const allCats: Category[] = this.$store.getters['products/allCategories']
+      const rootIds = new Set((this.$store.getters['products/rootCategories'] as Category[]).map((c: Category) => c.id))
+      const middleIds = new Set(allCats.filter((c: Category) => c.parentId && rootIds.has(c.parentId)).map((c: Category) => c.id))
+      return allCats.filter((c: Category) => c.parentId && middleIds.has(c.parentId) && c.isVisible !== false)
     },
     pageTitle(): string {
       if (this.searchQuery) return `搜尋「${this.searchQuery}」`
@@ -696,9 +702,11 @@ export default Vue.extend({
       return '瀏覽商品、探索品牌、篩選需要的商品。'
     },
     heroBannerImage(): string {
+      if (this.currentCategory?.bannerImage) return this.currentCategory.bannerImage
       if (this.currentCategory?.icon) return this.currentCategory.icon
+      if (this.rootCategory?.bannerImage) return this.rootCategory.bannerImage
       if (this.rootCategory?.icon) return this.rootCategory.icon
-      return mockProducts[0]?.image || ''
+      return this.$store.getters['products/allProducts'][0]?.image || ''
     },
     rootRankingCards(): Array<{ id: string; label: string; path: string; to: object; count: number; rank: number; image: string }> {
       return this.rootCategories
@@ -708,7 +716,7 @@ export default Vue.extend({
           path: buildCategoryPathFromCategory(this.categories, category.id),
           to: this.buildCategoryRouteFromId(category.id),
           count: this.categoryProductCount(category.id),
-          image: category.icon,
+          image: category.bannerImage || category.icon || this.$store.getters['products/allProducts'][0]?.image || '',
         }))
         .sort((a, b) => b.count - a.count)
         .map((item, index) => ({ ...item, rank: index + 1 }))
@@ -720,7 +728,7 @@ export default Vue.extend({
         path: buildCategoryPathFromCategory(this.categories, category.id),
         to: this.buildCategoryRouteFromId(category.id),
         count: this.categoryProductCount(category.id),
-        image: category.icon,
+        image: category.thumbnailImage || category.icon || this.$store.getters['products/allProducts'][0]?.image || '',
       }))
     },
     categoryBreadcrumbLinks(): Array<{ label: string; path: string; to: object; isCurrent: boolean }> {
@@ -840,7 +848,9 @@ export default Vue.extend({
     totalCount(): number { return this.allFiltered.length },
     totalPages(): number { return Math.max(1, Math.ceil(this.totalCount / this.pageSize)) },
     pagedProducts(): Product[] { return this.allFiltered.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize) },
-    recommendedProducts(): Product[] { return mockProducts.slice(0, 6) },
+    recommendedProducts(): Product[] {
+      return this.$store.getters['products/allProducts'].slice(0, 6)
+    },
     pageNumbers(): (number | '…')[] {
       const total = this.totalPages; const cur = this.currentPage
       if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
@@ -858,16 +868,36 @@ export default Vue.extend({
     },
     sortBy() { this.currentPage = 1 },
     searchQuery() { this.localSearch = this.searchQuery; this.currentPage = 1 },
-    filterRootCategoryId() {
-      this.filterMiddleCategoryId = ''
-      this.filterLeafCategoryId = ''
+    filterRootCategoryId(newId: string) {
+      const midCat: Category | undefined = this.$store.getters['products/categoryById'](this.filterMiddleCategoryId)
+      if (!newId || (midCat && midCat.parentId !== newId)) {
+        this.filterMiddleCategoryId = ''
+        this.filterLeafCategoryId = ''
+      }
       this.currentPage = 1
     },
-    filterMiddleCategoryId() {
-      this.filterLeafCategoryId = ''
+    filterMiddleCategoryId(newId: string) {
+      if (newId) {
+        const midCat: Category | undefined = this.$store.getters['products/categoryById'](newId)
+        if (midCat?.parentId && !this.filterRootCategoryId) {
+          this.filterRootCategoryId = midCat.parentId
+        }
+      }
+      const leafCat: Category | undefined = this.$store.getters['products/categoryById'](this.filterLeafCategoryId)
+      if (!newId || (leafCat && leafCat.parentId !== newId)) {
+        this.filterLeafCategoryId = ''
+      }
       this.currentPage = 1
     },
-    filterLeafCategoryId() { this.currentPage = 1 },
+    filterLeafCategoryId(newId: string) {
+      if (newId) {
+        const leafCat: Category | undefined = this.$store.getters['products/categoryById'](newId)
+        if (leafCat?.parentId && !this.filterMiddleCategoryId) {
+          this.filterMiddleCategoryId = leafCat.parentId
+        }
+      }
+      this.currentPage = 1
+    },
     filtersOpen(value: boolean) {
       document.body.style.overflow = value ? 'hidden' : ''
     },
@@ -895,11 +925,11 @@ export default Vue.extend({
     syncCategorySelection() {
       const segments = this.routeCategorySegments
       const trail = resolveCategoryTrail(this.categories, segments)
-      this.viewMode = this.pageVariant === 'leaf' ? 'list' : 'grid'
+      this.viewMode = 'grid'
 
       const canonicalSegments = trail.length
         ? [
-            ...trail.map((category) => category.name),
+            ...trail.map((category) => category.slug || category.id),
             ...segments.slice(trail.length),
           ]
         : segments
@@ -927,9 +957,10 @@ export default Vue.extend({
     },
     buildCategoryRouteFromTrail(trail: Category[]) {
       if (!trail.length) return { path: '/products' }
-      const params: Record<string, string> = { root: trail[0].name }
-      if (trail[1]) params.middle = trail[1].name
-      if (trail[2]) params.leaf = trail[2].name
+      const slug = (c: Category) => c.slug || c.id
+      const params: Record<string, string> = { root: slug(trail[0]) }
+      if (trail[1]) params.middle = slug(trail[1])
+      if (trail[2]) params.leaf = slug(trail[2])
       return { name: 'category', params }
     },
     applySearch() {

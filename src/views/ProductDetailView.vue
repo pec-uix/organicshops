@@ -57,14 +57,15 @@
               @touchstart="onGalleryTouchStart"
               @touchend="onGalleryTouchEnd"
             >
-              <img
-                v-if="selectedGalleryImage && isImageUrl(selectedGalleryImage.src)"
+          <img
+                v-if="selectedGalleryImage && shouldShowImage(selectedGalleryImage.src)"
                 :src="selectedGalleryImage.src"
                 :alt="product.name"
                 class="w-full h-full object-cover"
                 :style="{ objectPosition: selectedGalleryImage.objectPosition || 'center' }"
+                @error="markImageFailed(selectedGalleryImage.src)"
               />
-              <span v-else class="text-[120px] md:text-[160px]">{{ selectedGalleryImage ? selectedGalleryImage.src : product.image }}</span>
+              <span v-else class="text-[120px] md:text-[160px]">{{ placeholderText }}</span>
 
               <!-- Zoom hint -->
               <span class="absolute bottom-3 right-3 text-xs text-gray-400 bg-white bg-opacity-70 px-2 py-1 rounded-full">
@@ -82,13 +83,14 @@
                 @click="selectedImageIndex = index"
               >
                 <img
-                  v-if="isImageUrl(image.src)"
+                  v-if="shouldShowImage(image.src)"
                   :src="image.src"
                   :alt="`${product.name}-${index + 1}`"
                   class="h-16 w-full object-cover"
                   :style="{ objectPosition: image.objectPosition || 'center' }"
+                  @error="markImageFailed(image.src)"
                 />
-                <span v-else class="flex h-16 w-full items-center justify-center text-3xl">{{ image.src }}</span>
+                <span v-else class="flex h-16 w-full items-center justify-center text-3xl">{{ placeholderText }}</span>
               </button>
             </div>
 
@@ -130,10 +132,10 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 7h10M7 11h10M7 15h6M5 3h14a1 1 0 011 1v16l-3-2-2 2-2-2-2 2-2-2-3 2V4a1 1 0 011-1z" />
                     </svg>
                     <dt>商品編號</dt>
-                    <dd class="text-gray-700">{{ product.id.toUpperCase() }}</dd>
+                    <dd class="text-gray-700">{{ displayProductNo }}</dd>
                   </div>
 
-                  <div class="grid grid-cols-[1.5rem_4.5rem_1fr] items-center gap-x-2.5 text-gray-500 sm:grid-cols-[1.5rem_5.25rem_1fr]">
+                  <div v-if="displayUnit" class="grid grid-cols-[1.5rem_4.5rem_1fr] items-center gap-x-2.5 text-gray-500 sm:grid-cols-[1.5rem_5.25rem_1fr]">
                     <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 19h14M7 19l1.5-8h7L17 19M9 11V8a3 3 0 016 0v3M8 15h8" />
                     </svg>
@@ -164,20 +166,20 @@
             <div class="py-2">
               <div class="space-y-5">
                 <div>
-                  <p class="text-xs font-bold text-gray-400 line-through">
+                  <p v-if="hasRegularPrice" class="text-xs font-bold text-gray-400 line-through">
                     一般售價 ${{ regularPrice.toLocaleString() }}
                   </p>
 
                   <template v-if="displayRequiredOpPoints">
                     <p class="mt-2 flex flex-wrap items-baseline gap-0.5 whitespace-nowrap text-base font-bold leading-none text-brand-primary sm:text-lg">
-                      <span>會員價：</span>
+                      <span>OP 點數加價購：</span>
                       <span>{{ displayRequiredOpPoints.toLocaleString() }}</span>
                       <span>OP 點</span>
                       <span v-if="displayPrice > 0">+ ${{ displayPrice.toLocaleString() }}</span>
                     </p>
                   </template>
 
-                  <template v-else>
+                  <template v-else-if="hasDisplayPrice">
                     <p class="mt-2 flex flex-wrap items-baseline gap-0.5 whitespace-nowrap text-base font-bold leading-none text-brand-primary sm:text-lg">
                       <span>會員價：</span>
                       <span>$</span>{{ displayPrice.toLocaleString() }}
@@ -382,12 +384,13 @@
               <div class="flex gap-4">
                 <div class="h-32 w-28 shrink-0 overflow-hidden rounded-2xl bg-white">
                   <img
-                    v-if="isImageUrl(item.image)"
+                    v-if="shouldShowImage(item.image)"
                     :src="item.image"
                     :alt="item.name"
                     class="h-full w-full object-cover"
+                    @error="markImageFailed(item.image)"
                   >
-                  <span v-else class="flex h-full w-full items-center justify-center text-5xl">{{ item.image }}</span>
+                  <span v-else class="flex h-full w-full items-center justify-center text-5xl">{{ placeholderText }}</span>
                 </div>
 
                 <div class="min-w-0 flex-1">
@@ -495,13 +498,24 @@
 
             <!-- 產品介紹 -->
             <div v-else-if="activeTab === 'introduction'">
-              <p class="text-sm text-gray-700 leading-8 whitespace-pre-line">{{ displayIntroduction }}</p>
+              <div
+                v-if="product.productDescriptionHtml"
+                class="product-html text-sm text-gray-700 leading-8"
+                v-html="product.productDescriptionHtml"
+              />
+              <p v-else class="text-sm text-gray-700 leading-8 whitespace-pre-line">{{ displayIntroduction }}</p>
             </div>
 
             <!-- 成分規格 -->
             <div v-else-if="activeTab === 'specs'">
+              <div
+                v-if="product.specificationHtml"
+                class="product-html text-sm text-gray-700 leading-8"
+                v-html="product.specificationHtml"
+              />
               <div class="text-sm text-gray-700 leading-8">
                 <div
+                  v-if="!product.specificationHtml"
                   v-for="(line, i) in displaySpecs.split('\n')"
                   :key="i"
                   class="flex gap-2 py-1.5 border-b border-gray-50 last:border-0"
@@ -550,14 +564,15 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <img
-            v-if="selectedGalleryImage && isImageUrl(selectedGalleryImage.src)"
+            <img
+            v-if="selectedGalleryImage && shouldShowImage(selectedGalleryImage.src)"
             :src="selectedGalleryImage.src"
             :alt="product.name"
             class="max-w-[70vw] max-h-[70vh] object-contain"
             :style="{ objectPosition: selectedGalleryImage.objectPosition || 'center' }"
+            @error="markImageFailed(selectedGalleryImage.src)"
           />
-          <span v-else class="text-[200px] leading-none select-none">{{ selectedGalleryImage ? selectedGalleryImage.src : product && product.image }}</span>
+          <span v-else class="text-[200px] leading-none select-none">{{ placeholderText }}</span>
         </div>
       </div>
     </transition>
@@ -637,6 +652,7 @@ export default Vue.extend({
       addedNotice:        false,
       shareNotice:        '',
       bundleQuantities:   {} as Record<string, number>,
+      failedImageUrls:     {} as Record<string, boolean>,
 
       tabs: [
         { key: 'features',     label: '產品特色' },
@@ -649,9 +665,8 @@ export default Vue.extend({
   computed: {
     product(): Product | undefined {
       const id = this.$route.params.id
-      const fromStore = this.$store.getters['products/productById'](id)
-      if (fromStore) return fromStore
-      return mockProducts.find((product) => normalizeProductId(product.id) === normalizeProductId(id))
+      return this.$store.getters['products/productById'](id)
+        || (mockProducts as Product[]).find((product) => normalizeProductId(product.id) === normalizeProductId(id))
     },
     categories(): Category[] {
       return this.$store.getters['products/allCategories']
@@ -689,6 +704,9 @@ export default Vue.extend({
     },
     selectedGalleryImage(): GalleryImage | null {
       return this.galleryImages[this.selectedImageIndex] || this.galleryImages[0] || null
+    },
+    placeholderText(): string {
+      return '🌿'
     },
 
     // 庫存狀態：優先使用 stockStatus 欄位，否則從 inStock 推斷
@@ -762,6 +780,9 @@ export default Vue.extend({
     displayUnit(): string {
       return this.selectedVariant?.unit || this.product?.unit || ''
     },
+    displayProductNo(): string {
+      return (this.product?.productNo || this.product?.id || '').toUpperCase()
+    },
 
     displayRequiredOpPoints(): number {
       return this.selectedVariant?.requiredOpPoints || this.product?.requiredOpPoints || 0
@@ -802,10 +823,16 @@ export default Vue.extend({
       if (!this.product || !this.selectedVariant) return 0
       return Math.round(this.selectedVariant.memberPrice ?? this.selectedVariant.originalPrice ?? this.selectedVariant.price)
     },
+    hasDisplayPrice(): boolean {
+      return Number.isFinite(this.displayPrice) && this.displayPrice > 0
+    },
 
     regularPrice(): number {
       if (!this.product || !this.selectedVariant) return 0
       return Math.round(this.selectedVariant.originalPrice ?? this.selectedVariant.price)
+    },
+    hasRegularPrice(): boolean {
+      return Number.isFinite(this.regularPrice) && this.regularPrice > 0
     },
 
     hasMemberPrice(): boolean {
@@ -954,7 +981,8 @@ export default Vue.extend({
     },
     bundlePreviewProducts(): Product[] {
       if (!this.product) return []
-      const fallback = mockProducts.filter((item) => normalizeProductId(item.id) !== normalizeProductId(this.product!.id))
+      const fallback = (this.$store.getters['products/allProducts'] as Product[])
+        .filter((item) => normalizeProductId(item.id) !== normalizeProductId(this.product!.id))
       const pool = this.relatedProducts.length ? this.relatedProducts : fallback
       if (!this.isBundleProductDetail) return pool.slice(0, 2)
       return [
@@ -1003,6 +1031,12 @@ export default Vue.extend({
 
     isImageUrl(image: string) {
       return /^https?:\/\//.test(image) || image.startsWith('/')
+    },
+    shouldShowImage(image: string) {
+      return this.isImageUrl(image) && !this.failedImageUrls[image]
+    },
+    markImageFailed(image: string) {
+      this.$set(this.failedImageUrls, image, true)
     },
 
     previewPrice(product: Product): number {
@@ -1153,6 +1187,13 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+.product-html ::v-deep img {
+  max-width: 100%;
+  height: auto;
+}
+</style>
 
 <style scoped>
 .fade-enter-active,

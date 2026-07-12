@@ -1,0 +1,1242 @@
+{
+  "categoriesProcessed": 41,
+  "successfulImageCount": 60,
+  "failedImageCount": 0,
+  "categoriesWithoutBanner": [
+    {
+      "categoryId": "fresh-fruits",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=611",
+      "localPaths": [
+        "public/category-banners/fresh-fruits/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "fresh-produce-box",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=586",
+      "localPaths": [
+        "public/category-banners/fresh-produce-box/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "fresh-cake",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=698",
+      "localPaths": []
+    },
+    {
+      "categoryId": "frozen-bundle",
+      "sourceUrl": "https://www.organicshops.cc/package.aspx?types=1",
+      "localPaths": []
+    },
+    {
+      "categoryId": "frozen-flash",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=626",
+      "localPaths": [
+        "public/category-banners/frozen-flash/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "nuts",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=590",
+      "localPaths": []
+    },
+    {
+      "categoryId": "nuts-dried-fruits",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=592",
+      "localPaths": [
+        "public/category-banners/nuts-dried-fruits/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "grains-rice",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=221",
+      "localPaths": [
+        "public/category-banners/grains-rice/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "grains-noodles",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=475",
+      "localPaths": [
+        "public/category-banners/grains-noodles/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "grains-beans",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=594",
+      "localPaths": []
+    },
+    {
+      "categoryId": "beverage-ready",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=235",
+      "localPaths": [
+        "public/category-banners/beverage-ready/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "pantry-cookware",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=715",
+      "localPaths": [
+        "public/category-banners/pantry-cookware/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "supplements",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=576",
+      "localPaths": [
+        "public/category-banners/supplements/thumb.jpg"
+      ]
+    },
+    {
+      "categoryId": "daily-personal-care",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=654",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=664",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly-breakfast",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=666",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly-dinner",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=667",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly-soup",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=669",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly-snacks",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=670",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly-drinks",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=671",
+      "localPaths": []
+    },
+    {
+      "categoryId": "elderly-supplements",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=673",
+      "localPaths": []
+    }
+  ],
+  "categoriesUsingFallback": [
+    {
+      "categoryId": "fresh",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=585",
+      "thumbnailPath": "public/category-banners/fresh/thumb.jpg"
+    },
+    {
+      "categoryId": "fresh-fruits",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=611",
+      "thumbnailPath": "public/category-banners/fresh-fruits/thumb.jpg"
+    },
+    {
+      "categoryId": "fresh-produce-box",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=586",
+      "thumbnailPath": "public/category-banners/fresh-produce-box/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=580",
+      "thumbnailPath": "public/category-banners/frozen/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-flash",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=626",
+      "thumbnailPath": "public/category-banners/frozen-flash/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-meat",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=582",
+      "thumbnailPath": "public/category-banners/frozen-meat/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-seafood",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=583",
+      "thumbnailPath": "public/category-banners/frozen-seafood/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-ready",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=584",
+      "thumbnailPath": "public/category-banners/frozen-ready/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-quick-cook",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=678",
+      "thumbnailPath": "public/category-banners/frozen-quick-cook/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-vegetarian",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=679",
+      "thumbnailPath": "public/category-banners/frozen-vegetarian/thumb.jpg"
+    },
+    {
+      "categoryId": "frozen-breakfast",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=680",
+      "thumbnailPath": "public/category-banners/frozen-breakfast/thumb.jpg"
+    },
+    {
+      "categoryId": "nuts-mixed",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=591",
+      "thumbnailPath": "public/category-banners/nuts-mixed/thumb.jpg"
+    },
+    {
+      "categoryId": "nuts-dried-fruits",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=592",
+      "thumbnailPath": "public/category-banners/nuts-dried-fruits/thumb.jpg"
+    },
+    {
+      "categoryId": "snacks",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=143",
+      "thumbnailPath": "public/category-banners/snacks/thumb.jpg"
+    },
+    {
+      "categoryId": "grains",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=145",
+      "thumbnailPath": "public/category-banners/grains/thumb.jpg"
+    },
+    {
+      "categoryId": "grains-rice",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=221",
+      "thumbnailPath": "public/category-banners/grains-rice/thumb.jpg"
+    },
+    {
+      "categoryId": "grains-cereal",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=222",
+      "thumbnailPath": "public/category-banners/grains-cereal/thumb.jpg"
+    },
+    {
+      "categoryId": "grains-noodles",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=475",
+      "thumbnailPath": "public/category-banners/grains-noodles/thumb.jpg"
+    },
+    {
+      "categoryId": "beverage",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=154",
+      "thumbnailPath": "public/category-banners/beverage/thumb.jpg"
+    },
+    {
+      "categoryId": "beverage-ready",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=235",
+      "thumbnailPath": "public/category-banners/beverage-ready/thumb.jpg"
+    },
+    {
+      "categoryId": "beverage-brew",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=236",
+      "thumbnailPath": "public/category-banners/beverage-brew/thumb.jpg"
+    },
+    {
+      "categoryId": "pantry",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=152",
+      "thumbnailPath": "public/category-banners/pantry/thumb.jpg"
+    },
+    {
+      "categoryId": "pantry-oil",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=597",
+      "thumbnailPath": "public/category-banners/pantry-oil/thumb.jpg"
+    },
+    {
+      "categoryId": "pantry-seasoning",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=598",
+      "thumbnailPath": "public/category-banners/pantry-seasoning/thumb.jpg"
+    },
+    {
+      "categoryId": "pantry-dry-goods",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=599",
+      "thumbnailPath": "public/category-banners/pantry-dry-goods/thumb.jpg"
+    },
+    {
+      "categoryId": "pantry-cookware",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=715",
+      "thumbnailPath": "public/category-banners/pantry-cookware/thumb.jpg"
+    },
+    {
+      "categoryId": "supplements",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=576",
+      "thumbnailPath": "public/category-banners/supplements/thumb.jpg"
+    },
+    {
+      "categoryId": "daily",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=653",
+      "thumbnailPath": "public/category-banners/daily/thumb.jpg"
+    },
+    {
+      "categoryId": "daily-home",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=655",
+      "thumbnailPath": "public/category-banners/daily-home/thumb.jpg"
+    }
+  ],
+  "failedDownloads": [],
+  "generatedAt": "2026-07-10T08:59:18.560Z",
+  "categories": [
+    {
+      "categoryId": "fresh",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=585",
+      "bannerImage": "public/category-banners/fresh/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/fresh/banner-01.jpg",
+        "public/category-banners/fresh/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 0,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn221201a.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=611",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/fresh/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 288997
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn39098.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=586",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/fresh/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 468497
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn221201a.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=611",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/fresh/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "fresh-fruits",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=611",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 5,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/39145.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10061",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/fresh-fruits/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 46472
+        }
+      ]
+    },
+    {
+      "categoryId": "fresh-produce-box",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=586",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 2,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/39099.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10610",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/fresh-produce-box/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 70784
+        }
+      ]
+    },
+    {
+      "categoryId": "fresh-cake",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=698",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "frozen",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=580",
+      "bannerImage": "public/category-banners/frozen/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen/banner-01.jpg",
+        "public/category-banners/frozen/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 0,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/sla.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11695",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 204754
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/slb.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11696",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/frozen/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 202335
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/sla.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11695",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-bundle",
+      "sourceUrl": "https://www.organicshops.cc/package.aspx?types=1",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "frozen-flash",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=626",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 17,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/08329_6677.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12894",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-flash/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 34765
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-meat",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=582",
+      "bannerImage": "public/category-banners/frozen-meat/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen-meat/banner-01.jpg",
+        "public/category-banners/frozen-meat/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 36,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/sla.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11981",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen-meat/banner-01.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/slb.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11696",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/frozen-meat/banner-02.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/sla.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11981",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-meat/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-seafood",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=583",
+      "bannerImage": "public/category-banners/frozen-seafood/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen-seafood/banner-01.jpg",
+        "public/category-banners/frozen-seafood/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 26,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/sla.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11695",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen-seafood/banner-01.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/slb.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=583",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/frozen-seafood/banner-02.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/sla.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=11695",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-seafood/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-ready",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=584",
+      "bannerImage": "public/category-banners/frozen-ready/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen-ready/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 15,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/chien2.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12145",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen-ready/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 145069
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/chien2.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12145",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-ready/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-quick-cook",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=678",
+      "bannerImage": "public/category-banners/frozen-quick-cook/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen-quick-cook/banner-01.jpg",
+        "public/category-banners/frozen-quick-cook/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 19,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/homewu.jpg",
+          "linkUrl": "https://www.organicshops.cc/products.aspx?type=search&keyword=%E5%AE%8F%E8%A3%95%E8%A1%8C",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen-quick-cook/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 259670
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/porkdump.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12479",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/frozen-quick-cook/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 190959
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/homewu.jpg",
+          "linkUrl": "https://www.organicshops.cc/products.aspx?type=search&keyword=%E5%AE%8F%E8%A3%95%E8%A1%8C",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-quick-cook/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-vegetarian",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=679",
+      "bannerImage": "public/category-banners/frozen-vegetarian/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen-vegetarian/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 13,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/0701saa.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10043",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen-vegetarian/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 240712
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/0701saa.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10043",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-vegetarian/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "frozen-breakfast",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=680",
+      "bannerImage": "public/category-banners/frozen-breakfast/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/frozen-breakfast/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 8,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/0701saa.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10044",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/frozen-breakfast/banner-01.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/0701saa.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10044",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/frozen-breakfast/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "nuts",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=590",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "nuts-mixed",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=591",
+      "bannerImage": "public/category-banners/nuts-mixed/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/nuts-mixed/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 34,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/life123.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12177",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/nuts-mixed/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 151819
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/life123.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12177",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/nuts-mixed/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "nuts-dried-fruits",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=592",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 19,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/01155.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=4472",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/nuts-dried-fruits/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 18009
+        }
+      ]
+    },
+    {
+      "categoryId": "snacks",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=143",
+      "bannerImage": "public/category-banners/snacks/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/snacks/banner-01.jpg",
+        "public/category-banners/snacks/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 39,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/fat2.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12156",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/snacks/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 198999
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/summera2.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10453",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/snacks/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 156449
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/fat2.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12156",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/snacks/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "grains",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=145",
+      "bannerImage": "public/category-banners/grains/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/grains/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 0,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/magic3.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=96",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/grains/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 159472
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/magic3.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=96",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/grains/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "grains-rice",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=221",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 3,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/02060.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=549",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/grains-rice/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 40239
+        }
+      ]
+    },
+    {
+      "categoryId": "grains-cereal",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=222",
+      "bannerImage": "public/category-banners/grains-cereal/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/grains-cereal/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 4,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/magic3.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=96",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/grains-cereal/banner-01.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/magic3.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=96",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/grains-cereal/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "grains-noodles",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=475",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 7,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/03115.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=5964",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/grains-noodles/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 30856
+        }
+      ]
+    },
+    {
+      "categoryId": "grains-beans",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=594",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "beverage",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=154",
+      "bannerImage": "public/category-banners/beverage/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/beverage/banner-01.jpg",
+        "public/category-banners/beverage/banner-02.jpg"
+      ],
+      "formalBannerCount": 3,
+      "thumbFallbackCount": 0,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/nutpuder2.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=178",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/beverage/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 186792
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn24801.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=8658",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/beverage/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 349371
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/nutpuder2.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=178",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/beverage/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "beverage-ready",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=235",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 18,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/23240_7013.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12839",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/beverage-ready/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 59196
+        }
+      ]
+    },
+    {
+      "categoryId": "beverage-brew",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=236",
+      "bannerImage": "public/category-banners/beverage-brew/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/beverage-brew/banner-01.jpg",
+        "public/category-banners/beverage-brew/banner-02.jpg"
+      ],
+      "formalBannerCount": 4,
+      "thumbFallbackCount": 18,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/everymorn.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=103",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/beverage-brew/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 155752
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/youseed.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=94",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/beverage-brew/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 166760
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/everymorn.jpg",
+          "linkUrl": "https://www.organicshops.cc/package_detail.aspx?id=103",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/beverage-brew/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "pantry",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=152",
+      "bannerImage": "public/category-banners/pantry/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/pantry/banner-01.jpg",
+        "public/category-banners/pantry/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 0,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn09018.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=4412",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/pantry/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 307899
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/oil2022.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=8926",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/pantry/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 816998
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn09018.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=4412",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/pantry/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "pantry-oil",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=597",
+      "bannerImage": "public/category-banners/pantry-oil/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/pantry-oil/banner-01.jpg",
+        "public/category-banners/pantry-oil/banner-02.jpg"
+      ],
+      "formalBannerCount": 3,
+      "thumbFallbackCount": 5,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/cwoil1.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=9894",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/pantry-oil/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 198176
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/avoil.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=9895",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/pantry-oil/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 763677
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/cwoil1.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=9894",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/pantry-oil/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "pantry-seasoning",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=598",
+      "bannerImage": "public/category-banners/pantry-seasoning/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/pantry-seasoning/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 11,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn09018.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=4412",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/pantry-seasoning/banner-01.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn09018.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=4412",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/pantry-seasoning/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "pantry-dry-goods",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=599",
+      "bannerImage": "public/category-banners/pantry-dry-goods/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/pantry-dry-goods/banner-01.jpg",
+        "public/category-banners/pantry-dry-goods/banner-02.jpg"
+      ],
+      "formalBannerCount": 2,
+      "thumbFallbackCount": 8,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/cwoil1.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=568",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/pantry-dry-goods/banner-01.jpg",
+          "status": "copied-from-cache"
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/bn17060.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=10463",
+          "kind": "banner",
+          "fileName": "banner-02.jpg",
+          "localPath": "public/category-banners/pantry-dry-goods/banner-02.jpg",
+          "status": "downloaded",
+          "bytes": 220883
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/cwoil1.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=568",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/pantry-dry-goods/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "pantry-cookware",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=715",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 1,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/55913.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=12807",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/pantry-cookware/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 59637
+        }
+      ]
+    },
+    {
+      "categoryId": "supplements",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=576",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 7,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/product_image/17048f.jpg",
+          "linkUrl": "https://www.organicshops.cc/product.aspx?id=8692",
+          "kind": "thumb-fallback",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/supplements/thumb.jpg",
+          "status": "downloaded-thumb",
+          "bytes": 82588
+        }
+      ]
+    },
+    {
+      "categoryId": "daily",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=653",
+      "bannerImage": "public/category-banners/daily/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/daily/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 0,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/ads33121a.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=655",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/daily/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 611463
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/picture/ads33121a.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=655",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/daily/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "daily-personal-care",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=654",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "daily-home",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=655",
+      "bannerImage": "public/category-banners/daily-home/banner-01.jpg",
+      "bannerImages": [
+        "public/category-banners/daily-home/banner-01.jpg"
+      ],
+      "formalBannerCount": 1,
+      "thumbFallbackCount": 2,
+      "downloads": [
+        {
+          "imageUrl": "https://www.organicshops.cc/pics/ccnews/ads33121a.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=655",
+          "kind": "banner",
+          "fileName": "banner-01.jpg",
+          "localPath": "public/category-banners/daily-home/banner-01.jpg",
+          "status": "downloaded",
+          "bytes": 611463
+        },
+        {
+          "imageUrl": "https://www.organicshops.cc/pics/ccnews/ads33121a.jpg",
+          "linkUrl": "https://www.organicshops.cc/categories.aspx?cid=655",
+          "kind": "banner",
+          "fileName": "thumb.jpg",
+          "localPath": "public/category-banners/daily-home/thumb.jpg",
+          "status": "copied-from-cache-thumb"
+        }
+      ]
+    },
+    {
+      "categoryId": "elderly",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=664",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "elderly-breakfast",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=666",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "elderly-dinner",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=667",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "elderly-soup",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=669",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "elderly-snacks",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=670",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "elderly-drinks",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=671",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    },
+    {
+      "categoryId": "elderly-supplements",
+      "sourceUrl": "https://www.organicshops.cc/categories.aspx?cid=673",
+      "bannerImage": "",
+      "bannerImages": [],
+      "formalBannerCount": 0,
+      "thumbFallbackCount": 0,
+      "downloads": []
+    }
+  ]
+}

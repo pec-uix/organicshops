@@ -74,7 +74,7 @@
             <div class="flex items-center gap-3 px-6 py-3 sticky top-0 z-10 bg-white/90 backdrop-blur-md border-y border-gray-50">
               <div class="w-2 h-2 rounded-full shadow-sm" :style="{ backgroundColor: zone.color }" />
               <span class="text-xs font-bold tracking-widest" :style="{ color: zone.color }">{{ zone.label }}</span>
-              <span class="text-[10px] font-bold text-gray-700 ml-auto tracking-tighter">{{ zone.items.length }} 件商品</span>
+              <span class="text-xs font-bold text-gray-700 ml-auto">{{ zone.items.length }} 件商品</span>
             </div>
 
             <div class="px-6 space-y-4 pt-4 text-left">
@@ -86,7 +86,7 @@
                   <p class="line-clamp-2 text-sm font-bold leading-snug text-gray-800 group-hover:text-brand-primary transition-colors cursor-pointer">{{ item.product.name }}</p>
                   <div class="mt-1 grid gap-y-1">
                     <p class="text-sm font-black tracking-tight text-red-600">${{ itemDisplayPrice(item.product).toLocaleString() }}</p>
-                    <p v-if="item.product.requiredOpPoints" class="text-[11px] font-bold text-brand-primary">
+                    <p v-if="item.product.requiredOpPoints" class="text-xs font-bold text-brand-primary">
                       加價換購{{ item.product.requiredOpPoints.toLocaleString() }} OP 點 / 件
                     </p>
                   </div>
@@ -97,20 +97,20 @@
                     <span class="w-8 text-center text-xs font-bold text-gray-800">{{ item.quantity }}</span>
                     <button class="w-7 h-7 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors" @click="increment(item)">+</button>
                   </div>
-                  <button class="text-[10px] font-bold text-gray-300 hover:text-red-400 tracking-tighter transition-colors" @click="removeItem(item.product.id)">移除</button>
+                  <button class="text-xs font-bold text-gray-300 hover:text-red-400 transition-colors" @click="removeItem(item.product.id)">移除</button>
                 </div>
               </div>
             </div>
 
             <div class="mx-6 mb-4 mt-6 rounded-md p-4 bg-gray-50 border border-gray-100 text-left">
-              <div class="mb-2 flex items-center justify-between gap-3 text-[10px] font-bold">
+              <div class="mb-2 flex items-center justify-between gap-3 text-xs font-bold">
                 <span :style="{ color: zone.color }">{{ zoneProgressTitle(zone) }}</span>
                 <span class="flex-shrink-0 text-gray-400">門檻 ${{ zoneProgressThreshold(zone).toLocaleString() }}</span>
               </div>
               <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
                 <div class="h-full rounded-full transition-all duration-1000" :style="{ width: `${zoneProgress(zone)}%`, backgroundColor: zone.color }" />
               </div>
-              <div class="mt-3 grid gap-y-1 border-l-2 border-brand-primary/20 pl-3 text-[10px] font-bold leading-5">
+              <div class="mt-3 grid gap-y-1 border-l-2 border-brand-primary/20 pl-3 text-xs font-bold leading-6">
                 <p
                   v-for="note in zoneShippingNotes(zone)"
                   :key="note"
@@ -131,7 +131,7 @@
             <div class="flex justify-between items-baseline pt-4"><span class="text-sm font-bold text-brand-dark tracking-widest">總計</span><span class="text-3xl font-black text-brand-primary"><span class="mr-1 text-sm">$</span>{{ (totalPrice + shippingFee).toLocaleString() }}</span></div>
           </div>
           <button class="w-full bg-brand-primary text-white py-4 rounded-xl font-black text-sm tracking-[0.12em] shadow-sm hover:bg-brand-dark transition-all active:scale-[0.98]" @click="checkout">查看購物車並結帳</button>
-          <button class="w-full text-[10px] font-bold text-gray-300 hover:text-gray-500 tracking-widest transition-colors py-1" @click="clearCart">清空購物車</button>
+          <button class="w-full text-xs font-bold text-gray-300 hover:text-gray-500 tracking-widest transition-colors py-1" @click="clearCart">清空購物車</button>
         </div>
       </div>
     </transition>

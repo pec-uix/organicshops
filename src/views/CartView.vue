@@ -321,7 +321,7 @@
                 {{ note.text }}
                 <span
                   v-if="note.description"
-                  class="block pl-5 text-[11px] leading-5 text-gray-400"
+                  class="block text-[11px] leading-5 text-gray-400"
                 >
                   <span
                     v-for="line in note.description"
@@ -603,43 +603,17 @@
           v-if="totalCount > 0 && activeZoneAddOns.length > 0 && activeZone"
           class="rounded-2xl border border-gray-100 bg-brand-bg p-5 shadow-sm"
         >
-          <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-            <div class="border-l-4 border-brand-primary pl-3">
-              <h3 class="text-base font-black text-gray-800">{{ activeZone.label }}滿額加價購</h3>
-              <p class="mt-1 text-xs font-normal text-gray-400">
-                此區商品小計達指定門檻後，可用加購價帶回同溫層精選商品。
-              </p>
-            </div>
-            <span
-              class="mt-2 inline-flex w-fit rounded-full px-3 py-1 text-xs font-black sm:mt-0"
-              :style="{ backgroundColor: activeZone.color + '14', color: activeZone.color }"
-            >
-              {{ activeZone.label }}專屬
-            </span>
-          </div>
-
-          <div class="mb-4 rounded-2xl bg-white px-4 py-3 shadow-sm">
-            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-bold">
-              <span class="text-gray-500">目前{{ activeZone.label }}小計</span>
-              <span :style="{ color: activeZone.color }">${{ activeZoneSubtotal().toLocaleString() }}</span>
-            </div>
-            <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">
-              <div
-                class="h-full rounded-full transition-all duration-300"
-                :style="{ width: `${activeZoneAddOnProgress}%`, backgroundColor: activeZone.color }"
-              />
-            </div>
+          <div class="mb-4 border-l-4 border-brand-primary pl-3">
+            <h3 class="text-base font-black text-gray-800">滿額加價購</h3>
           </div>
 
           <div class="-mx-1 overflow-x-auto px-1 pb-1 lg:mx-0 lg:overflow-visible lg:px-0 lg:pb-0">
             <div class="flex w-max flex-nowrap gap-3 lg:w-auto lg:max-w-[1148px] lg:flex-wrap">
               <article
                 v-for="addon in activeZoneAddOns"
+                v-if="isAddOnUnlocked(addon)"
                 :key="addon.id"
-                class="flex h-full w-[220px] flex-none flex-col rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all"
-                :class="isAddOnUnlocked(addon)
-                  ? 'hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-md'
-                  : 'opacity-55'"
+                class="flex h-full w-[220px] flex-none flex-col rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-md"
               >
               <div class="flex flex-1 flex-col">
                 <router-link
@@ -663,11 +637,7 @@
                 <p class="mt-2 text-base font-black text-brand-primary">
                   加購價 ${{ addon.addOnPrice.toLocaleString() }}
                 </p>
-                <p
-                  v-if="addOnStatusText(addon)"
-                  class="mt-2 min-h-[1.25rem] text-xs font-bold leading-5 text-gray-400"
-                  :class="isAddOnUnlocked(addon) ? 'text-brand-primary' : 'text-gray-400'"
-                >
+                <p class="mt-2 min-h-[1.25rem] text-xs font-bold leading-5 text-brand-primary">
                   {{ addOnStatusText(addon) }}
                 </p>
               </div>
@@ -675,11 +645,7 @@
               <div class="mt-4">
                 <button
                   type="button"
-                  class="w-full rounded-xl px-4 py-2 text-sm font-black transition-all"
-                  :class="isAddOnUnlocked(addon)
-                    ? 'bg-brand-primary text-white shadow-sm hover:bg-brand-dark'
-                    : 'cursor-not-allowed bg-gray-100 text-gray-400'"
-                  :disabled="!isAddOnUnlocked(addon)"
+                  class="w-full rounded-xl bg-brand-primary px-4 py-2 text-sm font-black text-white shadow-sm transition-all hover:bg-brand-dark"
                   @click="openAddOnQuantityModal(addon)"
                 >
                   加入購物車

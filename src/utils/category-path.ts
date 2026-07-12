@@ -40,7 +40,7 @@ export function buildCategoryPathFromSegments(segments: string[]): string {
 }
 
 export function buildCategoryPathFromTrail(trail: Category[]): string {
-  return buildCategoryPathFromSegments(trail.map((category) => category.name))
+  return buildCategoryPathFromSegments(trail.map((category) => category.slug || category.id))
 }
 
 export function buildCategoryPathFromCategory(categories: Category[], categoryId: string): string {

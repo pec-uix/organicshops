@@ -1,12 +1,12 @@
 <template>
   <div
     class="w-full min-w-0"
-    :class="layout === 'grid' && !fullWidth ? 'mx-auto max-w-[15.5rem] md:max-w-[16rem] xl:max-w-[15rem] 2xl:max-w-[15.5rem] h-full' : ''"
+    :class="layout === 'grid' && !fullWidth ? 'h-full' : ''"
   >
     <!-- ── 1. 商品卡主體 (統一標準規格) ── -->
     <div
       class="group/card bg-white border border-gray-100 rounded-2xl transition-all duration-300 overflow-hidden relative flex shadow-sm"
-      :class="[cardClass, isMini ? 'h-[7.5rem]' : '', layout === 'list' ? 'w-full min-w-0 flex-row items-stretch h-[7.25rem] sm:h-[8rem] lg:h-[9rem]' : 'h-full flex-col min-h-[24.5rem] sm:min-h-[25rem]']"
+      :class="[cardClass, isMini ? 'h-[7.5rem]' : '', cardLayoutClass]"
       @mouseenter="onHoverEnter"
       @mouseleave="onHoverLeave"
     >
@@ -26,16 +26,17 @@
       <div v-if="isMini" class="relative h-[7.5rem] w-[7rem] flex-shrink-0 overflow-hidden rounded-lg bg-gray-50">
         <router-link :to="productDetailTo" class="block h-full w-full">
           <img
-            v-if="isImageUrl(product.image)"
+            v-if="shouldShowImage(product.image)"
             :src="product.image"
             :alt="product.name"
             class="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+            @error="markImageFailed(product.image)"
           />
           <span
             v-else
             class="flex h-full w-full items-center justify-center text-6xl leading-none transition-transform duration-700 group-hover/card:scale-105"
           >
-            {{ product.image }}
+            {{ placeholderText }}
           </span>
         </router-link>
         <button
@@ -59,16 +60,17 @@
       >
         <router-link :to="productDetailTo" class="block h-full w-full">
           <img
-            v-if="isImageUrl(product.image)"
+            v-if="shouldShowImage(product.image)"
             :src="product.image"
             :alt="product.name"
             class="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+            @error="markImageFailed(product.image)"
           />
           <span
             v-else
             class="flex h-full w-full items-center justify-center text-5xl leading-none transition-transform duration-700 group-hover/card:scale-105"
           >
-            {{ product.image }}
+            {{ placeholderText }}
           </span>
           <div v-if="!product.inStock" class="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[1px]">
             <span class="rounded bg-gray-400 px-2.5 py-1 text-[10px] font-bold text-white">已售完</span>
@@ -92,17 +94,22 @@
         :class="'aspect-square'"
       >
         <img
-          v-if="isImageUrl(product.image)"
+          v-if="shouldShowImage(product.image)"
           :src="product.image"
           :alt="product.name"
           class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+          @error="markImageFailed(product.image)"
         />
         <span
           v-else
           class="text-6xl sm:text-7xl leading-none transition-transform duration-700 group-hover/card:scale-105"
         >
-          {{ product.image }}
+          {{ placeholderText }}
         </span>
+        <!-- 買1送1 badge -->
+        <div v-if="onePlusOneMode" class="absolute top-2 left-2 z-10">
+          <span class="rounded-full bg-brand-primary px-2.5 py-1 text-[10px] font-black text-white shadow-sm">買 1 送 1</span>
+        </div>
         <!-- 售完狀態遮罩 -->
         <div v-if="!product.inStock" class="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[1px]">
           <span class="bg-gray-400 text-white px-3 py-1 text-xs font-bold rounded">已售完</span>
@@ -113,7 +120,7 @@
         <div
           class="flex-1 min-w-0 flex flex-col"
           :class="[
-            isMini ? 'p-0' : layout === 'list' ? 'p-2.5 sm:p-3' : 'p-3 sm:p-3.5 min-h-[11rem] sm:min-h-[11.25rem]',
+            contentClass,
             layout === 'list' && !isMini ? 'overflow-hidden' : ''
           ]"
         >
@@ -126,6 +133,15 @@
           </h3>
         </div>
 
+        <!-- 買1送1 贈品說明 -->
+        <div v-if="!isMini && layout !== 'list' && onePlusOneMode" class="mt-2 rounded-xl border border-brand-primary/15 bg-brand-surface/50 px-2.5 py-2">
+          <div class="flex items-center gap-2">
+            <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-[9px] font-black text-white">贈</span>
+            <p class="flex-1 text-xs font-black text-brand-dark">買 1 件贈同品項</p>
+            <span class="text-xs font-black text-brand-primary">$0</span>
+          </div>
+        </div>
+
         <template v-if="isMini">
           <div class="grid h-[7.5rem] min-w-0 flex-1 grid-rows-[2rem_1.25rem_2rem] items-start gap-y-2 px-0 py-2 pl-3 pr-3 text-left">
             <h3 class="line-clamp-2 text-left text-xs font-bold leading-tight text-gray-800">
@@ -133,7 +149,7 @@
             </h3>
 
             <div class="flex min-w-0 flex-nowrap items-baseline gap-2 overflow-hidden text-left whitespace-nowrap">
-                <div class="flex shrink-0 items-baseline gap-0.5 whitespace-nowrap">
+                <div v-if="hasRegularPrice" class="flex shrink-0 items-baseline gap-0.5 whitespace-nowrap">
                   <span class="text-xs font-medium leading-none text-gray-400">
                     售價
                   </span>
@@ -141,7 +157,7 @@
                     ${{ regularPrice.toLocaleString() }}
                   </span>
                 </div>
-                <div v-if="hasMemberPrice" class="flex shrink-0 items-baseline gap-0.5 whitespace-nowrap">
+                <div v-if="hasMemberPrice && hasBasePrice" class="flex shrink-0 items-baseline gap-0.5 whitespace-nowrap">
                   <span class="text-xs font-medium leading-none text-red-600">
                     會員價
                   </span>
@@ -149,7 +165,7 @@
                     ${{ basePrice.toLocaleString() }}
                   </span>
                 </div>
-                <div v-else class="flex shrink-0 items-baseline gap-0.5 whitespace-nowrap">
+                <div v-else-if="hasBasePrice" class="flex shrink-0 items-baseline gap-0.5 whitespace-nowrap">
                   <span class="text-xs font-medium leading-none text-gray-400">
                     會員價
                   </span>
@@ -189,7 +205,7 @@
                     {{ displayPromotionTag(tag) }}
                   </span>
                 </div>
-                <p v-if="product.requiredOpPoints || hasMemberPrice" class="mt-1 text-xs font-bold leading-none text-gray-400 line-through">
+                <p v-if="hasRegularPrice && (product.requiredOpPoints || hasMemberPrice)" class="mt-1 text-xs font-bold leading-none text-gray-400 line-through">
                   售價 ${{ regularPrice.toLocaleString() }}
                 </p>
               </div>
@@ -198,10 +214,10 @@
                 <div v-if="isOpExchange" class="min-w-0 whitespace-nowrap">
                   <p class="flex items-baseline gap-1 text-sm font-black leading-none text-brand-primary sm:text-base">
                     <span>{{ product.requiredOpPoints.toLocaleString() }} OP 點</span>
-                    <span v-if="basePrice > 0">+ ${{ basePrice.toLocaleString() }}</span>
+                    <span v-if="hasBasePrice">+ ${{ basePrice.toLocaleString() }}</span>
                   </p>
                 </div>
-                <div v-else class="flex min-w-0 items-center gap-2 whitespace-nowrap">
+                <div v-else-if="hasBasePrice" class="flex min-w-0 items-center gap-2 whitespace-nowrap">
                   <span class="text-xs font-bold leading-none text-gray-400">會員價</span>
                   <span class="text-base font-black leading-none text-brand-primary">$</span>
                   <span class="text-base font-black leading-none text-brand-primary">{{ basePrice.toLocaleString() }}</span>
@@ -222,35 +238,35 @@
               </div>
             </div>
           </template>
-          <div v-else class="mt-auto flex h-[6.5rem] flex-col justify-end">
-            <div class="flex h-[3.75rem] flex-col justify-end">
+          <div v-else :class="compact ? 'mt-4 flex h-[6.35rem] flex-col justify-between' : 'mt-auto flex h-[6.5rem] flex-col justify-end'">
+            <div :class="compact ? 'flex min-h-[3.15rem] flex-col justify-start' : 'flex h-[3.75rem] flex-col justify-end'">
               <div v-if="product.requiredOpPoints">
-                <p class="text-xs font-bold text-gray-400">
+                <p v-if="hasRegularPrice" class="text-xs font-bold text-gray-400">
                   售價 ${{ regularPrice.toLocaleString() }}
                 </p>
-                <div class="mt-0.5 flex flex-wrap items-baseline gap-1.5 text-sm font-black text-brand-primary">
+                <div :class="compact ? 'mt-1.5 flex flex-wrap items-baseline gap-1.5 text-sm font-black text-brand-primary' : 'mt-0.5 flex flex-wrap items-baseline gap-1.5 text-sm font-black text-brand-primary'">
                   <span>
                     {{ product.requiredOpPoints.toLocaleString() }} OP 點
                   </span>
-                  <span v-if="basePrice > 0">
+                  <span v-if="hasBasePrice">
                     + ${{ basePrice.toLocaleString() }}
                   </span>
                 </div>
               </div>
 
-              <div v-else>
-                <p v-if="hasMemberPrice" class="text-xs font-bold text-gray-400 line-through">
+              <div v-else-if="hasBasePrice">
+                <p v-if="hasMemberPrice && hasRegularPrice" class="text-xs font-bold text-gray-400 line-through">
                   售價 ${{ regularPrice.toLocaleString() }}
                 </p>
                 <p v-else class="text-xs font-bold text-gray-400">售價</p>
-                <p class="mt-0.5 flex items-baseline gap-1 text-base font-black text-brand-primary">
+                <p :class="compact ? 'mt-1.5 flex items-baseline gap-1 text-base font-black text-brand-primary' : 'mt-0.5 flex items-baseline gap-1 text-base font-black text-brand-primary'">
                   <span class="text-xs">會員價</span>
                   <span class="text-xs">$</span>{{ basePrice.toLocaleString() }}
                 </p>
               </div>
             </div>
 
-            <div class="pt-2" :class="ctaRevealClass">
+            <div :class="[compact ? 'pt-0' : 'pt-2', ctaRevealClass]">
               <button
                 @click.stop="openSpecModal"
                 :disabled="!canAddToCart"
@@ -269,91 +285,6 @@
       </div>
     </div>
 
-    <!-- ── 2. 規格選購彈窗 (維持原有精品互動) ── -->
-    <transition name="modal">
-      <div v-if="isModalOpen" class="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="absolute inset-0 bg-brand-dark/60 backdrop-blur-md" @click="isModalOpen = false"></div>
-        <div class="relative w-full max-w-[56rem] bg-white shadow-xl animate-sheet-up sm:animate-zoom-in max-h-[85vh] sm:max-h-[90vh] overflow-y-auto rounded-t-[1.75rem] sm:rounded-2xl">
-          <div class="flex min-h-0 flex-col lg:flex-row">
-            <div class="w-full lg:w-[45%] bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 border-b border-gray-100 lg:border-b-0 lg:border-r lg:border-gray-100">
-              <div class="aspect-square w-full max-w-[17rem] sm:max-w-[20rem] lg:max-w-none">
-                <img
-                  v-if="isImageUrl(product.image)"
-                  :src="product.image"
-                  :alt="product.name"
-                  class="w-full h-full object-cover rounded-2xl drop-shadow-xl"
-                />
-                <div
-                  v-else
-                  class="flex h-full w-full items-center justify-center rounded-2xl bg-white text-[5rem] sm:text-[6.5rem] shadow-inner"
-                >
-                  {{ product.image }}
-                </div>
-              </div>
-            </div>
-            <div class="flex-1 min-h-0 flex flex-col">
-              <div class="flex-1 overflow-y-auto p-5 sm:p-6 lg:p-8 flex flex-col min-h-0">
-              <div class="mb-4 flex items-start justify-between gap-4">
-                <div class="pr-2">
-                  <p v-if="isBundleMode" class="mb-2 text-xs font-black tracking-[0.2em] text-brand-primary">加入組合購</p>
-                  <h2 class="type-page-title text-gray-900 tracking-tight">
-                    {{ product.name }}
-                  </h2>
-                  <p v-if="isBundleMode" class="mt-3 text-sm font-bold leading-6 text-gray-500">
-                    {{ bundleRuleText }}
-                  </p>
-                </div>
-                <button @click="isModalOpen = false" class="flex-shrink-0 text-gray-400 p-1">
-                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-              </div>
-              <div class="space-y-5 flex-1 min-h-0">
-                <div v-if="!isBundleMode">
-                  <p class="text-[10px] font-bold text-brand-primary tracking-widest uppercase mb-3">{{ isBundleMode ? '選擇組合規格' : '選擇規格' }}</p>
-                  <div class="grid grid-cols-2 gap-2">
-                    <button 
-                      v-for="spec in productVariants" 
-                      :key="spec.label"
-                      @click="handleSpecChange(spec)"
-                      class="min-h-[3.5rem] px-3 py-2 text-left text-xs font-bold border rounded-xl transition-all"
-                      :class="selectedSpec === spec.label ? 'bg-brand-primary text-white border-brand-primary' : 'bg-white text-gray-400 border-gray-100'"
-                    >
-                      <span class="block">{{ spec.label }}</span>
-                      <span class="mt-1 block text-[10px] font-medium opacity-80">{{ spec.unit }}</span>
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <p class="text-[10px] font-bold text-brand-primary tracking-widest uppercase mb-3">{{ isBundleMode ? '選擇數量' : '數量' }}</p>
-                  <div class="flex items-center justify-between bg-gray-50 p-2 rounded-2xl">
-                    <button @click="qty > 1 && qty--" class="w-12 h-12 flex items-center justify-center text-2xl text-gray-400">－</button>
-                    <span class="font-bold text-2xl text-brand-dark">{{ qty }}</span>
-                    <button @click="qty++" class="w-12 h-12 flex items-center justify-center text-2xl text-gray-400">＋</button>
-                  </div>
-                </div>
-              </div>
-              </div>
-              <div class="sticky bottom-0 z-10 border-t border-gray-100 bg-white/95 backdrop-blur px-5 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-5 sm:pb-6">
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                  <div class="leading-none">
-                    <template v-if="isBundleMode">
-                      <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">已選 {{ bundleSelectedCount }} / {{ bundleRequiredCount }} 件</p>
-                      <span class="text-3xl sm:text-4xl font-black text-brand-primary"><span class="text-base">$</span>{{ bundlePrice.toLocaleString() }}</span>
-                      <p class="mt-2 text-xs font-bold text-gray-400">需選滿 {{ bundleRequiredCount }} 件，組合價</p>
-                    </template>
-                    <template v-else>
-                      <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">小計</p>
-                      <span class="text-3xl sm:text-4xl font-black text-brand-primary"><span class="text-base">$</span>{{ Math.round(currentPrice * qty).toLocaleString() }}</span>
-                    </template>
-                  </div>
-                  <button @click="confirmAdd" class="w-full sm:w-auto sm:min-w-[14rem] h-12 sm:h-14 bg-brand-primary text-white text-sm sm:text-base font-bold rounded-2xl shadow-sm hover:bg-brand-dark transition-all">{{ confirmActionLabel }}</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -378,14 +309,14 @@ export default Vue.extend({
     bundleSelectedCount: { type: Number, default: 1 },
     bundleRequiredCount: { type: Number, default: 2 },
     bundlePrice: { type: Number, default: 390 },
+    onePlusOneMode: { type: Boolean, default: false },
+    alwaysShowAction: { type: Boolean, default: false },
+    compact: { type: Boolean, default: false },
   },
   data() {
     return {
-      isModalOpen: false,
       isWishlisted: false,
-      selectedSpec: '',
-      currentPrice: 0,
-      qty: 1,
+      failedImageUrls: {} as Record<string, boolean>,
     }
   },
   computed: {
@@ -410,12 +341,21 @@ export default Vue.extend({
       const variant = this.productVariants[0]
       return Math.round(variant.memberPrice ?? variant.price)
     },
+    hasBasePrice(): boolean {
+      return Number.isFinite(this.basePrice) && this.basePrice > 0
+    },
     regularPrice(): number {
       const variant = this.productVariants[0]
       return Math.round(variant.originalPrice ?? variant.price)
     },
+    hasRegularPrice(): boolean {
+      return Number.isFinite(this.regularPrice) && this.regularPrice > 0
+    },
     hasMemberPrice(): boolean {
-      return !!this.product.memberPrice && this.regularPrice > this.basePrice
+      return !!this.product.memberPrice && this.hasRegularPrice && this.hasBasePrice && this.regularPrice > this.basePrice
+    },
+    placeholderText(): string {
+      return '🌿'
     },
     qualityTags(): string[] {
       const tags = new Set<string>()
@@ -448,7 +388,19 @@ export default Vue.extend({
       }
       return classes
     },
+    cardLayoutClass(): string {
+      if (this.layout === 'list') return 'w-full min-w-0 flex-row items-stretch h-[7.25rem] sm:h-[8rem] lg:h-[9rem]'
+      if (this.compact) return 'h-[22.75rem] flex-col sm:h-[23rem] md:h-[25rem] lg:h-[22.75rem]'
+      return 'h-full flex-col min-h-[24.5rem] sm:min-h-[25rem]'
+    },
+    contentClass(): string {
+      if (this.isMini) return 'p-0'
+      if (this.layout === 'list') return 'p-2.5 sm:p-3'
+      if (this.compact) return 'p-4 min-h-[10rem] sm:min-h-[10.25rem]'
+      return 'p-3 sm:p-3.5 min-h-[11rem] sm:min-h-[11.25rem]'
+    },
     ctaRevealClass(): string[] {
+      if (this.alwaysShowAction) return []
       if (this.variant !== 'editorial') return []
       return [
         'transition-all duration-300',
@@ -468,13 +420,16 @@ export default Vue.extend({
         requiredOpPoints: this.product.requiredOpPoints,
       }]
     },
-    selectedVariant(): ProductVariant {
-      return this.productVariants.find((variant) => variant.label === this.selectedSpec) || this.productVariants[0]
-    },
   },
   methods: {
     isImageUrl(image: string) {
       return /^https?:\/\//.test(image) || image.startsWith('/')
+    },
+    shouldShowImage(image: string) {
+      return this.isImageUrl(image) && !this.failedImageUrls[image]
+    },
+    markImageFailed(image: string) {
+      this.$set(this.failedImageUrls, image, true)
     },
     onHoverEnter() {
       // reserved for future analytics / micro-interactions
@@ -497,11 +452,37 @@ export default Vue.extend({
         this.$router.push({ name: 'login', query: { redirect: this.$route.fullPath } })
         return
       }
-      this.isModalOpen = true
-    },
-    handleSpecChange(spec: ProductVariant) {
-      this.selectedSpec = spec.label
-      this.currentPrice = Math.round(spec.memberPrice ?? spec.price)
+      if (this.isBundleMode || this.productVariants.length > 1) {
+        this.$router.push(this.productDetailTo)
+        return
+      }
+      const variant = this.productVariants[0]
+      this.$store.dispatch('cart/addItem', {
+        ...this.product,
+        id: `${this.product.id}-${variant.id}`,
+        unit: variant.unit,
+        price: Math.round(variant.price),
+        originalPrice: variant.originalPrice,
+        memberPrice: variant.memberPrice,
+        requiredOpPoints: variant.requiredOpPoints ?? this.product.requiredOpPoints,
+        quantity: 1,
+      })
+      if (this.onePlusOneMode) {
+        this.$store.dispatch('cart/addItem', {
+          ...this.product,
+          id: `${this.product.id}-${variant.id}-gift`,
+          name: `${this.product.name}（贈品）`,
+          unit: variant.unit,
+          price: 0,
+          originalPrice: Math.round(variant.price),
+          memberPrice: 0,
+          requiredOpPoints: undefined,
+          quantity: 1,
+          tags: [...(this.product.tags || []), '贈品'],
+          promotionMessage: '買 1 送 1 贈品',
+        })
+      }
+      this.$store.dispatch('ui/openCartDrawer')
     },
     displayPromotionTag(tag: string): string {
       const labels: Record<string, string> = {
@@ -512,40 +493,14 @@ export default Vue.extend({
       }
       return labels[tag] || tag
     },
-    confirmAdd() {
-      const variant = this.selectedVariant
-      this.$store.dispatch('cart/addItem', { 
-        ...this.product, 
-        id: `${this.product.id}-${variant.id}`,
-        name: `${this.product.name} (${variant.label})`,
-        unit: variant.unit,
-        price: Math.round(variant.price),
-        originalPrice: variant.originalPrice,
-        memberPrice: variant.memberPrice,
-        requiredOpPoints: variant.requiredOpPoints ?? this.product.requiredOpPoints,
-        quantity: this.qty 
-      })
-      this.$store.dispatch('ui/openCartDrawer')
-      this.isModalOpen = false
-    }
   },
   created() {
     this.isWishlisted = checkIsWishlisted(this.product.id)
-    this.selectedSpec = this.productVariants[0].label
-    this.currentPrice = Math.round(this.productVariants[0].memberPrice ?? this.productVariants[0].price)
   }
 })
 </script>
 
 <style scoped>
-.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-.modal-enter-active, .modal-leave-active { transition: opacity 0.3s ease; }
-.modal-enter, .modal-leave-to { opacity: 0; }
-.animate-zoom-in { animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-.animate-sheet-up { animation: sheetUp 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
-@keyframes sheetUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
 .product-card-list-image {
   width: 90px;

@@ -527,11 +527,11 @@ export const mockNewsArticles = [
 ]
 
 const memberOrderProfile = {
-  purchaserName: '皮克敏',
+  purchaserName: '陳怡君',
   purchaserAddress: '台南市永康區中正路301號',
   purchaserPhone: '',
   purchaserMobile: '0912345678',
-  recipientName: '皮克敏',
+  recipientName: '陳怡君',
   recipientAddress: '台南市永康區中正路301號',
   recipientPhone: '',
   recipientMobile: '0912345678',

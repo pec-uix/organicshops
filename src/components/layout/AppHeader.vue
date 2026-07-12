@@ -532,6 +532,13 @@ import {
   MegaMenuLink,
 } from '@/constants/navigation'
 
+function parseTo(to: string) {
+  if (!to.includes('?')) return { path: to }
+  const [path, qs] = to.split('?')
+  const query = Object.fromEntries(new URLSearchParams(qs))
+  return { path, query }
+}
+
 export default Vue.extend({
   name: 'AppHeader',
   data() {
@@ -670,7 +677,7 @@ export default Vue.extend({
       if (!group) return
       this.selectSubTab(index)
       this.closeMegaMenu()
-      this.$router.push(this.buildMegaGroupLink(menuKey, group.title)).catch(() => {})
+      this.$router.push(this.buildMegaGroupLink(menuKey, group)).catch(() => {})
     },
     buildMegaMenuBaseRoute(key: string): string {
       const routes: Record<string, string> = {
@@ -687,17 +694,17 @@ export default Vue.extend({
     buildMegaGroupKey(menuKey: string, groupTitle: string, index: number): string {
       return `${menuKey}-${groupTitle}-${index}`
     },
-    buildMegaGroupLink(menuKey: string, groupTitle: string) {
+    buildMegaGroupLink(menuKey: string, group: MegaMenuGroup) {
       if (menuKey === 'shop') {
-        return { name: 'category', params: { root: groupTitle } }
+        return { name: 'category', params: { root: group.categoryId || group.title } }
       }
       return { path: this.buildMegaMenuBaseRoute(menuKey) }
     },
     buildMegaItemLink(groupTitle: string, item: MegaMenuLink) {
-      return { path: item.to || '/' }
+      return parseTo(item.to || '/')
     },
     buildMegaChildLink(groupTitle: string, itemLabel: string, child: MegaMenuLink) {
-      return { path: child.to || '/' }
+      return parseTo(child.to || '/')
     },
     handleScroll() {
       this.isScrolled = window.scrollY > 40

@@ -35,11 +35,7 @@ const routes: Array<RouteConfig> = [
     name: 'product-detail',
     component: () => import(/* webpackChunkName: "product-detail" */ '../views/ProductDetailView.vue')
   },
-  {
-    path: '/combo/:id',
-    name: 'combo-detail',
-    component: () => import(/* webpackChunkName: "product-detail" */ '../views/ComboProductView.vue')
-  },
+  { path: '/combo/:id', redirect: '/products' },
   {
     path: '/event/:eventId/bundles/:id',
     name: 'event-bundle-builder',

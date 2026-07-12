@@ -13,6 +13,9 @@ export interface Category {
   id: string
   name: string
   icon: string
+  bannerImage?: string
+  bannerImages?: string[]
+  thumbnailImage?: string
   slug?: string
   parentId?: string | null
   description?: string
@@ -23,6 +26,7 @@ export interface Category {
 // ─── Product ─────────────────────────────────────────────────────────────────
 export interface Product {
   id: string
+  productNo?: string
   name: string
   description: string
   price: number        // NTD（定價）
@@ -49,6 +53,8 @@ export interface Product {
   features?: string[]         // 產品特色（Tab）
   introduction?: string       // 產品介紹（Tab）
   specs?: string              // 成分規格（Tab，純文字多行）
+  productDescriptionHtml?: string
+  specificationHtml?: string
 }
 
 export interface ProductVariant {

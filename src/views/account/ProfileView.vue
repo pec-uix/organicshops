@@ -249,7 +249,7 @@ export default Vue.extend({
     return {
       form: {
         memberNo: 'OGM-2026-0008',
-        name:     '皮克敏',
+        name:     '陳怡君',
         birthday: '1990-01-01',
         gender:   'male',
         email:    'ming@example.com',

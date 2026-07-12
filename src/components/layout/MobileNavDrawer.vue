@@ -435,6 +435,13 @@ import {
   MegaMenuLink,
 } from '@/constants/navigation'
 
+function parseTo(to: string) {
+  if (!to.includes('?')) return { path: to }
+  const [path, qs] = to.split('?')
+  const query = Object.fromEntries(new URLSearchParams(qs))
+  return { path, query }
+}
+
 export default Vue.extend({
   name: 'MobileNavDrawer',
   data() {
@@ -622,10 +629,10 @@ export default Vue.extend({
       return { path: this.buildMegaMenuBaseRoute(menuKey) }
     },
     buildMegaItemLink(groupTitle: string, item: MegaMenuLink) {
-      return { path: item.to || '/' }
+      return parseTo(item.to || '/')
     },
     buildMegaChildLink(groupTitle: string, itemLabel: string, child: MegaMenuLink) {
-      return { path: child.to || '/' }
+      return parseTo(child.to || '/')
     },
   },
 })

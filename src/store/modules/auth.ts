@@ -7,7 +7,7 @@ const authModule: Module<AuthState, any> = {
   state: (): AuthState => ({
     user: {
       id: 'u001',
-      name: '皮克敏',
+      name: '陳怡君',
       email: 'demo@organicshops.com',
       memberRoleLabel: '生機員工',
       memberTierLabel: 'VIP',
@@ -41,7 +41,7 @@ const authModule: Module<AuthState, any> = {
       const demoUsers: Record<string, User> = {
         'vip@organicshops.com': {
           id: 'u001',
-          name: '皮克敏',
+          name: '陳怡君',
           email: normalizedEmail,
           memberRoleLabel: '生機員工',
           memberTierLabel: 'VIP',

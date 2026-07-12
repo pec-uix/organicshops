@@ -2,7 +2,12 @@
   <div class="relative overflow-hidden group" :class="containerClass">
     <!-- ── 背景與圖片 ── -->
     <div class="absolute inset-0 z-0">
-      <img :src="image" :alt="title" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+      <img
+        :src="image"
+        :alt="title"
+        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+        :style="{ objectPosition: imagePosition }"
+      />
       <!-- 品牌色遮罩 (柔化圖片並提升文字易讀性) -->
       <div 
         class="absolute inset-0 bg-gradient-to-r from-brand-dark/40 to-transparent"
@@ -15,7 +20,7 @@
       class="relative z-10 h-full flex flex-col justify-center px-6 lg:px-16 space-y-4"
       :class="size === 'small' ? 'px-5 lg:px-6 space-y-2' : ''"
     >
-      <div v-if="tag" class="inline-block self-start px-3 py-0.5 bg-brand-primary text-white text-[9px] font-black uppercase tracking-[0.3em] rounded-none shadow-sm">
+      <div v-if="tag" class="inline-block self-start px-3 py-0.5 bg-brand-primary text-white text-[10px] font-black uppercase tracking-[0.25em] rounded-none shadow-sm">
         {{ tag }}
       </div>
       
@@ -28,7 +33,7 @@
       
       <p 
         v-if="subtitle && size !== 'small'" 
-        class="text-white/80 font-serif italic text-sm tracking-widest max-w-sm line-clamp-2"
+        class="max-w-sm text-sm font-medium leading-7 text-white/80 line-clamp-2"
       >
         {{ subtitle }}
       </p>
@@ -67,7 +72,8 @@ export default Vue.extend({
     subtitle: { type: String, default: '' },
     cta:      { type: String, default: '立即選購' },
     to:       { type: String, default: '' },
-    overlay:  { type: Boolean, default: true }
+    overlay:  { type: Boolean, default: true },
+    imagePosition: { type: String, default: 'center center' }
   },
   computed: {
     containerClass(): string {

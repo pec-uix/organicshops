@@ -125,74 +125,25 @@
       </section>
 
       <section>
-        <div v-if="isBundleItemPage" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div v-if="isBundleItemPage" class="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
           <router-link
             v-for="bundle in bundleProducts"
             :key="bundle.name"
             :to="bundle.path"
-            class="group overflow-hidden rounded-3xl border border-brand-primary/20 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-brand-primary/40 hover:shadow-md"
+            class="group flex flex-col overflow-hidden rounded-3xl border border-brand-primary/20 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-brand-primary/40 hover:shadow-md"
           >
-            <div class="aspect-[4/3] overflow-hidden bg-brand-surface/40">
+            <div class="aspect-[4/3] w-full flex-shrink-0 overflow-hidden bg-brand-surface/40">
               <img :src="bundle.image" :alt="bundle.name" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
             </div>
-            <div class="p-5">
-              <div class="mb-3 flex flex-wrap gap-2">
-                <span
-                  v-for="tag in bundle.tags"
-                  :key="tag"
-                  class="rounded-full px-3 py-1 text-xs font-black"
-                  :class="tag === '贈品已含' ? 'bg-brand-surface text-brand-primary' : 'bg-brand-primary text-white'"
-                >
-                  {{ tag }}
-                </span>
-              </div>
+            <div class="flex flex-1 flex-col p-5">
               <h3 class="line-clamp-2 text-xl font-black leading-tight text-brand-dark group-hover:text-brand-primary">{{ bundle.name }}</h3>
-              <p class="mt-3 text-sm font-semibold leading-6 text-gray-500">{{ bundle.description }}</p>
-              <div
-                v-if="bundle.ruleTitle"
-                class="mt-4 border-l-4 border-brand-primary bg-brand-bg px-4 py-3"
-              >
-                <p class="text-[11px] font-black tracking-[0.16em] text-brand-primary">{{ bundle.ruleTitle }}</p>
-                <p class="mt-2 text-sm font-black leading-6 text-brand-dark">{{ bundle.ruleText }}</p>
-                <div class="mt-3 grid gap-2 text-xs font-semibold leading-5 text-gray-500">
-                  <p>
-                    <span class="font-black text-gray-700">適用商品：</span>{{ bundle.selectionText }}
-                  </p>
-                  <p>
-                    <span class="font-black text-gray-700">優惠折抵：</span><span class="text-brand-primary">{{ bundle.discountText }}</span>
-                  </p>
-                </div>
-              </div>
-              <div
-                v-if="bundle.giftName"
-                class="mt-4 rounded-2xl border border-brand-primary/10 bg-brand-surface/40 p-3"
-              >
-                <p class="text-[11px] font-black tracking-[0.16em] text-brand-primary">搭贈內容</p>
-                <div class="mt-2 flex items-center gap-3">
-                  <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
-                    <img
-                      v-if="bundle.giftImage"
-                      :src="bundle.giftImage"
-                      :alt="bundle.giftName"
-                      class="h-full w-full object-cover"
-                    />
-                    <span v-else class="text-lg font-black text-brand-primary">贈</span>
-                  </div>
-                  <div class="min-w-0">
-                    <p class="line-clamp-1 text-sm font-black text-brand-dark">{{ bundle.giftName }} x{{ bundle.giftQuantity }}</p>
-                    <p class="mt-0.5 text-xs font-semibold text-gray-500">{{ bundle.giftUnit }}</p>
-                  </div>
-                  <span class="ml-auto flex-shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-brand-primary">$0</span>
-                </div>
-              </div>
-              <div class="mt-5 flex items-end justify-between gap-3">
-                <div>
-                  <p class="text-xs font-bold text-gray-400 line-through">原價 ${{ bundle.originalPrice.toLocaleString() }}</p>
-                  <p class="mt-1 text-2xl font-black text-brand-primary">
-                    <span class="text-sm">{{ bundle.ruleTitle ? '活動價' : '售價' }} $</span>{{ bundle.price.toLocaleString() }}
-                  </p>
-                </div>
-                <span class="rounded-2xl bg-brand-primary px-5 py-3 text-sm font-black text-white">選購組合</span>
+              <p class="mt-3 line-clamp-2 text-sm font-semibold leading-6 text-gray-500">{{ bundle.description }}</p>
+              <div class="mt-auto pt-5">
+                <p class="text-xs font-bold text-gray-400 line-through">原價 ${{ bundle.originalPrice.toLocaleString() }}</p>
+                <p class="mt-0.5 text-2xl font-black text-brand-primary">
+                  <span class="text-sm">活動價 $</span>{{ bundle.price.toLocaleString() }}
+                </p>
+                <span class="mt-3 flex h-10 w-full items-center justify-center rounded-xl bg-brand-primary text-sm font-black text-white transition-all hover:bg-brand-dark active:scale-[0.98]">選購組合</span>
               </div>
             </div>
           </router-link>
@@ -210,6 +161,7 @@
             :bundle-selected-count="1"
             :bundle-required-count="2"
             :bundle-price="390"
+            :one-plus-one-mode="isOnePlusOnePage"
           />
         </div>
         <div v-else class="rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-16 text-center shadow-sm">
@@ -226,6 +178,48 @@ import Vue from 'vue'
 import ProductCard from '@/components/product/ProductCard.vue'
 import { mockProducts } from '@/mock/data'
 import { Product } from '@/types'
+
+const CAMPAIGN_ITEM_PRODUCT_IDS: Record<string, string[]> = {
+  'flash-limited': [
+    '12501', '12900', '11840', '12901', '12898', '12899', '12877', '12839',
+    '12808', '12677', '12848', '12847', '12783', '12826', '12655', '12855',
+    '12853', '12854', '12529', '12849', '12502', '12506', '12472', '12672',
+    '12806', '12805', '12804', '12803', '12802', '12801', '12800', '12799',
+  ],
+  'flash-oneplusone': [
+    '12620', '11522', '11892', '12846', '9434', '12398', '12397', '12084',
+    '12815', '9439', '12903', '12904', '12902', '7754', '12583', '12087',
+  ],
+  'flash-multi': [
+    '12677', '12832', '9923', '12831', '12830', '12829', '12823', '12790',
+    '12806', '12805', '12804', '12803', '12802', '12801', '12800', '12799',
+    '12488', '12487', '12134', '12894', '11973', '11695', '11696', '12137',
+    '9550', '9549', '12641', '8380', '12672', '12644', '12642', '12643',
+    '12651', '12649', '12647', '12646', '12648', '12650', '7853', '7854',
+    '7855', '12390', '12366', '12645', '7295', '7833',
+  ],
+  'flash-surplus': [
+    '12916', '12897', '12896', '11868', '9895', '12781', '12845', '12838',
+    '12836', '12835', '12834', '12833', '12795', '12793', '12773', '12731',
+    '12730', '12853', '12638', '11866', '12598', '12557',
+  ],
+  'flash-member': [
+    '10421', '9437', '12085', '12415', '8135', '8692', '12083', '12832',
+    '9898', '2866', '10849', '12701', '12092', '12834', '10902',
+  ],
+  'theme-oats': [
+    '12084', '12815', '12904', '12903', '12902', '12097', '12082', '11866',
+    '11872', '11873', '11867', '11868', '12879', '11871', '11870', '11863',
+    '12816', '12817',
+  ],
+  'theme-mediterranean': [
+    '12081', '12082', '12083', '12084', '12085', '12086', '12087', '12093',
+    '11287', '12088', '12089', '12091', '12092',
+  ],
+  'flash-summer': ['9549', '11868', '12730', '6875', '12828'],
+  'flash-ghost':  ['12831', '12091', '11873', '12749', '12093'],
+  'theme-gift': ['12415', '12179', '9264', '9265', '12833', '12082', '12081', '11866', '11872'],
+}
 
 type CampaignItem = {
   id: string
@@ -321,6 +315,24 @@ export default Vue.extend({
               image: assetUrl('salmon.png'),
               productTags: ['flash'],
             },
+            {
+              id: 'flash-summer',
+              label: '盛夏能量季',
+              shortText: '夏日補給嚴選出擊',
+              description: '夏季特別企劃，補充能量的嚴選好物。',
+              bannerText: '盛夏能量季限時上架，把握夏日優惠。',
+              image: assetUrl('broccoli.png'),
+              productTags: ['flash'],
+            },
+            {
+              id: 'flash-ghost',
+              label: '中元普渡拜好拜滿',
+              shortText: '拜拜必備好禮全攻略',
+              description: '精選普渡必備商品，品質保證誠意十足。',
+              bannerText: '中元節特別企劃，誠意滿滿好物嚴選。',
+              image: assetUrl('nuts.png'),
+              productTags: ['flash'],
+            },
           ] as CampaignItem[],
         },
         {
@@ -357,69 +369,7 @@ export default Vue.extend({
             },
           ] as CampaignItem[],
         },
-        {
-          id: 'elder',
-          title: '銀髮專區',
-          description: '保留和原本分類頁相同的瀏覽方式，活動專區只在中分類層級使用大 banner。',
-          items: [
-            {
-              id: 'elder-breakfast',
-              label: '方便早餐',
-              shortText: '輕鬆補充早晨能量',
-              description: '適合忙碌與長輩日常的早餐選項。',
-              bannerText: '方便早餐主題頁使用同樣的大 banner。',
-              image: assetUrl('breakfast.png'),
-              productTags: ['member'],
-            },
-            {
-              id: 'elder-dinner',
-              label: '晚餐食材',
-              shortText: '晚間備餐更省事',
-              description: '晚餐所需食材與簡易料理主題。',
-              bannerText: '晚餐食材主題頁以 banner 帶入。',
-              image: assetUrl('salmon.png'),
-              productTags: ['flash'],
-            },
-            {
-              id: 'elder-soup',
-              label: '滋補湯品',
-              shortText: '溫補與日常保養',
-              description: '適合照護與家庭常備的湯品主題。',
-              bannerText: '滋補湯品也採大圖 banner 呈現。',
-              image: assetUrl('whitefungus.png'),
-              productTags: ['flash'],
-            },
-            {
-              id: 'elder-snack',
-              label: '休閒點心',
-              shortText: '日常點心與零嘴',
-              description: '適合午後點心與輕鬆補充。',
-              bannerText: '休閒點心主題頁保留 banner。',
-              image: assetUrl('nuts.png'),
-              productTags: ['optional'],
-            },
-            {
-              id: 'elder-drink',
-              label: '喝的保養',
-              shortText: '飲品型保養選品',
-              description: '可快速補充與日常飲用的主題商品。',
-              bannerText: '喝的保養主題頁同樣以 banner 呈現。',
-              image: assetUrl('salmon.png'),
-              productTags: ['member'],
-            },
-            {
-              id: 'elder-supplement',
-              label: '保健食品',
-              shortText: '保健與補充主題',
-              description: '保健食品與機能選品集中瀏覽。',
-              bannerText: '保健食品主題頁以大 banner 顯示。',
-              image: assetUrl('nuts.png'),
-              productTags: ['member'],
-            },
-          ] as CampaignItem[],
-        },
       ] as CampaignGroup[],
-      products: mockProducts as Product[],
       bundleProducts: [
         {
           name: '有機亞麻仁堅果粉與葡萄糖胺黑穀芝麻粉任2件組',
@@ -506,7 +456,7 @@ export default Vue.extend({
           giftQuantity: 1,
           giftUnit: '200g/包',
           giftImage: assetUrl('nuts.png'),
-          path: '/products/p106',
+          path: '/event/SUMMER2026/bundles/apricot-buy2-396',
         },
         {
           name: '有機枸杞原汁買2送2組',
@@ -523,7 +473,7 @@ export default Vue.extend({
           giftQuantity: 2,
           giftUnit: '500ml/瓶',
           giftImage: assetUrl('salmon.png'),
-          path: '/products/op201',
+          path: '/event/SUMMER2026/bundles/goji-buy2-1180',
         },
         {
           name: '菊花枸杞銀耳露買A送B組',
@@ -540,7 +490,7 @@ export default Vue.extend({
           giftQuantity: 1,
           giftUnit: '25g x 10包/袋',
           giftImage: assetUrl('nuts.png'),
-          path: '/products/p102',
+          path: '/event/SUMMER2026/bundles/whitefungus-buyab-58',
         },
         {
           name: '堅果果乾任選3件85折',
@@ -553,7 +503,7 @@ export default Vue.extend({
           ruleText: '指定堅果果乾任選 3 件，整組享 85 折。',
           selectionText: '原味綜合堅果、杏桃乾、原味腰果隨手包',
           discountText: '原價 $1,050，折抵 $157，活動價 $893',
-          path: '/event/SUMMER2026/bundles/same-zone-six',
+          path: '/event/SUMMER2026/bundles/nuts-three-893',
         },
         {
           name: '早餐穀粉任選4件折$120',
@@ -566,7 +516,7 @@ export default Vue.extend({
           ruleText: '指定早餐穀粉任選 4 件，整筆折 $120。',
           selectionText: '黑穀芝麻粉、亞麻仁堅果粉、奇亞籽穀物粉、燕麥堅果穀粉',
           discountText: '原價 $1,680，折抵 $120，活動價 $1,560',
-          path: '/event/SUMMER2026/bundles/same-zone-six',
+          path: '/event/SUMMER2026/bundles/breakfast-four-1560',
         },
         {
           name: '銀髮飲品任選6件每件折$10',
@@ -579,7 +529,7 @@ export default Vue.extend({
           ruleText: '指定飲品任選 6 件，每件折 $10。',
           selectionText: '菊花枸杞銀耳露、有機枸杞原汁、即飲保養飲',
           discountText: '原價 $390，折抵 $60，活動價 $330',
-          path: '/event/SUMMER2026/bundles/same-zone-six',
+          path: '/event/SUMMER2026/bundles/senior-six-330',
         },
       ],
     }
@@ -594,6 +544,12 @@ export default Vue.extend({
     activeItem(): CampaignItem | null {
       if (!this.activeItemId) return null
       return this.activeGroup.items.find((item: CampaignItem) => item.id === this.activeItemId) || null
+    },
+    products(): Product[] {
+      const ids = CAMPAIGN_ITEM_PRODUCT_IDS[this.activeItemId]
+      if (!ids) return mockProducts
+      const allProducts: Product[] = this.$store.getters['products/allProducts']
+      return ids.map(id => allProducts.find(p => p.id === id)).filter(Boolean) as Product[]
     },
     sortedProducts(): Product[] {
       const base = this.products
@@ -621,6 +577,9 @@ export default Vue.extend({
       return this.activeGroupId === 'flash' && this.activeItemId === 'flash-bundle'
         ? '有機紅藜麥、有機三色藜麥、有機奇亞籽任選第 2 件 5 折，可選 2 件，組合價 $390。'
         : ''
+    },
+    isOnePlusOnePage(): boolean {
+      return this.activeItemId === 'flash-oneplusone'
     },
   },
   watch: {

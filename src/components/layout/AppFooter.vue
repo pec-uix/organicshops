@@ -19,7 +19,7 @@
 
     <!-- ── Main Footer Content ── -->
     <div class="max-w-7xl mx-auto px-4 py-16">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-6">
         <div>
           <h4 class="text-white font-black mb-6 text-base tracking-widest border-l-4 border-brand-primary pl-3">客服中心</h4>
           <ul class="space-y-3 text-sm font-medium text-gray-300">
@@ -58,9 +58,9 @@
           </ul>
         </div>
 
-        <div class="col-span-2 lg:col-span-2 border-l border-gray-700/50 pl-0 lg:pl-8">
-          <div class="text-[12px] md:text-[13px] leading-6 space-y-1.5 font-medium opacity-90 mb-8">
-            <p class="text-white font-black text-base md:text-[17px] leading-tight mb-3 tracking-tight">企業資訊</p>
+        <div class="col-span-2 lg:col-span-3 border-l border-gray-700/50 pl-0 lg:pl-8">
+          <h4 class="text-white font-black mb-6 text-base tracking-widest border-l-4 border-brand-primary pl-3">企業資訊</h4>
+          <div class="text-sm font-medium text-gray-300 leading-7 space-y-0 mb-8">
             <p>統一企業集團</p>
             <p>統一生機開發股份有限公司</p>
             <p>免付費訂購電話：0800-777-000</p>
@@ -70,16 +70,19 @@
             <p>電話：03-434-0372</p>
             <p>傳真：03-434-0379</p>
             <p>食品業者登錄字號：H-116781797-00000-1</p>
-            <p class="pt-3 mt-2 border-t border-gray-700/30 text-[10px] leading-5 whitespace-nowrap">產品責任險：國泰世紀產物產品責任險單號碼1501字第14PD01573號</p>
+            <p class="pt-3 mt-2 border-t border-gray-700/30">產品責任險：國泰世紀產物產品責任險單號碼1501字第14PD01573號</p>
           </div>
 
           <div class="pt-6 border-t border-gray-700/50">
-            <p class="text-white font-black text-sm mb-3">關注我們</p>
-            <ul class="space-y-2">
-              <li><a href="#" class="text-[13px] font-bold text-gray-400 hover:text-white transition-colors tracking-widest">FACEBOOK</a></li>
-              <li><router-link to="/contact" class="text-[13px] font-bold text-gray-400 hover:text-white transition-colors tracking-widest">LINE</router-link></li>
-              <li><a href="#" class="text-[13px] font-bold text-gray-400 hover:text-white transition-colors tracking-widest">YOUTUBE</a></li>
-            </ul>
+            <p class="text-white font-black text-sm mb-4">追蹤動態</p>
+            <div class="flex gap-3">
+              <a href="#" title="Facebook" class="w-12 h-12 rounded-full bg-[#1877F2] flex items-center justify-center transition-all duration-200 hover:opacity-90">
+                <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <router-link to="/contact" title="LINE 聯絡客服" class="w-12 h-12 overflow-hidden rounded-full bg-[#06C755] flex items-center justify-center transition-all duration-200 hover:opacity-90" @click.native.stop>
+                <img src="/line-icon.png" alt="LINE" class="h-full w-full object-cover" />
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -95,7 +98,7 @@
 
     <!-- ── Right Floating Sidebar ── -->
     <div
-      class="fixed right-4 bottom-6 hidden pointer-events-auto transition-all duration-200 md:block lg:right-[20px] lg:bottom-[80px]"
+      class="fixed right-4 bottom-6 block pointer-events-auto transition-all duration-200 lg:right-[20px] lg:bottom-[80px]"
       :class="isCartOpen ? 'z-30 opacity-0 pointer-events-none' : 'z-[1000] opacity-100'"
       style="border: 0.5px solid #E5E7EB; box-shadow: 0 4px 16px rgba(0,0,0,0.15); border-radius: 16px;"
     >
@@ -123,46 +126,48 @@
         </div>
 
         <div class="relative group">
-          <router-link
-            to="/contact"
-            class="w-12 h-12 bg-[#00B900] text-white rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
-            aria-label="聯絡客服"
-            title="LINE 聯絡客服"
-            @click.native.stop
+          <a
+            href="https://page.line.me/upoc?openQrModal=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-12 h-12 overflow-hidden bg-[#06C755] rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
+            aria-label="LINE 官方帳號"
+            title="LINE 官方帳號"
           >
-            <span class="text-[11px] font-black tracking-tighter">LINE</span>
-          </router-link>
+            <img src="/line-icon.png" alt="LINE" class="h-full w-full object-cover" />
+          </a>
           <span class="pointer-events-none absolute right-full mr-2 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
-            LINE 聯絡客服
+            LINE 官方帳號
           </span>
         </div>
 
         <div class="relative group">
-          <router-link
-            to="/news"
-            class="w-12 h-12 bg-white text-gray-700 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 border border-gray-200"
-            aria-label="最新消息"
-            title="最新消息"
-            @click.native.stop
+          <a
+            href="https://www.facebook.com/UPOC1999/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-12 h-12 bg-[#1877F2] text-white rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
+            aria-label="Facebook 粉絲頁"
+            title="Facebook 粉絲頁"
           >
-            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12.073-12-12.073s-12 5.446-12 12.073c0 5.991 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.951.925-1.951 1.874v2.251h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.065 24 12.073z"/>
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="white">
+              <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"/>
             </svg>
-          </router-link>
+          </a>
           <span class="pointer-events-none absolute right-full mr-2 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
-            最新消息
+            Facebook 粉絲頁
           </span>
         </div>
 
         <div class="relative group">
           <button
             type="button"
-            class="w-14 h-14 rounded-xl overflow-hidden transition-all duration-200 hover:scale-105 bg-white"
+            class="w-12 h-12 bg-transparent flex items-center justify-center transition-all duration-200 hover:scale-105"
             aria-label="健康誌"
             title="健康誌"
             @click.stop="openPdf('/health-journal.pdf', '健康誌')"
           >
-            <img src="/health-journal-icon.png" alt="健康誌" class="w-full h-full object-cover" />
+            <img src="/health-journal-icon.png" alt="健康誌" class="max-h-full max-w-full object-contain" />
           </button>
           <span class="pointer-events-none absolute right-full mr-2 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
             健康誌
@@ -172,12 +177,12 @@
         <div class="relative group">
           <button
             type="button"
-            class="w-14 h-14 rounded-xl overflow-hidden transition-all duration-200 hover:scale-105 bg-white"
+            class="w-12 h-12 bg-transparent flex items-center justify-center transition-all duration-200 hover:scale-105"
             aria-label="禮盒型錄"
             title="禮盒型錄"
             @click.stop="openPdf('/gift-catalog.pdf', '禮盒型錄')"
           >
-            <img src="/gift-catalog-icon.png" alt="禮盒型錄" class="w-full h-full object-cover scale-125" />
+            <img src="/gift-catalog-icon.png" alt="禮盒型錄" class="max-h-full max-w-full object-contain scale-110" />
           </button>
           <span class="pointer-events-none absolute right-full mr-2 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
             禮盒型錄

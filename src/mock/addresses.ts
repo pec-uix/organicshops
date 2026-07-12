@@ -12,7 +12,7 @@ export interface SavedAddress {
 export const mockAddresses: SavedAddress[] = [
   {
     id: 1,
-    name: '皮克敏',
+    name: '陳怡君',
     phone: '0912345678',
     zipCode: '710',
     city: '台南市',
