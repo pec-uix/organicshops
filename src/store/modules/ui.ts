@@ -1,4 +1,5 @@
 import { Module } from 'vuex'
+import { publicAssetPath } from '@/utils/public-path'
 
 interface UiState {
   cartDrawerOpen: boolean
@@ -47,7 +48,7 @@ const uiModule: Module<UiState, any> = {
       commit('SET_MOBILE_MENU', !state.mobileMenuOpen)
     },
     openPdfViewer({ commit }, payload: { url: string; title: string }) {
-      commit('SET_PDF_VIEWER', payload)
+      commit('SET_PDF_VIEWER', { ...payload, url: publicAssetPath(payload.url) })
       document.body.style.overflow = 'hidden'
     },
     closePdfViewer({ commit }) {

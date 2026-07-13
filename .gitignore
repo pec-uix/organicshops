@@ -2,12 +2,6 @@
 node_modules
 /dist
 
-# Large local PDF assets
-images/健康誌.pdf
-public/health-journal.pdf
-public/gift-catalog.pdf
-
-
 # local env files
 .env.local
 .env.*.local

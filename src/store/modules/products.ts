@@ -2,6 +2,7 @@ import { Module } from 'vuex'
 import { Product, Category, TempZone } from '@/types'
 import scrapedProducts from '@/data/products.json'
 import categoryBlueprints from '@/data/categories.json'
+import { publicAssetHtml, publicAssetPath } from '@/utils/public-path'
 
 export type SortOption = 'latest' | 'price_asc' | 'price_desc' | 'sales'
 
@@ -43,7 +44,7 @@ interface CategoryBlueprint {
   thumbnailImage?: string
 }
 
-const fallbackImage = '/site-assets/logo.gif'
+const fallbackImage = publicAssetPath('/site-assets/logo.gif')
 const categoryBlueprintMap = new Map<string, CategoryBlueprint>(
   (categoryBlueprints as CategoryBlueprint[]).map((category) => [category.name, category]),
 )
@@ -128,7 +129,7 @@ function buildImportedCategories(products: ImportedProduct[]): Category[] {
     const categoryId = slugifyCategory(categoryName, `category-${index + 1}`)
     if (byId.has(categoryId)) return
     byId.add(categoryId)
-    const icon = product.mainImageUrl || fallbackImage
+    const icon = publicAssetPath(product.mainImageUrl || fallbackImage)
     const blueprint = categoryBlueprintMap.get(categoryName)
     rootIcons.set(categoryId, icon)
     categories.push({
@@ -136,9 +137,9 @@ function buildImportedCategories(products: ImportedProduct[]): Category[] {
       parentId: null,
       sortOrder: (categories.length + 1) * 10,
       icon,
-      bannerImage: blueprint?.bannerImage,
-      bannerImages: blueprint?.bannerImages,
-      thumbnailImage: blueprint?.thumbnailImage,
+      bannerImage: publicAssetPath(blueprint?.bannerImage || ''),
+      bannerImages: blueprint?.bannerImages?.map(publicAssetPath),
+      thumbnailImage: publicAssetPath(blueprint?.thumbnailImage || ''),
     })
     const defs = VIRTUAL_MIDDLE_CATEGORIES[categoryId]
     if (!defs) return
@@ -152,9 +153,9 @@ function buildImportedCategories(products: ImportedProduct[]): Category[] {
         parentId: categoryId,
         sortOrder: (categories.length + 1) * 10,
         icon,
-        bannerImage: blueprint?.bannerImage,
-        bannerImages: blueprint?.bannerImages,
-        thumbnailImage: blueprint?.thumbnailImage,
+        bannerImage: publicAssetPath(blueprint?.bannerImage || ''),
+        bannerImages: blueprint?.bannerImages?.map(publicAssetPath),
+        thumbnailImage: publicAssetPath(blueprint?.thumbnailImage || ''),
       })
     }
   })
@@ -175,10 +176,10 @@ function buildImportedCategories(products: ImportedProduct[]): Category[] {
     categories.push({
       id: subcategoryId, name: subcategoryName, slug: bareSlug,
       parentId, sortOrder: (categories.length + 1) * 10,
-      icon: product.mainImageUrl || fallbackImage,
-      bannerImage: blueprint?.bannerImage,
-      bannerImages: blueprint?.bannerImages,
-      thumbnailImage: blueprint?.thumbnailImage,
+      icon: publicAssetPath(product.mainImageUrl || fallbackImage),
+      bannerImage: publicAssetPath(blueprint?.bannerImage || ''),
+      bannerImages: blueprint?.bannerImages?.map(publicAssetPath),
+      thumbnailImage: publicAssetPath(blueprint?.thumbnailImage || ''),
     })
   })
 
@@ -202,9 +203,11 @@ function mapImportedProduct(product: ImportedProduct, index: number): Product {
   const price = memberPrice || originalPrice || 0
   const description = stripHtml(product.shortDescription || product.productDescription || '')
   const images = [
-    product.mainImageUrl || fallbackImage,
+    publicAssetPath(product.mainImageUrl || fallbackImage),
     ...(product.galleryImageUrls || []),
-  ].filter(Boolean)
+  ].filter(Boolean).map(publicAssetPath)
+  const productDescriptionHtml = publicAssetHtml(product.productDescription || '')
+  const specificationHtml = publicAssetHtml(product.specification || '')
 
   return {
     id: product.oldProductId,
@@ -217,7 +220,7 @@ function mapImportedProduct(product: ImportedProduct, index: number): Product {
     unit: '',
     categoryId: categoryIdFor(product),
     tempZone: inferTempZone(product.shippingType),
-    image: product.mainImageUrl || fallbackImage,
+    image: publicAssetPath(product.mainImageUrl || fallbackImage),
     images,
     inStock: true,
     isOrganic: /有機/.test(`${product.productName} ${description}`),
@@ -227,8 +230,8 @@ function mapImportedProduct(product: ImportedProduct, index: number): Product {
     conveniencePickup: Boolean(product.shippingType?.includes('超商')),
     introduction: stripHtml(product.productDescription || ''),
     specs: stripHtml(product.specification || ''),
-    productDescriptionHtml: product.productDescription || '',
-    specificationHtml: product.specification || '',
+    productDescriptionHtml,
+    specificationHtml,
   }
 }
 
