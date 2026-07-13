@@ -5,7 +5,7 @@
       <!-- ══ 頂部進度 ══ -->
       <div class="text-center mb-8">
         <span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm">
-          <img src="/logo.gif" alt="統一生機" class="h-full w-full object-contain" />
+          <img :src="publicAsset('/logo.gif')" alt="統一生機" class="h-full w-full object-contain" />
         </span>
         <h1 class="text-lg font-bold text-brand-dark mt-3 mb-1">補充個人資料</h1>
         <p class="text-sm text-gray-500">幫助我們提供更適合您的有機好物推薦（可跳過）</p>
@@ -180,6 +180,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { publicAssetPath } from '@/utils/public-path'
 
 export default Vue.extend({
   name: 'RegisterProfileView',
@@ -245,6 +246,9 @@ export default Vue.extend({
   },
 
   methods: {
+    publicAsset(path: string): string {
+      return publicAssetPath(path)
+    },
     safeRedirect(value: unknown): string {
       const redirect = Array.isArray(value) ? value[0] : value
       if (typeof redirect !== 'string') return ''

@@ -72,7 +72,7 @@
         </div>
         <div class="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
           <div class="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
-            <img src="/logo.gif" alt="統一生機標誌" class="mx-auto max-h-24 object-contain" />
+            <img :src="publicAsset('/logo.gif')" alt="統一生機標誌" class="mx-auto max-h-24 object-contain" />
           </div>
           <div class="space-y-5 type-body text-gray-600">
             <p>
@@ -173,6 +173,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { publicAssetPath } from '@/utils/public-path'
 
 export default Vue.extend({
   name: 'AboutView',
@@ -225,6 +226,11 @@ export default Vue.extend({
         { to: '/contact', label: '聯絡我們', desc: '商品、訂單與服務問題可由客服協助。' },
       ],
     }
+  },
+  methods: {
+    publicAsset(path: string): string {
+      return publicAssetPath(path)
+    },
   },
 })
 </script>

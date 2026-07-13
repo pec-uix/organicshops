@@ -27,7 +27,7 @@
       <!-- Banner -->
       <section class="mb-6 overflow-hidden rounded-[28px] bg-white shadow-sm">
         <div class="relative h-[320px] overflow-hidden sm:h-[380px] lg:h-[420px]">
-          <img src="/site-assets/goji.png" alt="OP 點數加價購" class="absolute inset-0 h-full w-full object-cover object-center" />
+          <img :src="publicAsset('/site-assets/goji.png')" alt="OP 點數加價購" class="absolute inset-0 h-full w-full object-cover object-center" />
           <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/15"></div>
           <div class="absolute inset-0 flex items-end p-6 sm:p-8 lg:p-12">
             <div class="max-w-2xl text-white">
@@ -312,6 +312,7 @@
 import Vue from 'vue'
 import { Product, ProductVariant } from '@/types'
 import { mockProducts } from '@/mock/data'
+import { publicAssetPath } from '@/utils/public-path'
 
 const TEMP_ZONE_LABELS: Record<string, string> = {
   frozen: '冷凍（-18°C 以下）',
@@ -402,6 +403,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    publicAsset(path: string): string {
+      return publicAssetPath(path)
+    },
     productDetailTo(product: Product) {
       return {
         name: 'product-detail',

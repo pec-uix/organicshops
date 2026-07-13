@@ -19,7 +19,7 @@
       <!-- 品牌標誌 -->
       <router-link to="/" class="mobile-brand flex min-w-0 items-center gap-2 sm:gap-3 flex-shrink-0 group rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40">
         <div class="mobile-brand-mark flex-shrink-0 overflow-hidden rounded-md shadow-sm" style="width: 154px; height: 82px;">
-          <img src="/logo.gif" alt="統一生機" class="h-full w-full object-contain" />
+          <img :src="publicAsset('/logo.gif')" alt="統一生機" class="h-full w-full object-contain" />
         </div>
       </router-link>
 
@@ -109,7 +109,7 @@
           <div class="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-6">
             <div class="flex flex-shrink-0 items-center">
               <router-link to="/" class="flex-shrink-0" aria-label="回到首頁">
-                <img src="/logo.gif" alt="統一生機" class="h-14 w-auto flex-shrink-0" />
+                <img :src="publicAsset('/logo.gif')" alt="統一生機" class="h-14 w-auto flex-shrink-0" />
               </router-link>
             </div>
 
@@ -524,6 +524,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { publicAssetPath } from '@/utils/public-path'
 import {
   MAIN_NAV_ITEMS,
   MEGA_MENUS,
@@ -642,6 +643,9 @@ export default Vue.extend({
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
+    publicAsset(path: string): string {
+      return publicAssetPath(path)
+    },
     openCartDrawer() { this.$store.dispatch('ui/openCartDrawer') },
     toggleMobileMenu() { this.$store.dispatch('ui/toggleMobileMenu') },
     openPdf(url: string, title: string) {
