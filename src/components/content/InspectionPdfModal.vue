@@ -94,10 +94,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InspectionReport } from '@/types'
+import { publicAssetPath } from '@/utils/public-path'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const pdfjsLib = (window as any).pdfjsLib
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
+if (pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = publicAssetPath('/pdf.worker.min.js')
 
 const SCALES = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
@@ -157,14 +158,14 @@ export default Vue.extend({
       if (this.pdfDoc) { this.pdfDoc.destroy(); this.pdfDoc = null }
 
       try {
-        const loadingTask = pdfjsLib.getDocument(url)
+        const loadingTask = pdfjsLib.getDocument(publicAssetPath(url))
         this.pdfDoc = await loadingTask.promise
         this.totalPages = this.pdfDoc.numPages
         this.loading = false
         await this.renderPage(1)
       } catch (e) {
         this.loading = false
-        this.error = 'PDF 載入失敗，請確認檔案路徑。'
+        this.error = 'PDF 暫時無法開啟，請稍後再試。'
       }
     },
     async renderPage(pageNum: number) {

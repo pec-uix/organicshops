@@ -9,7 +9,9 @@ import {
   InspectionReport,
 } from '@/types'
 
-const assetUrl = (filename: string): string => `${process.env.BASE_URL || '/'}site-assets/${filename}`
+const baseUrl = process.env.BASE_URL || '/'
+const assetUrl = (filename: string): string => `${baseUrl}site-assets/${filename}`
+const publicUrl = (filename: string): string => `${baseUrl}${filename}`
 
 // ─── Categories ──────────────────────────────────────────────────────────────
 export const mockCategories: Category[] = [
@@ -216,7 +218,7 @@ export const mockHealthJournals: HealthJournal[] = [
     subtitle: '春季飲食與有機生活提案',
     description: '整理春季日常保健、安心食材挑選與有機生活實踐建議。',
     coverImage: assetUrl('breakfast.png'),
-    pdfUrl: '/pdf/health-journal-2026-04.pdf',
+    pdfUrl: publicUrl('health-journal.pdf'),
     publishDate: '2026-04-01',
     issueLabel: '2026 四月號',
     isActive: true,
@@ -227,7 +229,7 @@ export const mockHealthJournals: HealthJournal[] = [
     subtitle: '換季營養補給指南',
     description: '從飲食、運動與生活節奏切入，提供換季期間的健康管理建議。',
     coverImage: assetUrl('whitefungus.png'),
-    pdfUrl: '/pdf/health-journal-2026-03.pdf',
+    pdfUrl: publicUrl('health-journal.pdf'),
     publishDate: '2026-03-01',
     issueLabel: '2026 三月號',
     isActive: true,
@@ -238,7 +240,7 @@ export const mockHealthJournals: HealthJournal[] = [
     subtitle: '節後輕盈飲食計畫',
     description: '以天然食材與簡單料理方式，協助節後回到穩定飲食節奏。',
     coverImage: assetUrl('goji.png'),
-    pdfUrl: '/pdf/health-journal-2026-02.pdf',
+    pdfUrl: publicUrl('health-journal.pdf'),
     publishDate: '2026-02-01',
     issueLabel: '2026 二月號',
     isActive: true,
@@ -251,7 +253,7 @@ export const mockGiftCatalogs: GiftCatalog[] = [
     title: '統一生機 2026 年度禮盒型錄',
     description: '整合節慶送禮、企業贈禮與常溫禮盒推薦。',
     coverImage: assetUrl('nuts.png'),
-    pdfUrl: '/pdf/gift-catalog-2026.pdf',
+    pdfUrl: publicUrl('gift-catalog.pdf'),
     publishDate: '2026-01-01',
     seasonLabel: '2026 年度型錄',
     isActive: true,
@@ -261,7 +263,7 @@ export const mockGiftCatalogs: GiftCatalog[] = [
     title: '統一生機 2026 中秋禮盒型錄',
     description: '精選堅果、沖調飲品與有機常溫禮盒，適合節慶拜訪與企業送禮。',
     coverImage: assetUrl('nuts.png'),
-    pdfUrl: '/pdf/gift-catalog-mid-autumn-2026.pdf',
+    pdfUrl: publicUrl('gift-catalog.pdf'),
     publishDate: '2026-06-01',
     seasonLabel: '中秋禮盒',
     isActive: true,
@@ -279,7 +281,7 @@ export const mockInspectionReports: InspectionReport[] = [
     labName: 'SGS',
     batchNo: '20260401',
     resultLabel: '合格',
-    pdfUrl: '/inspection-demo.pdf',
+    pdfUrl: publicUrl('inspection-demo.pdf'),
     tags: ['農殘', '重金屬'],
     isActive: true,
   },
@@ -293,7 +295,7 @@ export const mockInspectionReports: InspectionReport[] = [
     labName: '全國公證',
     batchNo: '20260315',
     resultLabel: '合格',
-    pdfUrl: '/inspection-demo.pdf',
+    pdfUrl: publicUrl('inspection-demo.pdf'),
     tags: ['微生物', '重金屬'],
     isActive: true,
   },
@@ -307,7 +309,7 @@ export const mockInspectionReports: InspectionReport[] = [
     labName: 'SGS',
     batchNo: '20260210',
     resultLabel: '合格',
-    pdfUrl: '/inspection-demo.pdf',
+    pdfUrl: publicUrl('inspection-demo.pdf'),
     tags: ['輻射', '重金屬'],
     isActive: true,
   },
@@ -321,7 +323,7 @@ export const mockInspectionReports: InspectionReport[] = [
     labName: 'SGS',
     batchNo: '20260120',
     resultLabel: '合格',
-    pdfUrl: '/inspection-demo.pdf',
+    pdfUrl: publicUrl('inspection-demo.pdf'),
     tags: ['黃麴毒素', '重金屬'],
     isActive: true,
   },
