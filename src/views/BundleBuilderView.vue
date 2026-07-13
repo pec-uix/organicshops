@@ -235,13 +235,13 @@
 
     <transition name="modal">
       <div v-if="previewItem" class="fixed inset-0 z-[100] flex items-end justify-center bg-brand-dark/50 p-0 backdrop-blur-sm sm:items-center sm:p-4" @click.self="previewItem = null">
-        <div class="flex w-full max-w-4xl flex-col overflow-hidden rounded-t-3xl bg-white shadow-xl sm:h-[640px] sm:rounded-3xl">
+        <div class="flex h-[82vh] w-full max-w-4xl flex-col overflow-hidden rounded-t-3xl bg-white shadow-xl sm:h-[640px] sm:rounded-3xl">
 
           <!-- ① 上方區：左圖 + 右欄（固定高度不伸縮） -->
           <div class="flex flex-shrink-0 flex-col sm:h-[300px] sm:flex-row">
 
             <!-- 左：主圖 -->
-            <div class="flex-shrink-0 bg-brand-surface/30 p-3 sm:h-full sm:w-[44%] sm:p-4">
+            <div class="hidden flex-shrink-0 bg-brand-surface/30 p-3 sm:block sm:h-full sm:w-[44%] sm:p-4">
               <div class="h-52 overflow-hidden rounded-2xl sm:h-full">
                 <img
                   :src="previewGalleryImages[previewImageIndex] || previewItem.image"
@@ -281,7 +281,7 @@
           </div>
 
           <!-- 縮圖列（若有多圖） -->
-          <div v-if="previewGalleryImages.length > 1" class="flex flex-shrink-0 gap-2 overflow-x-auto border-t border-gray-100 px-4 py-2">
+          <div v-if="previewGalleryImages.length > 1" class="hidden flex-shrink-0 gap-2 overflow-x-auto border-t border-gray-100 px-4 py-2 sm:flex">
             <button
               v-for="(img, idx) in previewGalleryImages"
               :key="idx"
@@ -308,7 +308,7 @@
           </div>
 
           <!-- ③ 分頁內容（flex-1，可捲動） -->
-          <div class="flex-1 overflow-y-auto px-5 py-4 text-sm leading-7 text-gray-600 sm:px-6">
+          <div class="min-h-0 flex-1 overflow-y-auto px-5 py-4 text-sm leading-7 text-gray-600 sm:px-6">
 
             <!-- 產品特色 -->
             <div v-if="previewTab === 'features'">
