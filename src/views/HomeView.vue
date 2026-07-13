@@ -74,14 +74,14 @@
         <div class="grid gap-4 lg:grid-cols-2">
           <div class="home-promo-tile aspect-[2.9/1] overflow-hidden rounded-2xl bg-white shadow-sm">
             <img
-              src="/home-banners/new-arrival-banner-01.png"
+              :src="publicAsset('/home-banners/new-arrival-banner-01.png')"
               alt="超值加價購"
               class="block h-full w-full object-cover"
             />
           </div>
           <div class="home-promo-tile aspect-[2.9/1] overflow-hidden rounded-2xl bg-white shadow-sm">
             <img
-              src="/home-banners/new-arrival-banner-02.png"
+              :src="publicAsset('/home-banners/new-arrival-banner-02.png')"
               alt="OPENPOINT 好康換一波"
               class="block h-full w-full object-cover"
             />
@@ -139,14 +139,14 @@
         <div class="grid gap-4 lg:grid-cols-2">
           <div class="home-promo-tile aspect-[2.2/1] overflow-hidden rounded-2xl bg-white shadow-sm">
             <img
-              src="/home-banners/new-product-banner-01.png"
+              :src="publicAsset('/home-banners/new-product-banner-01.png')"
               alt="OPENPOINT 好康換一波"
               class="block h-full w-full object-cover"
             />
           </div>
           <div class="home-promo-tile aspect-[2.2/1] overflow-hidden rounded-2xl bg-white shadow-sm">
             <img
-              src="/home-banners/new-product-banner-02.png"
+              :src="publicAsset('/home-banners/new-product-banner-02.png')"
               alt="有機鮮採椰菜"
               class="block h-full w-full object-cover"
             />
@@ -261,6 +261,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { buildCategoryPathFromCategory } from '@/utils/category-path'
+import { publicAssetPath } from '@/utils/public-path'
 import { Category, Product } from '@/types'
 import scrapedProducts from '@/data/products.json'
 import categoryBannerLookup from '@/data/category-banners.json'
@@ -314,7 +315,7 @@ const FLASH_CATEGORY_NAMES = new Set(['限時優惠快閃區', '特惠專區'])
 
 function resolveCategoryBanner(category: Category): string {
   const record = categoryBannerMap.get(category.id)
-  return record?.bannerImage || record?.bannerImages?.[0] || category.bannerImage || category.bannerImages?.[0] || category.icon
+  return publicAssetPath(record?.bannerImage || record?.bannerImages?.[0] || category.bannerImage || category.bannerImages?.[0] || category.icon)
 }
 
 function parseCapturedAt(raw?: string): number {
@@ -367,7 +368,7 @@ export default Vue.extend({
           tag: 'Season Pick',
           title: '生鮮直送<br />新鮮出發',
           subtitle: '嚴選安心食材，讓每日餐桌更自然新鮮。',
-          image: '/home-banners/banner-01.png',
+          image: publicAssetPath('/home-banners/banner-01.png'),
           cta: '前往生鮮直送',
           to: '/category/fresh',
         },
@@ -376,7 +377,7 @@ export default Vue.extend({
           tag: 'Fresh Market',
           title: '當季蔬果<br />每日補給',
           subtitle: '把握產地風味，把季節的好滋味帶回家。',
-          image: '/home-banners/banner-02.png',
+          image: publicAssetPath('/home-banners/banner-02.png'),
           cta: '探索當季鮮採',
           to: '/category/fresh',
         },
@@ -385,7 +386,7 @@ export default Vue.extend({
           tag: 'Kitchen Choice',
           title: '廚房料理品<br />備料更完整',
           subtitle: '油品、調味、穀物與常備食材一次看齊。',
-          image: '/home-banners/banner-03.png',
+          image: publicAssetPath('/home-banners/banner-03.png'),
           cta: '前往廚房料理品',
           to: '/category/pantry',
         },
@@ -433,7 +434,7 @@ export default Vue.extend({
           tag: 'Season Pick',
           title: '安心食材<br />新鮮上架',
           subtitle: '瀏覽最新分類與商品，快速找到需要的日常選品。',
-          image: '/site-assets/logo.gif',
+          image: publicAssetPath('/site-assets/logo.gif'),
           cta: '前往商品列表',
           to: '/products',
         }
@@ -495,13 +496,13 @@ export default Vue.extend({
       return seasonal.slice(0, 6)
     },
     eventBannerImage(): string {
-      return '/home-banners/event-banner.png'
+      return publicAssetPath('/home-banners/event-banner.png')
     },
     memberBannerImage(): string {
-      return '/home-banners/membership-banner.png'
+      return publicAssetPath('/home-banners/membership-banner.png')
     },
     communityBannerImage(): string {
-      return '/home-banners/community-banner.png'
+      return publicAssetPath('/home-banners/community-banner.png')
     },
     lineLoginPath(): string {
       return this.$store.getters['auth/isAuthenticated'] ? '/account/coupons' : '/login?redirect=/account/coupons'
@@ -515,6 +516,9 @@ export default Vue.extend({
     if (state.heroTimer) window.clearInterval(state.heroTimer)
   },
   methods: {
+    publicAsset(path: string): string {
+      return publicAssetPath(path)
+    },
     buildQuickCategoryPath(categoryId: string): string {
       return buildCategoryPathFromCategory(this.categories, categoryId)
     },
