@@ -18,32 +18,41 @@
         </div>
       </div>
 
-      <nav class="flex gap-2 overflow-x-auto px-3 py-3">
-        <router-link
-          v-for="item in sidebarLinks"
-          :key="item.key"
-          :to="item.to"
-          class="flex flex-shrink-0 items-center gap-1 rounded-full px-3 py-2.5 text-xs font-bold transition-colors"
-          :class="item.key === activeKey
-            ? 'bg-brand-surface text-brand-primary'
-            : 'bg-white text-gray-500 hover:bg-gray-50'"
-        >
-          <span class="flex h-6 w-8 flex-shrink-0 items-center justify-center rounded-md bg-white">
-            <img :src="sidebarIconSrc(item.iconKey)" alt="" class="h-auto w-8 max-w-none object-contain" />
+      <div class="relative">
+        <nav class="flex gap-2 overflow-x-auto px-3 py-3 pr-16">
+          <router-link
+            v-for="item in sidebarLinks"
+            :key="item.key"
+            :to="item.to"
+            class="flex flex-shrink-0 items-center gap-1 rounded-full px-3 py-2.5 text-xs font-bold transition-colors"
+            :class="item.key === activeKey
+              ? 'bg-brand-surface text-brand-primary'
+              : 'bg-white text-gray-500 hover:bg-gray-50'"
+          >
+            <span class="flex h-6 w-8 flex-shrink-0 items-center justify-center rounded-md bg-white">
+              <img :src="sidebarIconSrc(item.iconKey)" alt="" class="h-auto w-8 max-w-none object-contain" />
+            </span>
+            {{ item.label }}
+          </router-link>
+          <button
+            v-if="showLogout"
+            class="flex flex-shrink-0 items-center gap-1 rounded-full bg-white px-3 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50"
+            @click="logout"
+          >
+            <span class="flex h-6 w-8 flex-shrink-0 items-center justify-center rounded-md bg-white">
+              <img :src="sidebarIconSrc('logout')" alt="" class="h-auto w-8 max-w-none object-contain" />
+            </span>
+            登出
+          </button>
+        </nav>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex w-14 items-center justify-center bg-gradient-to-l from-white via-white/95 to-white/0">
+          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-white shadow-sm">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
           </span>
-          {{ item.label }}
-        </router-link>
-        <button
-          v-if="showLogout"
-          class="flex flex-shrink-0 items-center gap-1 rounded-full bg-white px-3 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50"
-          @click="logout"
-        >
-          <span class="flex h-6 w-8 flex-shrink-0 items-center justify-center rounded-md bg-white">
-            <img :src="sidebarIconSrc('logout')" alt="" class="h-auto w-8 max-w-none object-contain" />
-          </span>
-          登出
-        </button>
-      </nav>
+        </div>
+      </div>
     </section>
 
     <aside class="hidden lg:block w-52 sticky top-24">

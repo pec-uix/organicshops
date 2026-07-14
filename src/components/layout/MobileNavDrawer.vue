@@ -21,7 +21,7 @@
           class="absolute inset-y-0 left-0 flex w-[92%] max-w-[430px] flex-col overflow-hidden rounded-r-xl bg-white shadow-2xl"
         >
           <div class="flex-1 overflow-y-auto bg-white">
-            <nav class="divide-y divide-gray-100">
+            <nav class="divide-y-2 divide-brand-primary/25">
               <!-- 第 0 行：品牌綠關閉控制列 -->
               <div class="flex w-full items-center justify-between bg-[#76B82A] px-5 py-3.5">
                 <div
@@ -52,7 +52,7 @@
                 <div class="bg-white">
                   <button
                     type="button"
-                    class="flex w-full items-center justify-between border-b border-gray-100 px-4 py-5 text-left transition-colors hover:bg-gray-50"
+                    class="flex w-full items-center justify-between border-b-2 border-brand-primary/25 px-4 py-5 text-left transition-colors hover:bg-gray-50"
                     :class="memberAccordionOpen ? 'text-[#76B82A]' : 'text-gray-800'"
                     @click="memberAccordionOpen = !memberAccordionOpen"
                   >
@@ -183,7 +183,7 @@
                     leave-class="max-h-[1200px] opacity-100"
                     leave-to-class="max-h-0 opacity-0"
                   >
-                    <div v-if="openSectionKey === section.key" class="border-t border-gray-100 bg-white">
+                    <div v-if="openSectionKey === section.key" class="border-t-2 border-brand-primary/25 bg-white">
                       <div v-if="section.key === 'shop'" class="flex min-h-[520px] bg-white">
                         <div class="w-28 shrink-0 border-r border-gray-100 bg-white">
                           <button
@@ -373,7 +373,7 @@
                         <div
                           v-for="(group, groupIndex) in getMegaMenuGroups(section.key)"
                           :key="'mobile-menu-group-' + section.key + '-' + groupIndex"
-                          class="border-b border-gray-100 last:border-b-0"
+                          class="border-b-2 border-brand-primary/20 last:border-b-0"
                         >
                           <div class="px-4 pt-4 text-xs font-bold tracking-[0.16em] text-gray-400">
                             {{ group.title }}
@@ -508,10 +508,7 @@ export default Vue.extend({
       return this.memberSummary.couponCount
     },
     menuSections(): MainNavItem[] {
-      return [
-        ...MAIN_NAV_ITEMS,
-        { key: 'account', label: '會員中心', to: '/account', hasMenu: true },
-      ]
+      return MAIN_NAV_ITEMS
     },
     accountAccordionLinks(): Array<{ label: string; to: string }> {
       return this.memberQuickLinks.filter((link) => link.label !== '會員中心')
