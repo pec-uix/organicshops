@@ -58,23 +58,32 @@
       </section>
 
       <section v-if="!activeItem" class="mb-6 overflow-hidden rounded-3xl bg-white shadow-sm">
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          <router-link
-            v-for="item in activeGroup.items"
-            :key="item.id"
-            :to="campaignItemRoute(item.id)"
-            class="group overflow-hidden rounded-3xl border border-brand-primary/20 border-l-4 border-l-brand-primary bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-1 hover:border-brand-primary/45 hover:shadow-md"
-            :class="currentItem.id === item.id ? 'bg-brand-surface/35' : ''"
-          >
-            <div class="flex items-center gap-4">
-              <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-2xl bg-brand-surface ring-1 ring-brand-primary/15">
-                <img :src="item.image" :alt="item.label" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <div class="relative">
+          <div class="grid grid-flow-col grid-rows-2 auto-cols-[calc((100%-1rem)/3)] gap-2 overflow-x-auto px-3 py-3 pr-14 sm:grid-flow-row sm:auto-cols-auto sm:grid-cols-2 sm:grid-rows-none sm:gap-4 sm:overflow-visible sm:p-0 xl:grid-cols-3">
+            <router-link
+              v-for="item in activeGroup.items"
+              :key="item.id"
+              :to="campaignItemRoute(item.id)"
+              class="group overflow-hidden rounded-2xl border border-brand-primary/20 bg-white p-2 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-brand-primary/45 hover:shadow-md sm:rounded-3xl sm:border-l-4 sm:border-l-brand-primary sm:p-4 sm:text-left"
+              :class="currentItem.id === item.id ? 'bg-brand-surface/35' : ''"
+            >
+              <div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
+                <div class="h-14 w-full flex-shrink-0 overflow-hidden rounded-xl bg-brand-surface ring-1 ring-brand-primary/15 sm:h-16 sm:w-16 sm:rounded-2xl">
+                  <img :src="item.image" :alt="item.label" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                </div>
+                <div class="min-w-0">
+                  <h3 class="line-clamp-2 text-xs font-black leading-snug text-brand-dark group-hover:text-brand-primary sm:truncate sm:text-lg">{{ item.label }}</h3>
+                </div>
               </div>
-              <div class="min-w-0">
-                <h3 class="truncate text-lg font-black text-brand-dark group-hover:text-brand-primary">{{ item.label }}</h3>
-              </div>
-            </div>
-          </router-link>
+            </router-link>
+          </div>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex w-12 items-center justify-center bg-gradient-to-l from-white via-white/95 to-white/0 sm:hidden">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-white shadow-sm">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
         </div>
       </section>
 
