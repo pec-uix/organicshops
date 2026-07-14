@@ -38,6 +38,21 @@
           <span class="mt-1 hidden text-[10px] font-bold sm:block">搜尋</span>
         </button>
 
+        <router-link
+          to="/account"
+          class="flex flex-col items-center text-gray-500 transition-colors hover:text-brand-primary"
+          style="-webkit-tap-highlight-color: transparent;"
+          aria-label="會員中心"
+        >
+          <div class="rounded-full p-1 transition-colors hover:bg-brand-surface">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 20.25a7.5 7.5 0 0115 0" />
+            </svg>
+          </div>
+          <span class="mt-1 hidden text-[10px] font-bold sm:block">會員</span>
+        </router-link>
+
         <button
           class="flex flex-col items-center text-brand-primary transition-colors"
           style="-webkit-tap-highlight-color: transparent;"

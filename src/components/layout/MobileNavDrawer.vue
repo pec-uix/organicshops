@@ -96,8 +96,8 @@
                     leave-class="max-h-[640px] opacity-100"
                     leave-to-class="max-h-0 opacity-0"
                   >
-                    <div v-if="memberAccordionOpen" class="flex min-h-[360px] bg-white">
-                    <div class="w-28 shrink-0 border-r border-gray-100 bg-gray-50/50">
+                    <div v-if="memberAccordionOpen" class="flex h-[360px] bg-white">
+                    <div class="w-28 shrink-0 overflow-y-auto border-r border-gray-100 bg-gray-50/50">
                       <div class="flex min-h-[64px] w-full items-center border-l-4 border-[#76B82A] bg-white px-3 py-3 text-left">
                         <span class="text-[15px] font-bold leading-snug text-[#76B82A]">會員中心</span>
                       </div>
@@ -184,8 +184,8 @@
                     leave-to-class="max-h-0 opacity-0"
                   >
                     <div v-if="openSectionKey === section.key" class="border-t-2 border-brand-primary/25 bg-white">
-                      <div v-if="section.key === 'shop'" class="flex min-h-[520px] bg-white">
-                        <div class="w-28 shrink-0 border-r border-gray-100 bg-white">
+                      <div v-if="section.key === 'shop'" class="flex h-[360px] bg-white">
+                        <div class="w-28 shrink-0 overflow-y-auto border-r border-gray-100 bg-white">
                           <button
                             v-for="(category, categoryIndex) in shopRootCategories"
                             :key="'shop-root-' + section.key + '-' + categoryIndex"
@@ -259,8 +259,8 @@
                         </div>
                       </div>
 
-                      <div v-else-if="section.key === 'account'" class="flex min-h-[360px] bg-white">
-                        <div class="w-28 shrink-0 border-r border-gray-100 bg-gray-50/50">
+                      <div v-else-if="section.key === 'account'" class="flex h-[360px] bg-white">
+                        <div class="w-28 shrink-0 overflow-y-auto border-r border-gray-100 bg-gray-50/50">
                           <div class="flex min-h-[64px] w-full items-center border-l-4 border-[#76B82A] bg-white px-3 py-3 text-left">
                             <span class="text-[15px] font-bold leading-snug text-[#76B82A]">會員中心</span>
                           </div>
@@ -301,8 +301,8 @@
                         </div>
                       </div>
 
-                      <div v-else-if="usesTwoColumnMegaMenu(section.key)" class="flex min-h-[360px] bg-white">
-                        <div class="w-28 shrink-0 border-r border-gray-100 bg-gray-50/50">
+                      <div v-else-if="usesTwoColumnMegaMenu(section.key)" class="flex h-[360px] bg-white">
+                        <div class="w-28 shrink-0 overflow-y-auto border-r border-gray-100 bg-gray-50/50">
                           <button
                             v-for="(group, groupIndex) in getMegaMenuGroups(section.key)"
                             :key="'two-column-root-' + section.key + '-' + groupIndex"
@@ -369,7 +369,7 @@
                         </div>
                       </div>
 
-                      <div v-else class="bg-white">
+                      <div v-else class="h-[360px] overflow-y-auto bg-white">
                         <div
                           v-for="(group, groupIndex) in getMegaMenuGroups(section.key)"
                           :key="'mobile-menu-group-' + section.key + '-' + groupIndex"
@@ -447,7 +447,7 @@ export default Vue.extend({
   data() {
     return {
       openSectionKey: 'shop' as MainNavItem['key'] | '',
-      memberAccordionOpen: true,
+      memberAccordionOpen: false,
       memberQuickLinks: [
         { label: '會員中心', to: '/account' },
         { label: '我的訂單', to: '/account/orders' },
@@ -533,7 +533,7 @@ export default Vue.extend({
   },
   watch: {
     isOpen(nextOpen: boolean) {
-      if (nextOpen) this.ensureDefaultMenuState()
+      if (nextOpen) this.resetOpenState()
     },
     $route() {
       this.resetOpenState()
@@ -557,7 +557,7 @@ export default Vue.extend({
     },
     resetOpenState() {
       this.openSectionKey = 'shop'
-      this.memberAccordionOpen = true
+      this.memberAccordionOpen = false
       this.ensureDefaultMenuState()
     },
     ensureDefaultMenuState() {
